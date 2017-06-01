@@ -10,9 +10,9 @@ class SiteController extends \yii\web\Controller {
 
         $report_name1 = "กราฟสรุปคนไข้ทะเบียนคลินิกเบาหวาน ไม่มีความดันร่วมภายใน อ.ละแม จ.ชุมพร";
 
-/*
+
         // sql กราฟสรุปคนไข้ทะเบียนเบาหวาน ไม่มีความดันร่วม ภายใน อ.ละแม จ.ชุมพร
-        $sql1 = "
+         /*$sql1 = "
                 SELECT 
                 th.addressid,th.name as tumbol , th.full_name as address,count(distinct(cm.hn)) as count_hn
                 FROM clinicmember  cm
@@ -42,14 +42,13 @@ class SiteController extends \yii\web\Controller {
             'pagination' => FALSE,
         ]);
 
- 
-        return $this->render('index', [
-                    'dataProvider1' => $dataProvider1,                   
-                    'rawData1' => $rawData1,                 
+        */
+        
+        return $this->render('index', [                      
                     'report_name1' => $report_name1,                
         ]);
 
- */
+ 
     }
 
     public function actionLogin() {
