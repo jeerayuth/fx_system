@@ -30,7 +30,7 @@ $session = Yii::$app->session;
         <div class="wrap">
             <?php
             NavBar::begin([
-                'brandLabel' => 'ระบบศูนย์ข้อมูลและสารสนเทศ',
+                'brandLabel' => 'ระบบวิเคราะห์ข้อมูล',
                 'brandUrl' => Yii::$app->homeUrl,
                 'options' => [
                     'class' => 'navbar-inverse navbar-fixed-top',
@@ -40,7 +40,7 @@ $session = Yii::$app->session;
                 ['label' => 'หน้าแรก', 'url' => ['/site/index']],
             ];
             if ($session["loginname"] != null) {
-                $menuItems[] = ['label' => 'กลุ่มรายงานตามหน่วยงาน', 'url' => ['/report/index']];
+                $menuItems[] = ['label' => 'กลุ่มประเภทข้อมูล', 'url' => ['/report/index']];
                 $menuItems[] = ['label' => 'ออกจากระบบ', 'url' => ['/site/logout']];
             } else {
                 $menuItems[] = ['label' => 'ลงชื่อเข้าใช้งาน', 'url' => ['/site/login']];
@@ -74,7 +74,7 @@ $session = Yii::$app->session;
 
         <footer class="footer">
             <div class="container">
-                <p class="pull-left">&copy; ศูนย์ข้อมูลและสารสนเทศ โรงพยาบาลละแม <?= date('Y') ?></p>
+                <p class="pull-left">&copy; ศูนย์วิเคราะห์ข้อมูล <?= date('Y') ?></p>
 
                 <p class="pull-right"><?= Yii::powered() ?></p>
             </div>

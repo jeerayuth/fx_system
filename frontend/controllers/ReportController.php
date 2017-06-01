@@ -12,33 +12,30 @@ class ReportController extends \yii\web\Controller {
         return $this->render('//report/index');
     }
 
-    public function actionGrid($dep_id = null, $dep_name = null) {
+    public function actionGrid($master_currency_id = null, $name = null) {
 
-        if (!empty($dep_id)) {
+        if (!empty($master_currency_id)) {
+            
             $dataProvider = new SqlDataProvider([
-                'sql' => 'SELECT lr.*,(
-                            SELECT 
-                                count(lg.id) 
-                            FROM lamaereportslog lg   
-                            WHERE 
-                                lg.controller = lr.controller and lg.report = lr.pointer
-                            ) AS count_view ' .
-                ' FROM lamaereports lr ' .
-                ' WHERE lr.lamaedepartment_id=:dep_id ' .
-                ' AND lr.status=:status ',
-                'params' => [':dep_id' => $dep_id, ':status' => 'enable'],
+                'sql' => 'SELECT sc.*                  
+                            FROM sub_currency sc '.  
+                ' WHERE sc.master_currency_id=:master_currency_id ' ,
+                'params' => [':master_currency_id' => $master_currency_id],
                 'pagination' => [
                     'pageSize' => 200,
                 ],
             ]);
-
+            
+         
             // returns an array of data rows
             $models = $dataProvider->getModels();
         }
 
-        return $this->render('//report/grid', ['models' => $models, 'dep_name' => $dep_name]);
+        return $this->render('//report/grid', ['models' => $models, 'name' => $name]);
     }
 
+    
+    
     public function actionForm($controller = null, $form_id = null, $pointer = null, $report_name = null, $details = null) {
         //Function เลือก รูปแบบฟอร์มค้นหาข้อมูล
         $view = null;
