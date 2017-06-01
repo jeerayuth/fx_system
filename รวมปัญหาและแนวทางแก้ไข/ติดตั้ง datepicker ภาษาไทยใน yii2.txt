@@ -1,0 +1,98 @@
+﻿ติดตั้ง datepicker ภาษาไทยใน yii2
+
+ใน composer.json ให้ add 3 ตัวนี้เข้าไป
+"kartik-v/yii2-widget-datepicker": "@dev",
+"kartik-v/yii2-datecontrol": "@dev",
+"kartik-v/yii2-field-range" : "*"
+
+
+bootstrap-datepicker-thai.min.js
+bootstrap-datepicker-thai.js
+ใส่ไว้ใน
+vendor/kartik-v/yii2-widget-datepicker/assets/js
+
+
+DateControl.php
+ใส่ไว้ใน
+vendor/kartik-v/yii2-datecontrol
+
+
+datecontrol.js
+datecontrol.min.js
+ใส่ไว้ใน
+vendor/kartik-v/yii2-datecontrol/assets/js
+
+
+DatePickerAsset.php
+ใส่ไว้ใน
+vendor/kartik-v/yii2-widget-datepicker/DatePickerAsset.php
+
+
+
+ในไฟล์ common/config/main.php กำหนดดังนี้
+ให้ใส่ use kartik\datecontrol\Module; ไว้ด้านบนสุด
+
+config เพิ่ม
+'language' => 'th',
+'timezone'=>'Asia/Bangkok',
+
+
+ใส่คำสั่งดังต่อไปนี้เข้าไปใน module เพิ่ม
+ 'datecontrol' => [
+            'class' => 'kartik\datecontrol\Module',
+
+           // 'language'=> 'th',
+
+            // format settings for displaying each date attribute
+            'displaySettings' => [
+                'date' => 'd MMMM yyyy',
+                'time' => 'hh:mm:ss',
+                'datetime' => 'dd MMMM yyyy hh:mm:ss',
+            ],
+
+//            'displaySettings' => [
+//                'date' => 'php:d-M-Y',
+//                'time' => 'php:H:i:s',
+//                'datetime' => 'php:d-M-Y H:i:s'
+//            ],
+
+            // format settings for saving each date attribute          
+           'saveSettings' => [
+                'date' => 'php:Y-m-d',
+                'time' => 'php:H:i:s',
+                'datetime' => 'php:Y-m-d H:i:s',
+            ],
+           
+
+            // set your display timezone
+            'displayTimezone' => 'Asia/Bangkok',
+
+            // set your timezone for date saved to db
+            'saveTimezone' => 'Asia/Bangkok',
+            // automatically use kartik\widgets for each of the above formats
+            'autoWidget' => true,
+
+            'autoWidgetSettings' => [
+                Module::FORMAT_DATE => ['type'=>2, 'pluginOptions'=>['autoclose'=>true]], // example
+                Module::FORMAT_DATETIME => [], // setup if needed
+                Module::FORMAT_TIME => [], // setup if needed
+            ],
+
+        ],
+
+
+
+
+
+ในไฟล์ php.ini กำหนดดังนี้
+date.timezone=Asia/Bangkok
+
+
+
+
+
+
+
+
+หมายเหตุ
+ถ้ามีไฟล์เดิมอยู่ ให้ Backup ไฟล์เดิมไว้ก่อนนะครับ

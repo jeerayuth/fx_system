@@ -1,0 +1,3 @@
+การทำ Global Function
+
+http://stackoverflow.com/questions/31651613/how-to-write-global-functions-in-yii2-and-access-them-in-any-view-not-the-custo
