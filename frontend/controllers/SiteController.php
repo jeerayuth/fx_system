@@ -47,7 +47,7 @@ class SiteController extends \yii\web\Controller {
         return $this->render('index', [                      
                     'report_name1' => $report_name1,                
         ]);
-
+        
  
     }
 
