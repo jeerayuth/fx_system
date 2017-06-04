@@ -18,6 +18,7 @@ echo GridView::widget([
         'type' => 'primary',
         'after' => 'ประมวลผล ณ วันที่ ' . date('Y-m-d H:i:s')
     ],
+    'floatHeader' => true,
     'export' => [
         'fontAwesome' => true,
         'showConfirmAlert' => false,
@@ -41,4 +42,5 @@ echo GridView::widget([
     ]
 ])
 ?>
+
 

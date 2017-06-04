@@ -3,10 +3,44 @@
 /* @var $this yii\web\View */
 use kartik\grid\GridView;
 use yii\helpers\Html;
+use miloschuman\highcharts\Highcharts;
+use miloschuman\highcharts\HighchartsAsset;
+HighchartsAsset::register($this)->withScripts([
+	'highcharts-more',
+	'themes/grid'
+]);
+
 
 $this->title = $report_name;
 //$this->params['breadcrumbs'][] = $this->title;
 ?>
+
+
+<div id="container"></div>
+
+<?php
+
+echo Highcharts::widget([
+   'options' => [
+      'title' => ['text' => 'Fruit Consumption'],
+      'xAxis' => [
+         'categories' => ['Apples', 'Bananas', 'Oranges']
+      ],
+      'yAxis' => [
+         'title' => ['text' => 'Fruit eaten']
+      ],
+      'series' => [
+         ['name' => 'Jane', 'data' => [1, 0, 4]],
+         ['name' => 'John', 'data' => [5, 7, 3]]
+      ]
+   ]
+]);
+?>
+
+
+
+<br/>
+
 
 <?php
 
