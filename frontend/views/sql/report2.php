@@ -16,25 +16,57 @@ $this->title = $report_name;
 ?>
 
 
-<div id="container"></div>
+<div id="chart"></div>
 
 <?php
 
-echo Highcharts::widget([
-   'options' => [
-      'title' => ['text' => 'Fruit Consumption'],
-      'xAxis' => [
-         'categories' => ['Apples', 'Bananas', 'Oranges']
-      ],
-      'yAxis' => [
-         'title' => ['text' => 'Fruit eaten']
-      ],
-      'series' => [
-         ['name' => 'Jane', 'data' => [1, 0, 4]],
-         ['name' => 'John', 'data' => [5, 7, 3]]
-      ]
-   ]
-]);
+//เตรียมชุดข้อมูลไปใส่ให้กราฟ แกน x,y
+
+$data1 = [];
+for ($i = 0; $i < count($rawData); $i++) {
+    $data1[] = [
+        'name' => $rawData[$i]['month_s'],
+        'y' => $rawData[$i]['oh'] * 1,
+    ];
+}
+
+$data2 = [];
+for ($i = 0; $i < count($rawData); $i++) {
+    $data2[] = [
+        'name' => $rawData[$i]['month_s'],
+        'y' => $rawData[$i]['ol'] * 1,
+    ];
+}
+
+$js_data1 = json_encode($data1);
+$js_data2 = json_encode($data2);
+
+
+// chart
+$this->registerJs(" 
+    Highcharts.chart('chart', {
+    chart: {
+        type: 'column'
+    },
+    title: {
+        text: '$report_name'
+    },
+    xAxis: {
+        categories: ['มกราคม', 'กุมภาพันธ์', 'มีนาคม', 'เมษายน', 'พฤษภาคม','มิถุนายน','กรกฎาคม','สิงหาคม','กันยายน','ตุลาคม','พฤศจิกายน','ธันวาคม']
+    },
+    credits: {
+        enabled: false
+    },
+    series: [{
+        name: 'OPEN->Hight',
+        data: $js_data1
+    }, {
+        name: 'OPEN->Low',
+        data: $js_data2
+    }]
+});
+");
+// จบ chart
 ?>
 
 
@@ -59,7 +91,8 @@ echo GridView::widget([
     ],
     'columns' => [
         ['class' => 'yii\grid\SerialColumn'],
-           
+        
+      
         [
             'attribute' => 'month_s',
             'header' => 'เดือน'

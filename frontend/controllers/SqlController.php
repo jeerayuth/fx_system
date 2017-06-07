@@ -18,7 +18,7 @@ class SqlController extends CommonController {
                 FROM $currency_table
                 GROUP BY  YEAR(DATE_S)
                 ORDER BY year_s DESC
-                LIMIT 10 ";
+                LIMIT 5 ";
                                     
 
         try {
@@ -44,11 +44,12 @@ class SqlController extends CommonController {
     }
     
      public function actionReport2($sub_currency_id,$year_s) {
-         $currency_table = $sub_currency_id."_mn";
+        $currency_table = $sub_currency_id."_mn";
             
         $report_name = "ข้อมูลสถิติของคู่เงิน $sub_currency_id ปี $year_s";
-          
+                 
         $sql = "SELECT 
+                    '$sub_currency_id' as cur_name,
                     CONCAT(MONTH(DATE_S),'-',YEAR(DATE_S))  as month_s,
                     open,hight,low,close,
                     ((hight-open)*1000) as oh,
@@ -56,8 +57,12 @@ class SqlController extends CommonController {
                 FROM $currency_table
                 WHERE YEAR(DATE_S) = $year_s
                 GROUP BY  CONCAT(YEAR(DATE_S),'-',MONTH(DATE_S))
-                ORDER BY MONTH(DATE_S)  ";
-                                             
+                
+                ORDER BY DATE_S
+                          
+            ";
+        
+                                                                                
         try {
             $rawData = \yii::$app->db->createCommand($sql)->queryAll();
         } catch (\yii\db\Exception $e) {
@@ -72,6 +77,7 @@ class SqlController extends CommonController {
       
         return $this->render('report2', [
                     'dataProvider' => $dataProvider,
+                    'rawData' => $rawData,
                     'report_name' => $report_name,
                     'sub_currency_id' => $sub_currency_id
                   
