@@ -55,7 +55,7 @@ $this->registerJs("
         text: '$report_name'
     },
     xAxis: {
-        categories: ['มกราคม', 'กุมภาพันธ์', 'มีนาคม', 'เมษายน', 'พฤษภาคม','มิถุนายน','กรกฎาคม','สิงหาคม','กันยายน','ตุลาคม','พฤศจิกายน','ธันวาคม']
+        categories: ['สัปดาห์ที่ 1', 'สัปดาห์ที่ 2', 'สัปดาห์ที่ 3', 'สัปดาห์ที่ 4', 'สัปดาห์ที่ 5']
     },
     yAxis: {
             tickInterval: 5
@@ -130,16 +130,7 @@ echo GridView::widget([
              'format' => ['decimal',0] 
         ],
         
-        [
-            'attribute' => '',
-            'header' => '',
-            'format' => 'raw',
-            'value' => function($model) use ($sub_currency_id,$year_s)  {
-                    $month_id = $model['month_id'];
-                return Html::a(Html::encode('ข้อมูลรายสัปดาห์'), 
-                    ['sql/report3','sub_currency_id' => $sub_currency_id, 'year_s'=> $year_s, 'month_id'=>$month_id] ,['target'=>'_blank']);
-                    }
-                ]
+       
        
           
     ]
