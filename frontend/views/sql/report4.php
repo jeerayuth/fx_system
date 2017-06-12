@@ -25,7 +25,7 @@ $this->title = $report_name;
 $data1 = [];
 for ($i = 0; $i < count($rawData); $i++) {
     $data1[] = [
-        'name' => $rawData[$i]['month_s'],
+        'name' => $rawData[$i]['date_s'],
         'y' => $rawData[$i]['oh'] * 1,
     ];
 }
@@ -33,7 +33,7 @@ for ($i = 0; $i < count($rawData); $i++) {
 $data2 = [];
 for ($i = 0; $i < count($rawData); $i++) {
     $data2[] = [
-        'name' => $rawData[$i]['month_s'],
+        'name' => $rawData[$i]['date_s'],
         'y' => $rawData[$i]['ol'] * 1,
     ];
 }
@@ -55,7 +55,7 @@ $this->registerJs("
         text: '$report_name'
     },
     xAxis: {
-        categories: ['สัปดาห์ที่ 1', 'สัปดาห์ที่ 2', 'สัปดาห์ที่ 3', 'สัปดาห์ที่ 4', 'สัปดาห์ที่ 5']
+        categories: []
     },
     yAxis: {
             tickInterval: 5
@@ -100,8 +100,8 @@ echo GridView::widget([
         
       
         [
-            'attribute' => 'month_s',
-            'header' => 'เดือน'
+            'attribute' => 'date_s',
+            'header' => 'วันที่'
         ],
         [
             'attribute' => 'open',
@@ -135,8 +135,9 @@ echo GridView::widget([
             'header' => '',
             'format' => 'raw',
             'value' => function($model) use ($sub_currency_id,$year_s,$month_id)  {
-                return Html::a(Html::encode('ข้อมูลรายวัน'), 
-                    ['sql/report4','sub_currency_id' => $sub_currency_id, 'year_s'=> $year_s, 'month_id'=>$month_id] ,['target'=>'_blank']);
+                    $date_s = $model['date_s'];
+                return Html::a(Html::encode('ข้อมูลราย 4 ชั่วโมง'), 
+                    ['sql/report5','sub_currency_id' => $sub_currency_id, 'date_s'=> $date_s, 'year_s'=>$year_s, 'month_id'=>$month_id] ,['target'=>'_blank']);
                     }
                 ]
         
