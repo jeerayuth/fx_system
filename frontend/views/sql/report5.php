@@ -22,16 +22,26 @@ $this->title = $report_name;
 <?php
 
 //เตรียมชุดข้อมูลไปใส่ให้กราฟ แกน x,y
-
+// ข้อมูลชุดที่ 1 ค่าบวก
 $data1 = [];
 for ($i = 0; $i < count($rawData); $i++) {
     $data1[] = [
-        'name' => $rawData[$i]['title'],
+        'name' => $rawData[$i]['price_range'],
         'y' => $rawData[$i]['count_price_by_range'] * 1,
     ];
 }
-
 $js_data1 = json_encode($data1);
+
+
+// ข้อมูลชุดที่ 2 ค่าลบ
+$data2 = [];
+for ($i = 0; $i < count($rawData_negative); $i++) {
+    $data2[] = [
+        'name' => $rawData_negative[$i]['price_range'],
+        'y' => $rawData_negative[$i]['count_price_by_range'] * 1,
+    ];
+}
+$js_data2 = json_encode($data2);
 
 
  
@@ -52,7 +62,7 @@ Highcharts.chart('chart1', {
         },
         xAxis: [{
             categories: ['0-300', '301-600', '601-900', '901-1200',
-        '1201-1500', '1501-1800', '1801-2100', '2400+ '],
+        '1201-1500', '1501-1800', '1801-2100', '2101-2400'],
             reversed: false,
             labels: {
                 step: 1
@@ -61,7 +71,12 @@ Highcharts.chart('chart1', {
             opposite: true,
             reversed: false,
             categories: ['0-300', '301-600', '601-900', '901-1200',
-        '1201-1500', '1501-1800', '1801-2100', '2400+ '],
+        '1201-1500', '1501-1800', '1801-2100', '2101-2400','0-300', '301-600', '601-900', '901-1200',
+        '1201-1500', '1501-1800', '1801-2100', '2101-2400','0-300', '301-600', '601-900', '901-1200',
+        '1201-1500', '1501-1800', '1801-2100', '2101-2400','0-300', '301-600', '601-900', '901-1200',
+        '1201-1500', '1501-1800', '1801-2100', '2101-2400','0-300', '301-600', '601-900', '901-1200',
+        '1201-1500', '1501-1800', '1801-2100', '2101-2400','0-300', '301-600', '601-900', '901-1200',
+        '1201-1500', '1501-1800', '1801-2100', '2101-2400'],
             linkedTo: 0,
             labels: {
                 step: 1
@@ -73,7 +88,7 @@ Highcharts.chart('chart1', {
             },
             labels: {
                 formatter: function () {
-                    return Math.abs(this.value) + '%';
+                    return Math.abs(this.value) ;
                 }
             }
         },
@@ -86,16 +101,16 @@ Highcharts.chart('chart1', {
 
         tooltip: {
             formatter: function () {
-                return '<b>' + this.series.name + ', age ' + this.point.category + '</b><br/>' +
-                    'Population: ' + Highcharts.numberFormat(Math.abs(this.point.y), 0);
+                return '<b>' + this.series.name + '<br/>' +
+                    'จำนวน: ' + Highcharts.numberFormat(Math.abs(this.point.y), 0) +' ครั้ง';
             }
         },
 
         series: [{
-            name: 'Negative',
-            data: []
+            name: 'ค่าลบ',
+            data: $js_data2
         }, {
-            name: 'Positive',
+            name: 'ค่าบวก',
             data: $js_data1
    }]
 });

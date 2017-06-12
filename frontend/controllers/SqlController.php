@@ -226,7 +226,7 @@ class SqlController extends CommonController {
         $sql = "SELECT 
                     tr.time_s,price_range.price as price_range,
                     count(t.range1) as count_price_by_range,
-                    concat(tr.time_s,' ',' ',' ',' ',price_range.price) as title
+                    concat(tr.time_s,' ',price_range.price) as title
                 FROM price_range
                 INNER JOIN time_range tr ON tr.`level` = price_range.`level`
                 LEFT JOIN (
@@ -248,10 +248,36 @@ class SqlController extends CommonController {
                 ORDER BY tr.time_s,price_range.no ";
         
         
+        $sql_negative = "SELECT 
+                    tr.time_s,price_range.price as price_range,
+                    concat('-',count(t.range1)) as count_price_by_range,
+                    concat(tr.time_s,' ',price_range.price) as title
+                FROM price_range
+                INNER JOIN time_range tr ON tr.`level` = price_range.`level`
+                LEFT JOIN (
+                    select case
+                           when ((low-open)*$unit)  between   -300 and -1    then    '0-300' 
+                           when ((low-open)*$unit)  between  -600 and -301   then    '301-600'
+                           when ((low-open)*$unit)  between  -900 and -601   then    '601-900'
+                           when ((low-open)*$unit)  between  -1200 and -901  then    '901-1200'
+                           when ((low-open)*$unit)  between -1500 and -1201  then    '1201-1500'
+                           when ((low-open)*$unit)  between -1800 and -1501  then    '1501-1800'
+                           when ((low-open)*$unit)  between -2100 and -1801  then    '1801-2100'
+                           when ((low-open)*$unit)  between -2400 and -2101  then    '2101-2400'
+                    end
+                       as range1,TIME_S,DATE_S
+                       from $currency_table where YEAR(DATE_S)= $year_s AND MONTH(DATE_S)=$month_id
+                ) t ON (t.range1 = price_range.price and tr.time_s = t.TIME_S)  
+
+                GROUP BY tr.time_s,price_range.price
+                ORDER BY tr.time_s,price_range.no ";
+        
+        
        
                
         try {
             $rawData = \yii::$app->db->createCommand($sql)->queryAll();
+            $rawData_negative = \yii::$app->db->createCommand($sql_negative)->queryAll();
            
         } catch (\yii\db\Exception $e) {
             throw new \yii\web\ConflictHttpException('sql error');
@@ -262,10 +288,17 @@ class SqlController extends CommonController {
             'pagination' => FALSE,
         ]);
         
+        $dataProvider_negative = new \yii\data\ArrayDataProvider([
+            'allModels' => $rawData_negative,
+            'pagination' => FALSE,
+        ]);
+        
                    
          return $this->render('report5', [
-                    'dataProvider' => $dataProvider,               
-                    'rawData' => $rawData,               
+                    'dataProvider' => $dataProvider,  
+                    'dataProvider_negative' => $dataProvider_negative, 
+                    'rawData' => $rawData, 
+                    'rawData_negative' => $rawData_negative,
                     'report_name' => $report_name,
                     'sub_currency_id' => $sub_currency_id,
                     'year_s' => $year_s,
