@@ -26,7 +26,7 @@ $this->params['breadcrumbs'][] = $this->title;
             <tr>
                 <td><?= $count = $count + 1; ?></td>
                 <td>
-                    <a href="index.php?r=sql/report1&sub_currency_id=<?= $item['name']; ?>"><?= $item['name']; ?></a>
+                    <a href="index.php?r=sql/report1&sub_currency_id=<?= $item['id']; ?>"><?= $item['name']; ?></a>
                                                    
                 </td>
                               

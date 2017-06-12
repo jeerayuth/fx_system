@@ -16,123 +16,94 @@ $this->title = $report_name;
 ?>
 
 
-<div id="chart-range"></div>
+<div id="chart1" style="height: 600px; margin: 0 auto"></div>
 <br/>
 
-
 <?php
 
-//กราฟหาระดับราคา 0-300 ในแต่ละระดับใน timeframe 4 ชั่วโมง
 //เตรียมชุดข้อมูลไปใส่ให้กราฟ แกน x,y
-$data3 = [];
-for ($i = 0; $i < count($rawData_range1); $i++) {
-    $data3[] = [
-        'name' => $rawData_range1[$i]['time_s'],
-        'y' => $rawData_range1[$i]['count_price_by_range'] * 1,
+
+$data1 = [];
+for ($i = 0; $i < count($rawData); $i++) {
+    $data1[] = [
+        'name' => $rawData[$i]['title'],
+        'y' => $rawData[$i]['count_price_by_range'] * 1,
     ];
 }
-$js_data3 = json_encode($data3);
+
+$js_data1 = json_encode($data1);
 
 
+ 
 
-//กราฟหาระดับราคา 301-600 ในแต่ละระดับใน timeframe 4 ชั่วโมง
-//เตรียมชุดข้อมูลไปใส่ให้กราฟ แกน x,y
-$data4 = [];
-for ($i = 0; $i < count($rawData_range2); $i++) {
-    $data4[] = [
-        'name' => $rawData_range2[$i]['time_s'],
-        'y' => $rawData_range2[$i]['count_price_by_range'] * 1,
-    ];
-}
-$js_data4 = json_encode($data4);
+// chart
+$this->registerJs(" 
+ 
 
+Highcharts.chart('chart1', {
+        chart: {
+            type: 'bar'
+        },
+        title: {
+            text: 'ใส่หัวข้อ'
+        },
+        subtitle: {
+            text: '$report_name'
+        },
+        xAxis: [{
+            categories: ['0-300', '301-600', '601-900', '901-1200',
+        '1201-1500', '1501-1800', '1801-2100', '2400+ '],
+            reversed: false,
+            labels: {
+                step: 1
+            }
+        }, { // mirror axis on right side
+            opposite: true,
+            reversed: false,
+            categories: ['0-300', '301-600', '601-900', '901-1200',
+        '1201-1500', '1501-1800', '1801-2100', '2400+ '],
+            linkedTo: 0,
+            labels: {
+                step: 1
+            }
+        }],
+        yAxis: {
+            title: {
+                text: null
+            },
+            labels: {
+                formatter: function () {
+                    return Math.abs(this.value) + '%';
+                }
+            }
+        },
 
+        plotOptions: {
+            series: {
+                stacking: 'normal'
+            }
+        },
 
-//กราฟหาระดับราคา 601-900 ในแต่ละระดับใน timeframe 4 ชั่วโมง
-//เตรียมชุดข้อมูลไปใส่ให้กราฟ แกน x,y
-$data5 = [];
-for ($i = 0; $i < count($rawData_range3); $i++) {
-    $data5[] = [
-        'name' => $rawData_range3[$i]['time_s'],
-        'y' => $rawData_range3[$i]['count_price_by_range'] * 1,
-    ];
-}
-$js_data5 = json_encode($data5);
+        tooltip: {
+            formatter: function () {
+                return '<b>' + this.series.name + ', age ' + this.point.category + '</b><br/>' +
+                    'Population: ' + Highcharts.numberFormat(Math.abs(this.point.y), 0);
+            }
+        },
 
-
-
-//กราฟหาระดับราคา 901-1200 ในแต่ละระดับใน timeframe 4 ชั่วโมง
-//เตรียมชุดข้อมูลไปใส่ให้กราฟ แกน x,y
-$data6 = [];
-for ($i = 0; $i < count($rawData_range4); $i++) {
-    $data6[] = [
-        'name' => $rawData_range4[$i]['time_s'],
-        'y' => $rawData_range4[$i]['count_price_by_range'] * 1,
-    ];
-}
-$js_data6 = json_encode($data6);
-
-?>
-
-
-<?php
-
-$this->registerJs("   
-      
-Highcharts.chart('chart-range', {
-    chart: {
-        type: 'column'
-    },
-    title: {
-        text: 'ข้อมูลระดับราคาเฉลี่ยราย 4 ชั่วโมง ในแดนบวก ประจำปี $year_s เดือน $month_id'
-    },
-    subtitle: {
-        text: ''
-    },
-    xAxis: {
-        categories: [    
-        ],
-        crosshair: true
-    },
-    yAxis: {
-       tickInterval: 5     
-    },
-    tooltip: {
-        pointFormat: 'Value: {point.y:,.0f} ครั้ง'
-    },
-    plotOptions: {
-        column: {
-            pointPadding: 0.2,
-            borderWidth: 0
-        }
-    },
-    series: [{
-        name: '0-300',
-        data: $js_data3
-
-    }, {
-        name: '301-600',
-        data: $js_data4
-
-    }, {
-        name: '601-900',
-        data: $js_data5
-
-    },{
-        name: '901-1200',
-        data: $js_data6
-
-    } ]
+        series: [{
+            name: 'Negative',
+            data: []
+        }, {
+            name: 'Positive',
+            data: $js_data1
+   }]
 });
 
-
 ");
-        
-       
-// จบ chart
 ?>
 
-<br/>
+
 
 <?php
 
@@ -157,7 +128,7 @@ echo GridView::widget([
             'header' => 'เวลา'
         ],         
         [
-            'attribute' => 'range1',
+            'attribute' => 'price_range',
             'header' => 'ระดับราคา'
         ], 
         [
