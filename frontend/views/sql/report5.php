@@ -27,12 +27,12 @@ $data_positive = [];
 //เตรียมชุดข้อมูลไปใส่ให้กราฟ แกน x,y
 // ข้อมูลชุดที่ 1 ค่าบวก
 $data1 = [];
-for ($i = 0; $i < count($rawData); $i++) {
-    $text_positive = "'" . $rawData[$i]['title'] . "'";
+for ($i = 0; $i < count($rawData_positive); $i++) {
+    $text_positive = "'" . $rawData_positive[$i]['title'] . "'";
     array_push($data_positive, $text_positive);
     $data1[] = [
-        'name' => $rawData[$i]['price_range'],
-        'y' => $rawData[$i]['count_price_by_range'] * 1,
+        'name' => $rawData_positive[$i]['price_range'],
+        'y' => $rawData_positive[$i]['count_price_by_range'] * 1,
     ];
 }
 //convert array to string;
@@ -148,11 +148,11 @@ echo GridView::widget([
             'header' => 'เวลา'
         ],
         [
-            'attribute' => 'price_range',
+            'attribute' => 'price',
             'header' => 'ระดับราคา'
         ],
         [
-            'attribute' => 'count_price_by_range',
+            'attribute' => 'sum_range',
             'header' => 'จำนวนครั้ง'
         ],
     ]

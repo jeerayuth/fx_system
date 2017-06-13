@@ -210,8 +210,68 @@ class SqlController extends CommonController {
             throw new \yii\web\ConflictHttpException('sql error');
         }
         $unit = $data_unit[0]['units'];
+        
+        $sql_total = "SELECT 
+                        time_s,price as price,sum(count_range) as sum_range FROM 
+                        (
+                            SELECT tr.time_s,price_range.price,count(t.range1) as count_range
+                            FROM price_range
 
-        $sql = "SELECT 
+                            INNER JOIN time_range tr ON tr.`level` = price_range.`level`
+
+                            LEFT JOIN (
+
+                            select case
+                                   when ((hight-open)*1000)  between   0 and 300        then    '0-300' 
+                                   when ((hight-open)*1000)  between  301 and 600 	then    '301-600'
+                                   when ((hight-open)*1000)  between  601 and 900 	then    '601-900'
+                                   when ((hight-open)*1000)  between  901 and 1200 	then    '901-1200'
+                                   when ((hight-open)*1000)  between 1201 and 1500 	then 	'1201-1500'
+                                   when ((hight-open)*1000)  between 1501 and 1800 	then 	'1501-1800'
+                                   when ((hight-open)*1000)  between 1801 and 2100 	then 	'1801-2100'
+                                   when ((hight-open)*1000)  between 2101 and 2400 	then 	'2101-2400'
+                                  end
+                                 as range1,TIME_S,DATE_S
+
+                                   from usdjpy_h4 where YEAR(DATE_S)=$year_s AND MONTH(DATE_S)= $month_id
+
+
+                            ) t ON (t.range1 = price_range.price and tr.time_s = t.TIME_S)  
+                            group by tr.time_s,price_range.price
+
+                            UNION ALL
+
+                            SELECT tr.time_s,price_range.price,count(t2.range1) as count_range
+
+                            FROM price_range
+
+                            INNER JOIN time_range tr ON tr.`level` = price_range.`level`
+
+                            LEFT JOIN (
+
+                            select case
+                                   when ((open-low)*1000)  between   0 and 300    then  '0-300' 
+                                   when ((open-low)*1000)  between  301 and 600 	then  '301-600'
+                                   when ((open-low)*1000)  between  601 and 900 	then  '601-900'
+                                   when ((open-low)*1000)  between  901 and 1200 	then 	'901-1200'
+                                   when ((open-low)*1000)  between 1201 and 1500 	then 	'1201-1500'
+                                   when ((open-low)*1000)  between 1501 and 1800 	then 	'1501-1800'
+                                   when ((open-low)*1000)  between 1801 and 2100 	then 	'1801-2100'
+                                   when ((open-low)*1000)  between 2101 and 2400 	then 	'2101-2400'
+                                  end
+                                   as range1,TIME_S,DATE_S
+                                   from usdjpy_h4 where YEAR(DATE_S)=$year_s AND MONTH(DATE_S)= $month_id
+                            ) t2 ON (t2.range1 = price_range.price and tr.time_s = t2.TIME_S)  
+                            group by tr.time_s,price_range.price
+
+                        ) tt
+
+                        GROUP BY time_s,price
+                        ORDER BY sum_range desc ";
+        
+        
+
+        $sql_positive = "SELECT 
                     tr.time_s,price_range.price as price_range,
                     count(t.range1) as count_price_by_range,
                     concat(tr.time_s,' ',price_range.price) as title
@@ -264,14 +324,20 @@ class SqlController extends CommonController {
 
 
         try {
-            $rawData = \yii::$app->db->createCommand($sql)->queryAll();
+            $rawData = \yii::$app->db->createCommand($sql_total)->queryAll();
+            $rawData_positive = \yii::$app->db->createCommand($sql_positive)->queryAll();
             $rawData_negative = \yii::$app->db->createCommand($sql_negative)->queryAll();
         } catch (\yii\db\Exception $e) {
             throw new \yii\web\ConflictHttpException('sql error');
         }
-
+        
         $dataProvider = new \yii\data\ArrayDataProvider([
             'allModels' => $rawData,
+            'pagination' => FALSE,
+        ]);
+
+        $dataProvider_positive = new \yii\data\ArrayDataProvider([
+            'allModels' => $rawData_positive,
             'pagination' => FALSE,
         ]);
 
@@ -283,8 +349,10 @@ class SqlController extends CommonController {
 
         return $this->render('report5', [
                     'dataProvider' => $dataProvider,
+                    'dataProvider_positive' => $dataProvider_positive,
                     'dataProvider_negative' => $dataProvider_negative,
                     'rawData' => $rawData,
+                    'rawData_positive' => $rawData_positive,
                     'rawData_negative' => $rawData_negative,
                     'report_name' => $report_name,
                     'sub_currency_id' => $sub_currency_id,
