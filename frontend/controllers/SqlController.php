@@ -245,13 +245,13 @@ class SqlController extends CommonController {
                 ) t ON (t.range1 = price_range.price and tr.time_s = t.TIME_S)  
 
                 GROUP BY tr.time_s,price_range.price
-                ORDER BY tr.time_s,price_range.no ";
+                ORDER BY price_range.no,tr.time_s ";
         
         
         $sql_negative = "SELECT 
                     tr.time_s,price_range.price as price_range,
                     concat('-',count(t.range1)) as count_price_by_range,
-                    concat(tr.time_s,' ',price_range.price) as title
+                    concat(price_range.price,'  ',tr.time_s) as title
                 FROM price_range
                 INNER JOIN time_range tr ON tr.`level` = price_range.`level`
                 LEFT JOIN (
@@ -270,7 +270,7 @@ class SqlController extends CommonController {
                 ) t ON (t.range1 = price_range.price and tr.time_s = t.TIME_S)  
 
                 GROUP BY tr.time_s,price_range.price
-                ORDER BY tr.time_s,price_range.no ";
+                ORDER BY price_range.no,tr.time_s ";
         
         
        

@@ -21,38 +21,42 @@ $this->title = $report_name;
 <br/>
 
 <?php
-$text = array();
-$data = [];
-for ($i = 0; $i < count($rawData); $i++) {
-    $text = "'" . $rawData[$i]['price_range'] . "'";
-    array_push($data, $text);
-}
-//convert array to string;
-$text_title = implode(",", $data);
-
-
-
+// เตรียมข้อมูลหัวข้อระดับราคา,เวลา แกนบวก
+$text_positive = array();
+$data_positive = [];
 //เตรียมชุดข้อมูลไปใส่ให้กราฟ แกน x,y
 // ข้อมูลชุดที่ 1 ค่าบวก
-
 $data1 = [];
 for ($i = 0; $i < count($rawData); $i++) {
+    $text_positive = "'" . $rawData[$i]['title'] . "'";
+    array_push($data_positive, $text_positive);
     $data1[] = [
         'name' => $rawData[$i]['price_range'],
         'y' => $rawData[$i]['count_price_by_range'] * 1,
     ];
+
 }
+//convert array to string;
+$text_title_positive = implode(",", $data_positive);
+// json encode
 $js_data1 = json_encode($data1);
 
 
+// เตรียมข้อมูลหัวข้อระดับราคา,เวลา แกนลบ
+$text_negative = array();
+$data_negative = [];
 // ข้อมูลชุดที่ 2 ค่าลบ
 $data2 = [];
 for ($i = 0; $i < count($rawData_negative); $i++) {
+    $text_negative = "'" . $rawData_negative[$i]['title'] . "'";
+    array_push($data_negative, $text_negative);
     $data2[] = [
         'name' => $rawData_negative[$i]['price_range'],
         'y' => $rawData_negative[$i]['count_price_by_range'] * 1,
     ];
 }
+//convert array to string;
+$text_title_negative = implode(",", $data_negative);
 $js_data2 = json_encode($data2);
 
 
@@ -73,7 +77,7 @@ Highcharts.chart('chart1', {
             text: '$report_name'
         },
         xAxis: [{
-            categories: [$text_title],
+            categories: [$text_title_positive],
             reversed: false,
             labels: {
                 step: 1
@@ -81,7 +85,7 @@ Highcharts.chart('chart1', {
         }, { // mirror axis on right side
             opposite: true,
             reversed: false,
-            categories: [$text_title],
+            categories: [$text_title_negative],
             linkedTo: 0,
             labels: {
                 step: 1
