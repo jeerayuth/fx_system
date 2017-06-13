@@ -78,6 +78,11 @@ $this->registerJs("
 
 
 <br/>
+<center>
+<button type="button" class="btn btn-success" onclick = "javascript:(history.go(-1))"><i class="glyphicon glyphicon-menu-left"></i> ย้อนกลับ</button>
+<a href="index.php?r=sql/report5&sub_currency_id=<?php echo  $sub_currency_id; ?>&year_s=<?php echo $year_s;?>&month_id=<?php echo $month_id;?>" class="btn btn-danger"><i class="glyphicon glyphicon-menu-right"></i> ระดับราคาเฉลี่ยราย 4 ชั่วโมง</a>
+</center>
+<br/>
 
 
 <?php
@@ -130,22 +135,8 @@ echo GridView::widget([
              'format' => ['decimal',0] 
         ],
         
-          [
-            'attribute' => '',
-            'header' => '',
-            'format' => 'raw',
-            'value' => function($model) use ($sub_currency_id,$year_s,$month_id)  {
-                    $date_s = $model['date_s'];
-                return Html::a(Html::encode('ข้อมูลราย 4 ชั่วโมง'), 
-                    ['sql/report5','sub_currency_id' => $sub_currency_id, 'date_s'=> $date_s, 'year_s'=>$year_s, 'month_id'=>$month_id] ,['target'=>'_blank']);
-                    }
-                ]
-        
-       
-       
           
     ]
 ])
 ?>
 
-<button type="button" class="btn btn-success" onclick = "javascript:(history.go(-1))"><i class="glyphicon glyphicon-menu-left"></i> ย้อนกลับ</button>

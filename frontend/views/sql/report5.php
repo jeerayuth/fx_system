@@ -126,6 +126,10 @@ Highcharts.chart('chart-range', {
 ?>
 
 
+<center>
+<button type="button" class="btn btn-success" onclick = "javascript:(history.go(-1))"><i class="glyphicon glyphicon-menu-left"></i> ย้อนกลับ</button>
+</center>
+
 
 <?php
 echo GridView::widget([
@@ -159,4 +163,3 @@ echo GridView::widget([
 ])
 ?>
 
-<button type="button" class="btn btn-success" onclick = "javascript:(history.go(-1))"><i class="glyphicon glyphicon-menu-left"></i> ย้อนกลับ</button>

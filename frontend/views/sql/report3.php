@@ -78,7 +78,11 @@ $this->registerJs("
 
 
 <br/>
-
+<center>
+<button type="button" class="btn btn-primary" onclick = "javascript:(history.go(-1))"><i class="glyphicon glyphicon-menu-left"></i> ย้อนกลับ</button>
+<a href="index.php?r=sql/report4&sub_currency_id=<?php echo  $sub_currency_id; ?>&year_s=<?php echo $year_s;?>&month_id=<?php echo $month_id;?>" class="btn btn-danger"><i class="glyphicon glyphicon-menu-right"></i> ข้อมูลรายวัน</a>
+</center>
+<br/>
 
 <?php
 
@@ -130,21 +134,9 @@ echo GridView::widget([
              'format' => ['decimal',0] 
         ],
         
-          [
-            'attribute' => '',
-            'header' => '',
-            'format' => 'raw',
-            'value' => function($model) use ($sub_currency_id,$year_s,$month_id)  {
-                return Html::a(Html::encode('ข้อมูลรายวัน'), 
-                    ['sql/report4','sub_currency_id' => $sub_currency_id, 'year_s'=> $year_s, 'month_id'=>$month_id] ,['target'=>'_blank']);
-                    }
-                ]
-        
-       
-       
+      
           
     ]
 ])
 ?>
 
-<button type="button" class="btn btn-success" onclick = "javascript:(history.go(-1))"><i class="glyphicon glyphicon-menu-left"></i> ย้อนกลับ</button>

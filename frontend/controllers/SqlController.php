@@ -196,7 +196,7 @@ class SqlController extends CommonController {
         ]);
     }
 
-    public function actionReport5($sub_currency_id, $date_s, $year_s, $month_id) {
+    public function actionReport5($sub_currency_id, $year_s, $month_id) {
         $currency_table = $sub_currency_id . "_h4";
 
         $report_name = "ข้อมูลสถิติของคู่เงิน $sub_currency_id  เดือน $month_id ปี $year_s ";
