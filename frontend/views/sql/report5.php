@@ -1,13 +1,14 @@
 <?php
-
 /* @var $this yii\web\View */
+
 use kartik\grid\GridView;
 use yii\helpers\Html;
 use miloschuman\highcharts\Highcharts;
 use miloschuman\highcharts\HighchartsAsset;
+
 HighchartsAsset::register($this)->withScripts([
-	'highcharts-more',
-	'themes/grid'
+    'highcharts-more',
+    'themes/grid'
 ]);
 
 
@@ -20,9 +21,20 @@ $this->title = $report_name;
 <br/>
 
 <?php
+$text = array();
+$data = [];
+for ($i = 0; $i < count($rawData); $i++) {
+    $text = "'" . $rawData[$i]['price_range'] . "'";
+    array_push($data, $text);
+}
+//convert array to string;
+$text_title = implode(",", $data);
+
+
 
 //เตรียมชุดข้อมูลไปใส่ให้กราฟ แกน x,y
 // ข้อมูลชุดที่ 1 ค่าบวก
+
 $data1 = [];
 for ($i = 0; $i < count($rawData); $i++) {
     $data1[] = [
@@ -44,7 +56,7 @@ for ($i = 0; $i < count($rawData_negative); $i++) {
 $js_data2 = json_encode($data2);
 
 
- 
+
 
 // chart
 $this->registerJs(" 
@@ -55,14 +67,13 @@ Highcharts.chart('chart1', {
             type: 'bar'
         },
         title: {
-            text: 'ใส่หัวข้อ'
+            text: 'สถิติ'
         },
         subtitle: {
             text: '$report_name'
         },
         xAxis: [{
-            categories: ['0-300', '301-600', '601-900', '901-1200',
-        '1201-1500', '1501-1800', '1801-2100', '2101-2400'],
+            categories: [$text_title],
             reversed: false,
             labels: {
                 step: 1
@@ -70,13 +81,7 @@ Highcharts.chart('chart1', {
         }, { // mirror axis on right side
             opposite: true,
             reversed: false,
-            categories: ['0-300', '301-600', '601-900', '901-1200',
-        '1201-1500', '1501-1800', '1801-2100', '2101-2400','0-300', '301-600', '601-900', '901-1200',
-        '1201-1500', '1501-1800', '1801-2100', '2101-2400','0-300', '301-600', '601-900', '901-1200',
-        '1201-1500', '1501-1800', '1801-2100', '2101-2400','0-300', '301-600', '601-900', '901-1200',
-        '1201-1500', '1501-1800', '1801-2100', '2101-2400','0-300', '301-600', '601-900', '901-1200',
-        '1201-1500', '1501-1800', '1801-2100', '2101-2400','0-300', '301-600', '601-900', '901-1200',
-        '1201-1500', '1501-1800', '1801-2100', '2101-2400'],
+            categories: [$text_title],
             linkedTo: 0,
             labels: {
                 step: 1
@@ -121,7 +126,6 @@ Highcharts.chart('chart1', {
 
 
 <?php
-
 echo GridView::widget([
     'dataProvider' => $dataProvider,
     'panel' => [
@@ -137,23 +141,18 @@ echo GridView::widget([
     ],
     'columns' => [
         ['class' => 'yii\grid\SerialColumn'],
-            
-         [
+        [
             'attribute' => 'time_s',
             'header' => 'เวลา'
-        ],         
+        ],
         [
             'attribute' => 'price_range',
             'header' => 'ระดับราคา'
-        ], 
+        ],
         [
             'attribute' => 'count_price_by_range',
             'header' => 'จำนวนครั้ง'
-        ], 
-              
-       
-                    
-        
+        ],
     ]
 ])
 ?>
