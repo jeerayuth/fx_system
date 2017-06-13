@@ -17,7 +17,7 @@ $this->title = $report_name;
 ?>
 
 
-<div id="chart1" style="height: 600px; margin: 0 auto"></div>
+<div id="chart-range" style="height: 600px; margin: 0 auto"></div>
 <br/>
 
 <?php
@@ -34,7 +34,6 @@ for ($i = 0; $i < count($rawData); $i++) {
         'name' => $rawData[$i]['price_range'],
         'y' => $rawData[$i]['count_price_by_range'] * 1,
     ];
-
 }
 //convert array to string;
 $text_title_positive = implode(",", $data_positive);
@@ -64,14 +63,13 @@ $js_data2 = json_encode($data2);
 
 // chart
 $this->registerJs(" 
- 
 
-Highcharts.chart('chart1', {
+Highcharts.chart('chart-range', {
         chart: {
             type: 'bar'
         },
         title: {
-            text: 'สถิติ'
+            text: 'กราฟสถิติแบบพิรามิต'
         },
         subtitle: {
             text: '$report_name'
@@ -116,12 +114,12 @@ Highcharts.chart('chart1', {
         },
 
         series: [{
-            name: 'ค่าลบ',
-            data: $js_data2
-        }, {
             name: 'ค่าบวก',
             data: $js_data1
-   }]
+            },{
+            name: 'ค่าลบ',
+            data: $js_data2
+        }]
 });
 
 ");
