@@ -78,6 +78,7 @@ $this->registerJs("
 // จบ chart
 ?>
 
+<br/>
 
 
 <?php
@@ -102,7 +103,7 @@ $js = <<<MOO
                 // As we're loading the data asynchronously, we don't know what order it will arrive. So
                 // we keep a counter and create the chart when all the data is loaded.
                 seriesCounter++;
-             
+                console.log(seriesOptions);
                 if (seriesCounter == names.length) {
                     createChart(seriesOptions);
                 }
