@@ -10,10 +10,36 @@ Target Server Type    : MYSQL
 Target Server Version : 50207
 File Encoding         : 65001
 
-Date: 2017-06-12 07:41:50
+Date: 2017-06-14 00:35:54
 */
 
 SET FOREIGN_KEY_CHECKS=0;
+-- ----------------------------
+-- Table structure for `date_series`
+-- ----------------------------
+DROP TABLE IF EXISTS `date_series`;
+CREATE TABLE `date_series` (
+  `aday` varchar(13) NOT NULL
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+
+-- ----------------------------
+-- Records of date_series
+-- ----------------------------
+INSERT INTO date_series VALUES ('01');
+INSERT INTO date_series VALUES ('02');
+INSERT INTO date_series VALUES ('03');
+INSERT INTO date_series VALUES ('04');
+INSERT INTO date_series VALUES ('05');
+INSERT INTO date_series VALUES ('06');
+INSERT INTO date_series VALUES ('07');
+INSERT INTO date_series VALUES ('08');
+INSERT INTO date_series VALUES ('09');
+INSERT INTO date_series VALUES ('10');
+INSERT INTO date_series VALUES ('11');
+INSERT INTO date_series VALUES ('12');
+INSERT INTO date_series VALUES ('13');
+INSERT INTO date_series VALUES ('14');
+
 -- ----------------------------
 -- Table structure for `master_currency`
 -- ----------------------------
@@ -115,8 +141,6 @@ INSERT INTO price_range VALUES ('l003', '601-900', '3');
 INSERT INTO price_range VALUES ('l004', '901-1200', '3');
 INSERT INTO price_range VALUES ('l005', '1201-1500', '3');
 INSERT INTO price_range VALUES ('l006', '1501-1800', '3');
-INSERT INTO price_range VALUES ('l007', '1801-2100', '3');
-INSERT INTO price_range VALUES ('l008', '2101-2400', '3');
 
 -- ----------------------------
 -- Table structure for `sub_currency`
@@ -161,7 +185,6 @@ INSERT INTO time_range VALUES ('08:00:00', '3');
 INSERT INTO time_range VALUES ('12:00:00', '3');
 INSERT INTO time_range VALUES ('16:00:00', '3');
 INSERT INTO time_range VALUES ('20:00:00', '3');
-INSERT INTO time_range VALUES ('12:00:00', '');
 
 -- ----------------------------
 -- Table structure for `usdcad_mn`

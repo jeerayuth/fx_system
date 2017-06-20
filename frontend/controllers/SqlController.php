@@ -172,10 +172,29 @@ class SqlController extends CommonController {
                 WHERE YEAR(DATE_S) = $year_s and MONTH(DATE_S) = $month_id
               
                 ORDER BY DATE_S   ";
+        
+        
+        
+        $sql_day_pattern = "SELECT 
+                                t1.DATE_S as date_s,h1.time_first,t1.open as price_open1,h1.time_second,t2.open as price_open2, 
+                                IF(t1.`open` < t2.`OPEN`,t2.open-t1.open,
+                                                IF(t1.`open` > t2.`OPEN`, t2.open - t1.open, 0
+                                    )
+                                )*1000 as cal_price_range
+
+                                FROM price_dynamic_h1 h1
+                                LEFT JOIN (
+                                        select DATE_S,TIME_S,`OPEN` from usdjpy_h1 where DATE_S = '2017-01-04'
+                                ) t1 on (t1.TIME_S = h1.time_first)
+
+                                LEFT JOIN (
+                                        select DATE_S,TIME_S,`OPEN` from usdjpy_h1 where DATE_S = '2017-01-04'
+                                ) t2 on (t2.TIME_S = h1.time_second) ";
 
 
         try {
             $rawData = \yii::$app->db->createCommand($sql)->queryAll();
+            $rawData_day_pattern = \yii::$app->db->createCommand($sql_day_pattern)->queryAll();
         } catch (\yii\db\Exception $e) {
             throw new \yii\web\ConflictHttpException('sql error');
         }
@@ -184,11 +203,18 @@ class SqlController extends CommonController {
             'allModels' => $rawData,
             'pagination' => FALSE,
         ]);
-
+        
+        $dataProvider_day_pattern = new \yii\data\ArrayDataProvider([
+            'allModels' => $rawData_day_pattern,
+            'pagination' => FALSE,
+        ]);
+        
 
         return $this->render('report4', [
                     'dataProvider' => $dataProvider,
+                    'dataProvider_day_pattern' => $dataProvider_day_pattern,
                     'rawData' => $rawData,
+                    'rawData_day_pattern' =>$rawData_day_pattern,
                     'report_name' => $report_name,
                     'sub_currency_id' => $sub_currency_id,
                     'year_s' => $year_s,
@@ -196,6 +222,7 @@ class SqlController extends CommonController {
         ]);
     }
 
+    
     public function actionReport5($sub_currency_id, $year_s, $month_id) {
         $currency_table = $sub_currency_id . "_h4";
 
