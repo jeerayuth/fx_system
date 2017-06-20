@@ -87,14 +87,12 @@ $js = <<<MOO
     $(function () {
         var seriesOptions = [],
             seriesCounter = 0,
-           names = ['2017-01-01']; 
-          /* names = ['GOOG'];  */
-        
-
-        $.each(names, function(i, name) {
+            date_s = ['2017-01-01']; 
+       
+        $.each(date_s, function(i, name) {
 
            $.getJSON('index.php?r=json/report1&date_s='+ name.toLowerCase() +'&callback=?',	function(data) {  
-          /* $.getJSON('http://www.highcharts.com/samples/data/jsonp.php?filename='+ name.toLowerCase() +'-c.json&callback=?',	function(data) {  */
+        
                 seriesOptions[i] = {
                     name: name,
                     data: data
@@ -104,7 +102,7 @@ $js = <<<MOO
                 // we keep a counter and create the chart when all the data is loaded.
                 seriesCounter++;
                 console.log(seriesOptions);
-                if (seriesCounter == names.length) {
+                if (seriesCounter == date_s.length) {
                     createChart(seriesOptions);
                 }
             });
