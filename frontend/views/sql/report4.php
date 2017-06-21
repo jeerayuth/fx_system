@@ -87,31 +87,31 @@ $js = <<<MOO
     $(function () {
         var seriesOptions = [],
             seriesCounter = 0,
-            date_s = ['2017-01-03']; 
-            console.log(date_s);
-        
+            date_s = ['2017-01-03','2017-01-04','2017-01-05','2017-01-06'];   
             data_arr = [];
+        
         $.each(date_s, function(i, name) {
-           $.getJSON('index.php?r=json/report1&date_s='+ name.toLowerCase() +'&callback=?',	function(data) {  
-                
+           $.getJSON('index.php?r=json/report1&date_s='+ name +'&callback=?',	function(data) {  
+               
                 // convert data object field to int,float
                 for (var l=0; l < data.length; l++) {
-                    data_arr[l] = data[l].price_range * 1;                          
+                    data_arr[l] = data[l].price_range * 1; 
                 }
-                console.log(data_arr); 
                     
                 seriesOptions[i] = {
                     name: name,
-                    data: data_arr 
+                    data: data_arr
                 }; 
         
-        
+                 console.log(seriesOptions); 
                 // As we're loading the data asynchronously, we don't know what order it will arrive. So
                 // we keep a counter and create the chart when all the data is loaded.
                 seriesCounter++;          
                 if (seriesCounter == date_s.length) {
                     createChart(seriesOptions);
                 }
+                // clear old array before next step
+                data_arr = [];
             });
         });
     });
