@@ -17,7 +17,7 @@ class JsonController extends CommonController {
                 h1.time_second as `time_second` , 
 
                 IF(t1.`open` < t2.`OPEN`,t2.open-t1.open,
-                                IF(t1.`open` > t2.`OPEN`, t2.open - t1.open, 0
+                                IF(t1.`open` > t2.`OPEN`, t2.open - t1.open, 1
                                                 )
                 )*1000 as `price_range`
 

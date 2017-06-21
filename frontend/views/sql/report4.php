@@ -23,10 +23,17 @@ $this->title = $report_name;
 
 <?php
 
-//เตรียมชุดข้อมูลไปใส่ให้กราฟ แกน x,y
+//เตรียมชุดข้อมูลวันที่
+$text_date_s = array();
+$data_date_s = [];
 
+
+//เตรียมชุดข้อมูลไปใส่ให้กราฟ แกน x,y
 $data1 = [];
 for ($i = 0; $i < count($rawData); $i++) {
+    $text_date_s = $rawData[$i]['date_s'];
+    array_push($data_date_s, $text_date_s);
+    
     $data1[] = [
         'name' => $rawData[$i]['date_s'],
         'y' => $rawData[$i]['oh'] * 1,
@@ -40,6 +47,12 @@ for ($i = 0; $i < count($rawData); $i++) {
         'y' => $rawData[$i]['ol'] * 1,
     ];
 }
+
+//convert array to string;
+$text_date_s = implode(",", $data_date_s);
+//print_r($data_date_s);
+$js_date_s = json_encode($data_date_s);
+
 
 $js_data1 = json_encode($data1);
 $js_data2 = json_encode($data2);
@@ -87,15 +100,22 @@ $js = <<<MOO
     $(function () {
         var seriesOptions = [],
             seriesCounter = 0,
-            date_s = ['2017-01-03','2017-01-04','2017-01-05','2017-01-06'];   
+           // date_s = $js_date_s;
+            date_s = ["2017-02-20","2017-02-21","2017-02-22","2017-02-23","2017-02-24","2017-02-27"];
             data_arr = [];
+    
         
         $.each(date_s, function(i, name) {
            $.getJSON('index.php?r=json/report1&date_s='+ name +'&callback=?',	function(data) {  
                
                 // convert data object field to int,float
                 for (var l=0; l < data.length; l++) {
-                    data_arr[l] = data[l].price_range * 1; 
+                    if(data[l].price_range!= 0) {
+                        data_arr[l] = data[l].price_range * 1; 
+                    } else {
+                        data_arr[l] = 1 ; 
+                    }
+                    
                 }
                     
                 seriesOptions[i] = {
@@ -122,8 +142,12 @@ $this->registerJs($js);
 echo Highstock::widget([
     // The highcharts initialization statement will be wrapped in a function
     // named 'createChart' with one parameter: data.
+    
     'callback' => 'createChart',
     'options' => [
+        'chart' => [
+           'height' => 550
+        ],
         'rangeSelector' => [
             'selected' => 4
         ],
