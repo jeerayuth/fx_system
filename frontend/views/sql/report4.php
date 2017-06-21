@@ -5,13 +5,13 @@ use kartik\grid\GridView;
 use yii\helpers\Html;
 use miloschuman\highcharts\Highcharts;
 use miloschuman\highcharts\HighchartsAsset;
+use miloschuman\highcharts\Highstock;
+use yii\web\JsExpression;
+
 HighchartsAsset::register($this)->withScripts([
 	'highcharts-more',
 	'themes/grid'
 ]);
-
-use miloschuman\highcharts\Highstock;
-use yii\web\JsExpression;
 
 
 $this->title = $report_name;
@@ -21,14 +21,9 @@ $this->title = $report_name;
 
 <div id="chart"></div>
 
-<br/>
-
-<div id="chart-series"></div>
-
-
 <?php
 
-
+//เตรียมชุดข้อมูลไปใส่ให้กราฟ แกน x,y
 
 $data1 = [];
 for ($i = 0; $i < count($rawData); $i++) {
@@ -83,31 +78,40 @@ $this->registerJs("
 // จบ chart
 ?>
 
+<br/>
 
-<?Php
+
+<?php
 
 $js = <<<MOO
     $(function () {
         var seriesOptions = [],
             seriesCounter = 0,
-            names = ['2017-01-01'];
-
-        $.each(names, function(i, name) {
+            date_s = ['2017-01-03']; 
+            console.log(date_s);
         
-            $.getJSON('http://localhost:8080/fx_system/frontend/web/index.php?r=json/report1&date_s='+  name.toLowerCase() +'&callback=?',	function(data) {
-
+            data_arr = [];
+        $.each(date_s, function(i, name) {
+           $.getJSON('index.php?r=json/report1&date_s='+ name.toLowerCase() +'&callback=?',	function(data) {  
+                
+                // convert data object field to int,float
+                for (var l=0; l < data.length; l++) {
+                    data_arr[l] = data[l].price_range * 1;                          
+                }
+                console.log(data_arr); 
+                    
                 seriesOptions[i] = {
                     name: name,
-                    data: data
-                };
-
+                    data: data_arr 
+                }; 
+        
+        
                 // As we're loading the data asynchronously, we don't know what order it will arrive. So
                 // we keep a counter and create the chart when all the data is loaded.
-               // seriesCounter++;
- 
-              //  if (seriesCounter == names.length) {
+                seriesCounter++;          
+                if (seriesCounter == date_s.length) {
                     createChart(seriesOptions);
-              //  }
+                }
             });
         });
     });
@@ -147,9 +151,7 @@ echo Highstock::widget([
         'series' => new JsExpression('data'), // Here we use the callback parameter, data
     ]
 ]);
-
 ?>
-
 
 
 

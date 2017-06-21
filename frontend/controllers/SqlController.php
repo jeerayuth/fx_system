@@ -148,7 +148,7 @@ class SqlController extends CommonController {
     public function actionReport4($sub_currency_id, $year_s, $month_id) {
         $currency_table = $sub_currency_id . "_d1";
 
-        $report_name = "ข้อมูลสถิติของคู่เงิน $sub_currency_id เดือน $month_id ปี $year_s ";
+        $report_name = "ข้อมูลสถิติการแกว่งของราคาในคู่เงิน $sub_currency_id เดือน $month_id ปี $year_s ";
 
         // sql find units in sub_current table
         $sql_find = "SELECT id,units FROM sub_currency WHERE id = '$sub_currency_id' ";
@@ -436,7 +436,25 @@ class SqlController extends CommonController {
                     'sub_currency_id' => $sub_currency_id,
         ]);
     }
+    
+    
+     public function actionReport7(){
+         $sql="select hight*1
+                        from usdjpy_h4
+                 ";
+          
+         try {               
+            $data = \yii::$app->db->createCommand($sql)->queryAll();
+        } catch (\yii\db\Exception $e) {
+            throw new \yii\web\ConflictHttpException('sql error');
+        } 
+        
+        //print_r($data);
+         var_dump($data);
+         
+    
+     }
+    
+    
 
-}
-
-?>
+}?>
