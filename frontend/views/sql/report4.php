@@ -268,8 +268,10 @@ echo GridView::widget([
             cde = new Date(de)
         }
         
+       
         alert(cds);
-        alert(cde);
+        
+      //  window.open('http://localhost:8080/fx_system/frontend/web/index.php?r=sql/report8&datestart=' + cds + '&dateend=' + cde + '&sub_currency_id=<?php echo $sub_currency_id;?>' );
     }
     
     
