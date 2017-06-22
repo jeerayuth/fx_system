@@ -12,6 +12,8 @@ use kartik\datecontrol\Module;
 use kartik\date\DatePicker;
 use kartik\datecontrol\DateControl;
 
+use kartik\time\TimePicker;
+
 HighchartsAsset::register($this)->withScripts([
 	'highcharts-more',
 	'themes/grid'
@@ -94,7 +96,6 @@ $this->registerJs("
     </div>
     <div class="col-md-6">
                  <form novalidate="" id="demo-form2" data-parsley-validate="" class="form-horizontal form-label-left">
-
                    <div class="form-group">
                         <label class="control-label col-md-6 col-sm-6 col-xs-6" for="first-name">เลือกช่วงวันที่ <span class="required">*</span>
                         </label>
@@ -111,6 +112,23 @@ $this->registerJs("
                             ]);
                             ?>
                             <button type="button" class="btn btn-primary" onclick = "javascript:url()"><i class="fa fa-search"></i>ดูพฤติกรรมกราฟราย 1 ชั่วโมง</button>
+                            <?php
+                                echo '<label class="control-label">เวลาเริ่มต้น</label>';
+                                echo TimePicker::widget(
+                                        [
+                                            'name' => 'begin_time',
+                                            'value' =>  '01:00',
+                                            
+                                        ]);
+                            ?>
+                            <?php
+                                echo '<label class="control-label">เวลาสิ้นสุด</label>';
+                                echo TimePicker::widget([
+                                            'name' => 'end_time',
+                                            'value' => '11:55',
+                                        ]);
+                            ?>
+                            <button type="button" class="btn btn-primary" onclick = "javascript:url_5m()"><i class="fa fa-search"></i>ดูพฤติกรรมกราฟราย 5 นาที</button>
                         </div>
                        
                     </div>
@@ -189,17 +207,43 @@ echo GridView::widget([
         var arr1 = d1.split("-");
         s1 = arr1[0];
         s2 = arr1[1];
-        s3 = arr1[2] - 543;
-        datestart = s3 + s2 + s1;
+        s3 = arr1[2];
+        datestart = s3+s2+s1;
         d2 = $('#w0-2').val();
         var arr2 = d2.split("-");
         m1 = arr2[0];
         m2 = arr2[1];
-        m3 = arr2[2] - 543;
-        dateend = m3 + m2 + m1;
-      
+        m3 = arr2[2];
+        dateend = m3+m2+m1;
+        
          window.open('http://localhost:8080/fx_system/frontend/web/index.php?r=sql/report7&datestart=' + datestart + '&dateend=' + dateend + '&sub_currency_id=<?php echo $sub_currency_id;?>' );
     }
+    
+    
+    function url_5m() {
+        t1 = $('#w1').val();
+        var arr1 = t1.split(" ");
+        s1 = arr1[0]+':00';
+        s2 = arr1[1];
+        
+        
+        
+        if (s2 == 'PM') {
+            s1 = s1+12;
+        } 
+        
+        
+        t2 = $('#w2').val();
+        var arr2 = t2.split(" ");
+        m1 = arr2[0]+':00';
+        m2 = arr2[1];
+        
+        alert(m1);
+    }
+    
+    
+    
+    
     window.onload = function () {
         //your jQuery code here
         // jquery here     

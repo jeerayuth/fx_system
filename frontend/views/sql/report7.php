@@ -67,7 +67,6 @@ $js = <<<MOO
                     data: data_arr
                 }; 
         
-                 console.log(seriesOptions); 
                 // As we're loading the data asynchronously, we don't know what order it will arrive. So
                 // we keep a counter and create the chart when all the data is loaded.
                 seriesCounter++;          
@@ -114,17 +113,14 @@ echo Highstock::widget([
         ],
         'tooltip' => [
             'headerFormat' => '<b>{series.name} เวลา {series.x} </b><br/>',
-            'pointFormat' => '<span style="color:{series.color}">{series.name}</span>: <b>{point.y}</b> ({point.change}%) <br/>',
-            'valueDecimals' => 2 ,
-            
+            'valueDecimals' => 2 ,     
             'formatter' => new JsExpression("function() {   
                     s = this.x+2;
                     text = '';
-            
                     
-                     $.each(this.points, function(i, point) {
+                    $.each(this.points, function(i, point) {
                          text +=   '<br/><span style=\"color:' + this.series.color + '\">' + this.series.name + ' เวลา' +  s + ' ราคา ' + point.y + '</span> ';                           
-                     });
+                    });
      
                     return text ;
               }") 

@@ -21,8 +21,6 @@ class JsonController extends CommonController {
                                                 )
                 )*$unit as `price_range`
 
-
-
                 FROM price_dynamic_h1 h1
 
                 LEFT JOIN (

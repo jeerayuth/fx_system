@@ -1,6 +1,37 @@
 Change Log: `yii2-krajee-base`
 ==============================
 
+## Version 1.8.9
+
+**Date:** 03-May-2017
+
+- (#79): New property `hashVarLoadPosition` for InputWidget and Widget.
+- (enh kartik-v/yii2-widget-switchinput#29): Enhance boolean inputs for better value init in non model scenario.
+
+## Version 1.8.8
+
+**Date:** 22-Feb-2017
+
+- (enh #74): Allow registering variables in closures by setting them in global namespace.
+- (enh #75): Better validation for default attribute value.
+- (enh #76): Create `BaseAssetBundle` without JQuery and Bootstrap assets dependency.
+
+## Version 1.8.7
+
+**Date:** 04-Sep-2016
+
+- (enh #72): Set a timeout for plugin events callbacks.
+- (enh #73): Update Animate CSS assets to latest version.
+- Enhance PHP Documentation for all classes and methods in the extension.
+
+## Version 1.8.6
+
+**Date:** 19-Aug-2016
+
+- (enh #67): Update Latvian translations.
+- (enh #71): Simplify plugin initialization and event handling.
+- Add github contribution templates.
+
 ## Version 1.8.5
 
 **Date:** 08-May-2016

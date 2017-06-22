@@ -1,6 +1,33 @@
 Change Log: `yii2-datecontrol`
 ==============================
 
+## version 1.9.6
+
+**Date:** 14-Jan-2017
+
+- (enh #92): Implement following DateControl plugin events that can be listened via jQuery/javascript:
+   - `beforechange.datecontrol`: will be triggered before an ajax request is sent when changing the date input on client.
+   - `changesuccess.datecontrol`: will be triggered after successful change of a date on the client(applicable for both ajax or non ajax conversions). 
+   - `changeerror.datecontrol`: will be triggered when the ajax conversion service returns an error status.
+   - `changecomplete.datecontrol`: will be triggered after completion of an ajax conversion service.
+   - `changeajaxerror.datecontrol`: will be triggered when any exception or error is thrown during the ajax conversion.
+   - `afterpaste.datecontrol`: will be triggered when a data is pasted in the date input on the client.   
+- (enh #96, #102): Ignore timezone conversion for `DateControl::FORMAT_DATE`.
+- (bug #105): Set date control plugin data correctly within widget options.
+- (bug #106): More correct validation for guessing date without ajax conversion.
+- (bug #108): Initialize auto widget options correctly.
+- Better configuration for `Module::convertAction`.
+
+## version 1.9.5
+
+**Date:** 08-Dec-2016
+
+- Add github contribution and issue/PR logging templates.
+- Enhance PHP Documentation for all classes and methods in the extension.
+- Add branch alias for dev-master latest release.
+- (enh #94): Add paste support for DateControl.
+- (bug #103): **BC BREAKING CHANGE**: A new property `widgetOptions` is available. This property will replace the `options` property for the scenario when `autoWidget` or `widgetClass` is set.
+
 ## version 1.9.4
 
 **Date:** 30-Jul-2015
