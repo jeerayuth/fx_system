@@ -120,10 +120,10 @@ echo Highstock::widget([
             'formatter' => new JsExpression("function() {   
                     s = this.x+2;
                     text = '';
-                   
+            
+                    
                      $.each(this.points, function(i, point) {
-                         text +=   '<br/><span style=\"color:red\">' + this.series.name + ' ราคา ' + point.y + ' เวลา' +  s +  '</span> ';
-                            
+                         text +=   '<br/><span style=\"color:' + this.series.color + '\">' + this.series.name + ' เวลา' +  s + ' ราคา ' + point.y + '</span> ';                           
                      });
      
                     return text ;
