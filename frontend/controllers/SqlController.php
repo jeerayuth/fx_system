@@ -174,27 +174,8 @@ class SqlController extends CommonController {
                 ORDER BY DATE_S   ";
         
         
-        
-        $sql_day_pattern = "SELECT 
-                                t1.DATE_S as date_s,h1.time_first,t1.open as price_open1,h1.time_second,t2.open as price_open2, 
-                                IF(t1.`open` < t2.`OPEN`,t2.open-t1.open,
-                                                IF(t1.`open` > t2.`OPEN`, t2.open - t1.open, 0
-                                    )
-                                )*1000 as cal_price_range
-
-                                FROM price_dynamic_h1 h1
-                                LEFT JOIN (
-                                        select DATE_S,TIME_S,`OPEN` from usdjpy_h1 where DATE_S = '2017-01-04'
-                                ) t1 on (t1.TIME_S = h1.time_first)
-
-                                LEFT JOIN (
-                                        select DATE_S,TIME_S,`OPEN` from usdjpy_h1 where DATE_S = '2017-01-04'
-                                ) t2 on (t2.TIME_S = h1.time_second) ";
-
-
         try {
-            $rawData = \yii::$app->db->createCommand($sql)->queryAll();
-            $rawData_day_pattern = \yii::$app->db->createCommand($sql_day_pattern)->queryAll();
+            $rawData = \yii::$app->db->createCommand($sql)->queryAll();         
         } catch (\yii\db\Exception $e) {
             throw new \yii\web\ConflictHttpException('sql error');
         }
@@ -203,18 +184,10 @@ class SqlController extends CommonController {
             'allModels' => $rawData,
             'pagination' => FALSE,
         ]);
-        
-        $dataProvider_day_pattern = new \yii\data\ArrayDataProvider([
-            'allModels' => $rawData_day_pattern,
-            'pagination' => FALSE,
-        ]);
-        
-
+            
         return $this->render('report4', [
-                    'dataProvider' => $dataProvider,
-                    'dataProvider_day_pattern' => $dataProvider_day_pattern,
-                    'rawData' => $rawData,
-                    'rawData_day_pattern' =>$rawData_day_pattern,
+                    'dataProvider' => $dataProvider,               
+                    'rawData' => $rawData,             
                     'report_name' => $report_name,
                     'sub_currency_id' => $sub_currency_id,
                     'year_s' => $year_s,
@@ -438,22 +411,42 @@ class SqlController extends CommonController {
     }
     
     
-     public function actionReport7(){
-         $sql="select hight*1
-                        from usdjpy_h4
-                 ";
-          
-         try {               
-            $data = \yii::$app->db->createCommand($sql)->queryAll();
+      public function actionReport7($sub_currency_id,$datestart,$dateend) {
+        $currency_table = $sub_currency_id . "_h1";
+
+        $report_name = "กราฟพฤติกรรมการแกว่งในคู่เงิน $sub_currency_id ระหว่างวันที่ $datestart ถึงวันที่ $dateend";
+
+        // sql find units in sub_current table
+        $sql_find = "SELECT id,units FROM sub_currency WHERE id = '$sub_currency_id' ";
+        
+        // เอาไว้ดึงช่วงวันที่ไปให้กราฟแสดงผล
+        $sql = "SELECT 
+                    '$sub_currency_id' as cur_name, DATE_S as date_s 
+                FROM $currency_table
+                WHERE DATE_S between '$datestart' and '$dateend'
+                GROUP BY DATE_S
+                ORDER BY DATE_S   ";
+        
+        try {
+            $data_unit = \yii::$app->db->createCommand($sql_find)->queryAll();
+            $rawData = \yii::$app->db->createCommand($sql)->queryAll();  
         } catch (\yii\db\Exception $e) {
             throw new \yii\web\ConflictHttpException('sql error');
-        } 
-        
-        //print_r($data);
-         var_dump($data);
-         
+        }
+
+        $unit = $data_unit[0]['units'];
+                   
+        return $this->render('report7', [
+                    'rawData' => $rawData,
+                    'report_name' => $report_name,
+                    'sub_currency_id' => $sub_currency_id,
+                    'datestart' => $datestart,
+                    'dateend' => $dateend,
+                    'unit' => $unit,
+        ]);
+    }
     
-     }
+
     
     
 

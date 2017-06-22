@@ -8,6 +8,10 @@ use miloschuman\highcharts\HighchartsAsset;
 use miloschuman\highcharts\Highstock;
 use yii\web\JsExpression;
 
+use kartik\datecontrol\Module;
+use kartik\date\DatePicker;
+use kartik\datecontrol\DateControl;
+
 HighchartsAsset::register($this)->withScripts([
 	'highcharts-more',
 	'themes/grid'
@@ -23,17 +27,9 @@ $this->title = $report_name;
 
 <?php
 
-//เตรียมชุดข้อมูลวันที่
-$text_date_s = array();
-$data_date_s = [];
-
-
 //เตรียมชุดข้อมูลไปใส่ให้กราฟ แกน x,y
 $data1 = [];
-for ($i = 0; $i < count($rawData); $i++) {
-    $text_date_s = $rawData[$i]['date_s'];
-    array_push($data_date_s, $text_date_s);
-    
+for ($i = 0; $i < count($rawData); $i++) {   
     $data1[] = [
         'name' => $rawData[$i]['date_s'],
         'y' => $rawData[$i]['oh'] * 1,
@@ -48,12 +44,7 @@ for ($i = 0; $i < count($rawData); $i++) {
     ];
 }
 
-//convert array to string;
-$text_date_s = implode(",", $data_date_s);
-//print_r($data_date_s);
-$js_date_s = json_encode($data_date_s);
-
-
+//convert array to json string;
 $js_data1 = json_encode($data1);
 $js_data2 = json_encode($data2);
 
@@ -91,99 +82,43 @@ $this->registerJs("
 // จบ chart
 ?>
 
-<br/>
-
-
-<?php
-
-$js = <<<MOO
-    $(function () {
-        var seriesOptions = [],
-            seriesCounter = 0,
-           // date_s = $js_date_s;
-            date_s = ["2017-02-20","2017-02-21","2017-02-22","2017-02-23","2017-02-24","2017-02-27"];
-            data_arr = [];
-    
-        
-        $.each(date_s, function(i, name) {
-           $.getJSON('index.php?r=json/report1&date_s='+ name +'&callback=?',	function(data) {  
-               
-                // convert data object field to int,float
-                for (var l=0; l < data.length; l++) {
-                    if(data[l].price_range!= 0) {
-                        data_arr[l] = data[l].price_range * 1; 
-                    } else {
-                        data_arr[l] = 1 ; 
-                    }
-                    
-                }
-                    
-                seriesOptions[i] = {
-                    name: name,
-                    data: data_arr
-                }; 
-        
-                 console.log(seriesOptions); 
-                // As we're loading the data asynchronously, we don't know what order it will arrive. So
-                // we keep a counter and create the chart when all the data is loaded.
-                seriesCounter++;          
-                if (seriesCounter == date_s.length) {
-                    createChart(seriesOptions);
-                }
-                // clear old array before next step
-                data_arr = [];
-            });
-        });
-    });
-MOO;
-
-$this->registerJs($js);
-
-echo Highstock::widget([
-    // The highcharts initialization statement will be wrapped in a function
-    // named 'createChart' with one parameter: data.
-    
-    'callback' => 'createChart',
-    'options' => [
-        'chart' => [
-           'height' => 550
-        ],
-        'rangeSelector' => [
-            'selected' => 4
-        ],
-        'yAxis' => [
-            'labels' => [
-                'formatter' => new JsExpression("function () {
-                    return (this.value > 0 ? ' + ' : '') + this.value + '%';
-                }")
-            ],
-            'plotLines' => [[
-                'value' => 0,
-                'width' => 2,
-                'color' => 'silver'
-            ]]
-        ],
-        'plotOptions' => [
-            'series' => [
-                'compare' => 'percent'
-            ]
-        ],
-        'tooltip' => [
-            'pointFormat' => '<span style="color:{series.color}">{series.name}</span>: <b>{point.y}</b> ({point.change}%)<br/>',
-            'valueDecimals' => 2
-        ],
-        'series' => new JsExpression('data'), // Here we use the callback parameter, data
-    ]
-]);
-?>
-
-
 
 <br/>
-<center>
-<button type="button" class="btn btn-success" onclick = "javascript:(history.go(-1))"><i class="glyphicon glyphicon-menu-left"></i> ย้อนกลับ</button>
-<a href="index.php?r=sql/report5&sub_currency_id=<?php echo  $sub_currency_id; ?>&year_s=<?php echo $year_s;?>&month_id=<?php echo $month_id;?>" class="btn btn-danger"><i class="glyphicon glyphicon-menu-right"></i> ระดับราคาเฉลี่ยราย 4 ชั่วโมง</a>
-</center>
+
+<div class="row">
+    <div class="col-md-6">
+        <center>
+        <button type="button" class="btn btn-success" onclick = "javascript:(history.go(-1))"><i class="glyphicon glyphicon-menu-left"></i> ย้อนกลับ</button>
+        <a href="index.php?r=sql/report5&sub_currency_id=<?php echo  $sub_currency_id; ?>&year_s=<?php echo $year_s;?>&month_id=<?php echo $month_id;?>" class="btn btn-danger"><i class="glyphicon glyphicon-menu-right"></i> ระดับราคาเฉลี่ยราย 4 ชั่วโมง</a>
+        </center>
+    </div>
+    <div class="col-md-6">
+                 <form novalidate="" id="demo-form2" data-parsley-validate="" class="form-horizontal form-label-left">
+
+                   <div class="form-group">
+                        <label class="control-label col-md-6 col-sm-6 col-xs-6" for="first-name">เลือกช่วงวันที่ <span class="required">*</span>
+                        </label>
+                        <div class="col-md-6 col-sm-6 col-xs-6">
+                            <?php
+                            echo DatePicker::widget([
+                                'name' => 'from_date',
+                                'type' => DatePicker::TYPE_RANGE,
+                                'name2' => 'to_date',
+                                'pluginOptions' => [
+                                    'autoclose' => true,
+                                    'format' => 'dd-mm-yyyy'
+                                ]
+                            ]);
+                            ?>
+                            <button type="button" class="btn btn-primary" onclick = "javascript:url()"><i class="fa fa-search"></i>ดูพฤติกรรมกราฟราย 1 ชั่วโมง</button>
+                        </div>
+                       
+                    </div>
+                </form>
+    </div>
+</div>
+
+
 <br/>
 
 
@@ -242,3 +177,31 @@ echo GridView::widget([
 ])
 ?>
 
+
+
+<script type="text/javascript">
+    //function เรียกหน้ารายงาน
+    function url() {
+        
+        //ตัดเครื่องหมาย - ออก แล้วส่ง datestart&dateend ไปยัง url ที่ต้องการ
+         //ตัดเครื่องหมาย - ออก แล้วส่ง datestart&dateend ไปยัง url ที่ต้องการ
+        d1 = $('#w0').val();
+        var arr1 = d1.split("-");
+        s1 = arr1[0];
+        s2 = arr1[1];
+        s3 = arr1[2] - 543;
+        datestart = s3 + s2 + s1;
+        d2 = $('#w0-2').val();
+        var arr2 = d2.split("-");
+        m1 = arr2[0];
+        m2 = arr2[1];
+        m3 = arr2[2] - 543;
+        dateend = m3 + m2 + m1;
+      
+         window.open('http://localhost:8080/fx_system/frontend/web/index.php?r=sql/report7&datestart=' + datestart + '&dateend=' + dateend + '&sub_currency_id=<?php echo $sub_currency_id;?>' );
+    }
+    window.onload = function () {
+        //your jQuery code here
+        // jquery here     
+    };
+</script>

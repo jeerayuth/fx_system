@@ -8,7 +8,7 @@ use frontend\components\CommonController;
 
 class JsonController extends CommonController {
 
-    public function actionReport1($date_s = '2017-01-04' ,$callback = null) {
+    public function actionReport1($date_s = '2017-01-04' ,$unit,$callback = null) {
 
           \Yii::$app->response->format = \yii\web\Response::FORMAT_JSONP;
           
@@ -19,7 +19,7 @@ class JsonController extends CommonController {
                 IF(t1.`open` < t2.`OPEN`,t2.open-t1.open,
                                 IF(t1.`open` > t2.`OPEN`, t2.open - t1.open, 1
                                                 )
-                )*1000 as `price_range`
+                )*$unit as `price_range`
 
 
 
