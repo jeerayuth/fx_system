@@ -117,17 +117,17 @@ echo Highstock::widget([
             'pointFormat' => '<span style="color:{series.color}">{series.name}</span>: <b>{point.y}</b> ({point.change}%) <br/>',
             'valueDecimals' => 2 ,
             
-            'formatter' => new JsExpression('function() {   
-                    s = this.x+1;
-                    text = "";
+            'formatter' => new JsExpression("function() {   
+                    s = this.x+2;
+                    text = '';
                    
                      $.each(this.points, function(i, point) {
-                         text +=   this.series.name + " ราคา " + point.y + " เวลา" +  s +  "<br/> ";
+                         text +=   '<br/><span style=\"color:red\">' + this.series.name + ' ราคา ' + point.y + ' เวลา' +  s +  '</span> ';
                             
                      });
      
                     return text ;
-              }') 
+              }") 
                                   
         ],
         'series' => new JsExpression('data'), // Here we use the callback parameter, data
