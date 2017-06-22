@@ -221,16 +221,37 @@ echo GridView::widget([
     
     
     function url_5m() {
+        
+        // ดึง date มาใช้
+        d1 = $('#w0').val();
+        var arr1 = d1.split("-");
+        s1 = arr1[0];
+        s2 = arr1[1];
+        s3 = arr1[2];
+        datestart = s3+"-"+s2+"-"+s1;
+        
+        d2 = $('#w0-2').val();
+        var arr2 = d2.split("-");
+        m1 = arr2[0];
+        m2 = arr2[1];
+        m3 = arr2[2];
+        dateend = m3+"-"+m2+"-"+m1;
+        
+        
+        // ดึง time มาใช้
         t1 = $('#w1').val();
         var arr1 = t1.split(" ");
         s1 = arr1[0]+':00';
         s2 = arr1[1];
-        
-        
-        
+           
         if (s2 == 'PM') {
-            s1 = s1+12;
-        } 
+            ds = datestart + ' ' + s1;
+            cds = new Date(ds);
+            cds.setMinutes(cds.getMinutes()+720);
+        } else {
+            ds = datestart + ' ' + s1;
+            cds = new Date(ds);
+        }
         
         
         t2 = $('#w2').val();
@@ -238,7 +259,17 @@ echo GridView::widget([
         m1 = arr2[0]+':00';
         m2 = arr2[1];
         
-        alert(m1);
+        if (m2 == 'PM') {
+            de = dateend + ' ' + m1;
+            cde = new Date(de)
+            cde.setMinutes(cde.getMinutes()+720);
+        } else {
+            de = dateend + ' ' + m1;
+            cde = new Date(de)
+        }
+        
+        alert(cds);
+        alert(cde);
     }
     
     
