@@ -148,7 +148,7 @@ class SqlController extends CommonController {
     public function actionReport4($sub_currency_id, $year_s, $month_id) {
         $currency_table = $sub_currency_id . "_d1";
 
-        $report_name = "ข้อมูลสถิติการแกว่งของราคาในคู่เงิน $sub_currency_id เดือน $month_id ปี $year_s ";
+        $report_name = "กราฟพฤติกรรมการแกว่งของราคาในคู่เงิน $sub_currency_id เดือน $month_id ปี $year_s ";
 
         // sql find units in sub_current table
         $sql_find = "SELECT id,units FROM sub_currency WHERE id = '$sub_currency_id' ";
@@ -447,13 +447,13 @@ class SqlController extends CommonController {
     }
     
     
-     public function actionReport8($sub_currency_id,$cds,$cde) {
+     public function actionReport8($datestart,$dateend,$timestart,$timeend,$sub_currency_id) {
         $currency_table = $sub_currency_id . "_m5";
 
-        $report_name = "กราฟพฤติกรรมการแกว่งในคู่เงิน $sub_currency_id ระหว่างวันที่ $datestart ถึงวันที่ $dateend";
+        $report_name = "กราฟพฤติกรรมการแกว่งในคู่เงิน $sub_currency_id ระหว่างวันที่ $datestart ถึงวันที่ $dateend ";
+        $report_name .= "เวลา $timestart ถึง $timeend ";
         
-        echo $report_name;
-        /*
+        
         // sql find units in sub_current table
         $sql_find = "SELECT id,units FROM sub_currency WHERE id = '$sub_currency_id' ";
         
@@ -463,7 +463,7 @@ class SqlController extends CommonController {
                 FROM $currency_table
                 WHERE DATE_S between '$datestart' and '$dateend'
                 GROUP BY DATE_S
-                ORDER BY DATE_S   ";
+                ORDER BY DATE_S ";
         
         try {
             $data_unit = \yii::$app->db->createCommand($sql_find)->queryAll();
@@ -473,17 +473,19 @@ class SqlController extends CommonController {
         }
 
         $unit = $data_unit[0]['units'];
-                   
-        return $this->render('report7', [
+                           
+        return $this->render('report8', [
                     'rawData' => $rawData,
                     'report_name' => $report_name,
                     'sub_currency_id' => $sub_currency_id,
                     'datestart' => $datestart,
                     'dateend' => $dateend,
+                    'timestart' => $timestart,
+                    'timeend' => $timeend,
                     'unit' => $unit,
         ]);
          
-         */
+  
     }
 
     

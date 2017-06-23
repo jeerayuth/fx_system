@@ -14,6 +14,8 @@ use kartik\datecontrol\DateControl;
 
 use kartik\time\TimePicker;
 
+\conquer\momentjs\MomentjsAsset::register($this);
+
 HighchartsAsset::register($this)->withScripts([
 	'highcharts-more',
 	'themes/grid'
@@ -269,9 +271,11 @@ echo GridView::widget([
         }
         
        
-        alert(cds);
-        
-      //  window.open('http://localhost:8080/fx_system/frontend/web/index.php?r=sql/report8&datestart=' + cds + '&dateend=' + cde + '&sub_currency_id=<?php echo $sub_currency_id;?>' );
+         timestart = moment(cds).format('HH:mm:ss');
+         timeend = moment(cde).format('HH:mm:ss');
+         
+
+        window.open('http://localhost:8080/fx_system/frontend/web/index.php?r=sql/report8&datestart=' + datestart + '&dateend=' + dateend + '&timestart=' + timestart + '&timeend=' + timeend + '&sub_currency_id=<?php echo $sub_currency_id;?>' );
     }
     
     
