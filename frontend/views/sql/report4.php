@@ -126,6 +126,7 @@ $this->registerJs("
                                  */
                             ?>
                             <button type="button" class="btn btn-primary" onclick = "javascript:url()"><i class="fa fa-search"></i>ดูพฤติกรรมกราฟตามเวลา</button> 
+                            <button type="button" class="btn btn-primary" onclick = "javascript:url_week()"><i class="fa fa-search"></i>ดูพฤติกรรมกราฟรายสัปดาห์</button> 
                         <!--    <button type="button" class="btn btn-primary" onclick = "javascript:url_5m()"><i class="fa fa-search"></i>ดูพฤติกรรมกราฟราย 5 นาที</button> -->
                         </div>
                        
@@ -218,6 +219,34 @@ echo GridView::widget([
         
          window.open('http://localhost:8080/fx_system/frontend/web/index.php?r=sql/report7&datestart=' + datestart + '&dateend=' + dateend + '&sub_currency_id=<?php echo $sub_currency_id;?>' + '&timeframe=' + timeframe );
     }
+    
+    //function เรียกหน้ารายงาน
+    function url_week() {
+        
+        //ตัดเครื่องหมาย - ออก แล้วส่ง datestart&dateend ไปยัง url ที่ต้องการ
+         //ตัดเครื่องหมาย - ออก แล้วส่ง datestart&dateend ไปยัง url ที่ต้องการ
+        d1 = $('#w0').val();
+        var arr1 = d1.split("-");
+        s1 = arr1[0];
+        s2 = arr1[1];
+        s3 = arr1[2];
+        datestart = s3+s2+s1;
+        d2 = $('#w0-2').val();
+        var arr2 = d2.split("-");
+        m1 = arr2[0];
+        m2 = arr2[1];
+        m3 = arr2[2];
+        dateend = m3+m2+m1;
+        
+        
+         window.open('http://localhost:8080/fx_system/frontend/web/index.php?r=sql/report8&datestart=' + datestart + '&dateend=' + dateend + '&sub_currency_id=<?php echo $sub_currency_id;?>' );
+    }
+    
+    
+    
+    
+    
+    
     
     
     function url_5m() {
