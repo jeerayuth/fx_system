@@ -115,20 +115,23 @@ $this->registerJs("
                             ?>
                             
                             <?php
+                            /*
                                 echo '<label class="control-label">เวลาเริ่มต้น</label>';
                                 echo TimePicker::widget(
                                         [
                                             'name' => 'begin_time',
                                             'value' =>  '01:00',
                                             
-                                        ]);
+                                        ]); */
                             ?>
                             <?php
+                                /*
                                 echo '<label class="control-label">เวลาสิ้นสุด</label>';
                                 echo TimePicker::widget([
                                             'name' => 'end_time',
                                             'value' => '11:55 PM',
                                         ]);
+                                 */
                             ?>
                             <button type="button" class="btn btn-primary" onclick = "javascript:url()"><i class="fa fa-search"></i>ดูพฤติกรรมกราฟราย 1 ชั่วโมง</button> 
                             <button type="button" class="btn btn-primary" onclick = "javascript:url_5m()"><i class="fa fa-search"></i>ดูพฤติกรรมกราฟราย 5 นาที</button>
@@ -242,6 +245,7 @@ echo GridView::widget([
         
         
         // ดึง time มาใช้
+        /*
         t1 = $('#w1').val();
         var arr1 = t1.split(" ");
         s1 = arr1[0]+':00';
@@ -274,9 +278,9 @@ echo GridView::widget([
        
          timestart = moment(cds).format('HH:mm:ss');
          timeend = moment(cde).format('HH:mm:ss');
-         
+         */
 
-        window.open('http://localhost:8080/fx_system/frontend/web/index.php?r=sql/report8&datestart=' + datestart + '&dateend=' + dateend + '&timestart=' + timestart + '&timeend=' + timeend + '&sub_currency_id=<?php echo $sub_currency_id;?>' );
+        window.open('http://localhost:8080/fx_system/frontend/web/index.php?r=sql/report8&datestart=' + datestart + '&dateend=' + dateend + '&sub_currency_id=<?php echo $sub_currency_id;?>' );
     }
     
     

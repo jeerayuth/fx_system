@@ -41,8 +41,8 @@ $js_date_s = json_encode($data_date_s);
 
 <?php 
     // convert time ให้เป็นตัวแปร string
-        $timestart = "'".$timestart."'";
-        $timeend = "'".$timeend."'";
+   //     $timestart = "'".$timestart."'";
+  //      $timeend = "'".$timeend."'";
 ?>
 
 <?php
@@ -54,12 +54,11 @@ $js = <<<MOO
             date_s = $js_date_s;
             unit = $unit;      
             data_arr = [];
-            timestart = $timestart;
-            timeend = $timeend;
+
             
-        
+       
         $.each(date_s, function(i, name) {
-           $.getJSON('index.php?r=json/report2&date_s='+ name  + '&timestart=' + timestart + '&timeend=' + timeend + '&unit='+ unit + '&callback=?',	function(data) {  
+           $.getJSON('index.php?r=json/report2&date_s='+ name  +  '&unit='+ unit + '&callback=?',	function(data) {  
                
                 // convert data object field to int,float
                 for (var l=0; l < data.length; l++) {

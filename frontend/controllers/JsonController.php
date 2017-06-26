@@ -50,7 +50,7 @@ class JsonController extends CommonController {
     
     
     //รายงานดูพฤติกรรมราคาในกราฟราย 5 นาที ทั้งวัน แบบเลือกชั่วโมง
-    public function actionReport2($date_s ='2017-01-04' ,$timestart='01:00:00',$timeend='01:30:00',$unit ,$callback = null) {
+    public function actionReport2($date_s ='2017-01-04',$unit ,$callback = null) {
 
           \Yii::$app->response->format = \yii\web\Response::FORMAT_JSONP;
           
@@ -67,8 +67,9 @@ class JsonController extends CommonController {
 
                 INNER JOIN (
                         select DATE_S,TIME_S,`OPEN` from usdjpy_m5 where DATE_S = '$date_s'
-                ) t2 on (t2.TIME_S = m5.time_second)
-                AND m5.time_first BETWEEN '$timestart' AND  '$timeend' ";
+                ) t2 on (t2.TIME_S = m5.time_second) ";
+                
+               /* AND m5.time_first BETWEEN '$timestart' AND  '$timeend'  "; */
 
           
          try {               
