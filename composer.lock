@@ -4,8 +4,8 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "49b77055a15a6165bb2406d568b12e45",
-    "content-hash": "019a4902a100f48ff95f58d3e1b1b5eb",
+    "hash": "3462a544d6da32b9b13bddaf27e0a6f5",
+    "content-hash": "b1d70ae28c5ca068384e06815e600b49",
     "packages": [
         {
             "name": "bower-asset/bootstrap",
@@ -244,6 +244,48 @@
             ]
         },
         {
+            "name": "bower-asset/moment",
+            "version": "2.18.1",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/moment/moment.git",
+                "reference": "b8a7fc310eb3625e83fc0c8f1ea2840fa83c7378"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/moment/moment/zipball/b8a7fc310eb3625e83fc0c8f1ea2840fa83c7378",
+                "reference": "b8a7fc310eb3625e83fc0c8f1ea2840fa83c7378",
+                "shasum": ""
+            },
+            "type": "bower-asset-library",
+            "extra": {
+                "bower-asset-main": "moment.js",
+                "bower-asset-ignore": [
+                    "**/.*",
+                    "benchmarks",
+                    "bower_components",
+                    "meteor",
+                    "node_modules",
+                    "scripts",
+                    "tasks",
+                    "test",
+                    "component.json",
+                    "composer.json",
+                    "CONTRIBUTING.md",
+                    "ender.js",
+                    "Gruntfile.js",
+                    "Moment.js.nuspec",
+                    "package.js",
+                    "package.json",
+                    "ISSUE_TEMPLATE.md",
+                    "typing-tests"
+                ]
+            },
+            "license": [
+                "MIT"
+            ]
+        },
+        {
             "name": "bower-asset/punycode",
             "version": "v1.3.2",
             "source": {
@@ -364,6 +406,58 @@
                 "markdown-extra"
             ],
             "time": "2016-09-14 20:40:20"
+        },
+        {
+            "name": "conquer/momentjs",
+            "version": "1.0.2",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/borodulin/yii2-momentjs.git",
+                "reference": "b9d6ebf130762a66c926c9c610be833c8cd23a1f"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/borodulin/yii2-momentjs/zipball/b9d6ebf130762a66c926c9c610be833c8cd23a1f",
+                "reference": "b9d6ebf130762a66c926c9c610be833c8cd23a1f",
+                "shasum": ""
+            },
+            "require": {
+                "bower-asset/moment": ">=2.9.0",
+                "php": ">=5.4.0",
+                "yiisoft/yii2": "*"
+            },
+            "type": "yii2-extension",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "1.0.3.x-dev"
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "conquer\\momentjs\\": ""
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Andrey Borodulin",
+                    "email": "borodulin@gmail.com",
+                    "homepage": "https://github.com/borodulin/yii2-momentjs"
+                }
+            ],
+            "description": "Yii2 momentjs widget",
+            "homepage": "https://github.com/borodulin/yii2-momentjs",
+            "keywords": [
+                "extension",
+                "moment",
+                "momentjs",
+                "widget",
+                "yii2"
+            ],
+            "time": "2016-02-17 15:50:35"
         },
         {
             "name": "ezyang/htmlpurifier",

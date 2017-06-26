@@ -210,4 +210,13 @@ return array (
       '@kartik/time' => $vendorDir . '/kartik-v/yii2-widget-timepicker',
     ),
   ),
+  'conquer/momentjs' => 
+  array (
+    'name' => 'conquer/momentjs',
+    'version' => '1.0.2.0',
+    'alias' => 
+    array (
+      '@conquer/momentjs' => $vendorDir . '/conquer/momentjs',
+    ),
+  ),
 );

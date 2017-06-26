@@ -77,9 +77,7 @@ class JsonController extends CommonController {
             throw new \yii\web\ConflictHttpException('sql error');
         } 
         
-  
-   
-        
+           
        return ['callback' => $callback, 'data' => $data];
     
     

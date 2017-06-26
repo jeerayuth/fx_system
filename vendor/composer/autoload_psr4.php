@@ -33,6 +33,7 @@ return array(
     'kartik\\datecontrol\\' => array($vendorDir . '/kartik-v/yii2-datecontrol'),
     'kartik\\date\\' => array($vendorDir . '/kartik-v/yii2-widget-datepicker'),
     'kartik\\base\\' => array($vendorDir . '/kartik-v/yii2-krajee-base'),
+    'conquer\\momentjs\\' => array($vendorDir . '/conquer/momentjs'),
     'cebe\\markdown\\' => array($vendorDir . '/cebe/markdown'),
     'Faker\\' => array($vendorDir . '/fzaninotto/faker/src/Faker'),
 );

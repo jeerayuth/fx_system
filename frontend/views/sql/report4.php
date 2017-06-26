@@ -113,7 +113,7 @@ $this->registerJs("
                                 ]
                             ]);
                             ?>
-                            <button type="button" class="btn btn-primary" onclick = "javascript:url()"><i class="fa fa-search"></i>ดูพฤติกรรมกราฟราย 1 ชั่วโมง</button>
+                            
                             <?php
                                 echo '<label class="control-label">เวลาเริ่มต้น</label>';
                                 echo TimePicker::widget(
@@ -127,9 +127,10 @@ $this->registerJs("
                                 echo '<label class="control-label">เวลาสิ้นสุด</label>';
                                 echo TimePicker::widget([
                                             'name' => 'end_time',
-                                            'value' => '11:55',
+                                            'value' => '11:55 PM',
                                         ]);
                             ?>
+                            <button type="button" class="btn btn-primary" onclick = "javascript:url()"><i class="fa fa-search"></i>ดูพฤติกรรมกราฟราย 1 ชั่วโมง</button> 
                             <button type="button" class="btn btn-primary" onclick = "javascript:url_5m()"><i class="fa fa-search"></i>ดูพฤติกรรมกราฟราย 5 นาที</button>
                         </div>
                        
