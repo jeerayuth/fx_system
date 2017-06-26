@@ -1,63 +1,43 @@
 <?php
-
 namespace frontend\controllers;
-
 use Yii;
 use frontend\components\CommonController;
-
 class SqlController extends CommonController {
-
     public function actionReport1($sub_currency_id) {
-
         $currency_table = $sub_currency_id . "_mn";
-
         $report_name = "เลือกปีที่ต้องการดูข้อมูลสถิติของคู่เงิน $sub_currency_id";
-
         $sql = "SELECT 
                     YEAR(DATE_S) as year_s
                 FROM $currency_table
                 GROUP BY  YEAR(DATE_S)
                 ORDER BY year_s DESC
                 LIMIT 5 ";
-
-
         try {
             $rawData = \yii::$app->db->createCommand($sql)->queryAll();
         } catch (\yii\db\Exception $e) {
             throw new \yii\web\ConflictHttpException('sql error');
         }
-
         $dataProvider = new \yii\data\ArrayDataProvider([
             'allModels' => $rawData,
             'pagination' => FALSE,
         ]);
-
-
         return $this->render('report1', [
                     'dataProvider' => $dataProvider,
                     'report_name' => $report_name,
                     'sub_currency_id' => $sub_currency_id
         ]);
     }
-
     public function actionReport2($sub_currency_id, $year_s) {
         $currency_table = $sub_currency_id . "_mn";
-
         $report_name = "ข้อมูลสถิติของคู่เงิน $sub_currency_id ปี $year_s";
-
         // sql find units in sub_current table
         $sql_find = "SELECT id,units FROM sub_currency WHERE id = '$sub_currency_id' ";
-
         try {
             $data_unit = \yii::$app->db->createCommand($sql_find)->queryAll();
         } catch (\yii\db\Exception $e) {
             throw new \yii\web\ConflictHttpException('sql error');
         }
-
         $unit = $data_unit[0]['units'];
-
-
-
         $sql = "SELECT 
                     '$sub_currency_id' as cur_name,
                     CONCAT(MONTH(DATE_S),'-',YEAR(DATE_S))  as month_s,
@@ -72,20 +52,15 @@ class SqlController extends CommonController {
                 ORDER BY DATE_S
                           
             ";
-
-
         try {
             $rawData = \yii::$app->db->createCommand($sql)->queryAll();
         } catch (\yii\db\Exception $e) {
             throw new \yii\web\ConflictHttpException('sql error');
         }
-
         $dataProvider = new \yii\data\ArrayDataProvider([
             'allModels' => $rawData,
             'pagination' => FALSE,
         ]);
-
-
         return $this->render('report2', [
                     'dataProvider' => $dataProvider,
                     'rawData' => $rawData,
@@ -94,23 +69,17 @@ class SqlController extends CommonController {
                     'year_s' => $year_s,
         ]);
     }
-
     public function actionReport3($sub_currency_id, $year_s, $month_id) {
         $currency_table = $sub_currency_id . "_w1";
-
         $report_name = "ข้อมูลสถิติของคู่เงิน $sub_currency_id เดือน $month_id ปี $year_s ";
-
         // sql find units in sub_current table
         $sql_find = "SELECT id,units FROM sub_currency WHERE id = '$sub_currency_id' ";
-
         try {
             $data_unit = \yii::$app->db->createCommand($sql_find)->queryAll();
         } catch (\yii\db\Exception $e) {
             throw new \yii\web\ConflictHttpException('sql error');
         }
-
         $unit = $data_unit[0]['units'];
-
         $sql = "SELECT 
                     '$sub_currency_id' as cur_name,
                     DATE_S as month_s,
@@ -121,20 +90,15 @@ class SqlController extends CommonController {
                 WHERE YEAR(DATE_S) = $year_s and MONTH(DATE_S) = $month_id
               
                 ORDER BY DATE_S   ";
-
-
         try {
             $rawData = \yii::$app->db->createCommand($sql)->queryAll();
         } catch (\yii\db\Exception $e) {
             throw new \yii\web\ConflictHttpException('sql error');
         }
-
         $dataProvider = new \yii\data\ArrayDataProvider([
             'allModels' => $rawData,
             'pagination' => FALSE,
         ]);
-
-
         return $this->render('report3', [
                     'dataProvider' => $dataProvider,
                     'rawData' => $rawData,
@@ -144,24 +108,17 @@ class SqlController extends CommonController {
                     'month_id' => $month_id,
         ]);
     }
-
     public function actionReport4($sub_currency_id, $year_s, $month_id) {
         $currency_table = $sub_currency_id . "_d1";
-
         $report_name = "กราฟพฤติกรรมการแกว่งของราคาในคู่เงิน $sub_currency_id เดือน $month_id ปี $year_s ";
-
         // sql find units in sub_current table
         $sql_find = "SELECT id,units FROM sub_currency WHERE id = '$sub_currency_id' ";
-
         try {
             $data_unit = \yii::$app->db->createCommand($sql_find)->queryAll();
         } catch (\yii\db\Exception $e) {
             throw new \yii\web\ConflictHttpException('sql error');
         }
-
         $unit = $data_unit[0]['units'];
-
-
         $sql = "SELECT 
                     '$sub_currency_id' as cur_name,
                     DATE_S as date_s ,
@@ -179,7 +136,6 @@ class SqlController extends CommonController {
         } catch (\yii\db\Exception $e) {
             throw new \yii\web\ConflictHttpException('sql error');
         }
-
         $dataProvider = new \yii\data\ArrayDataProvider([
             'allModels' => $rawData,
             'pagination' => FALSE,
@@ -194,16 +150,12 @@ class SqlController extends CommonController {
                     'month_id' => $month_id,
         ]);
     }
-
     
     public function actionReport5($sub_currency_id, $year_s, $month_id) {
         $currency_table = $sub_currency_id . "_h4";
-
         $report_name = "ข้อมูลสถิติของคู่เงิน $sub_currency_id  เดือน $month_id ปี $year_s ";
-
         // sql find units in sub_current table
         $sql_find = "SELECT id,units FROM sub_currency WHERE id = '$sub_currency_id' ";
-
         try {
             $data_unit = \yii::$app->db->createCommand($sql_find)->queryAll();
         } catch (\yii\db\Exception $e) {
@@ -216,11 +168,8 @@ class SqlController extends CommonController {
                         (
                             SELECT tr.time_s,price_range.price,count(t.range1) as count_range
                             FROM price_range
-
                             INNER JOIN time_range tr ON tr.`level` = price_range.`level`
-
                             LEFT JOIN (
-
                             select case
                                    when ((hight-open)*1000)  between   0 and 300        then    '0-300' 
                                    when ((hight-open)*1000)  between  301 and 600 	then    '301-600'
@@ -232,23 +181,14 @@ class SqlController extends CommonController {
                                    when ((hight-open)*1000)  between 2101 and 2400 	then 	'2101-2400'
                                   end
                                  as range1,TIME_S,DATE_S
-
                                    from usdjpy_h4 where YEAR(DATE_S)=$year_s AND MONTH(DATE_S)= $month_id
-
-
                             ) t ON (t.range1 = price_range.price and tr.time_s = t.TIME_S)  
                             group by tr.time_s,price_range.price
-
                             UNION ALL
-
                             SELECT tr.time_s,price_range.price,count(t2.range1) as count_range
-
                             FROM price_range
-
                             INNER JOIN time_range tr ON tr.`level` = price_range.`level`
-
                             LEFT JOIN (
-
                             select case
                                    when ((open-low)*1000)  between   0 and 300    then  '0-300' 
                                    when ((open-low)*1000)  between  301 and 600 	then  '301-600'
@@ -263,14 +203,11 @@ class SqlController extends CommonController {
                                    from usdjpy_h4 where YEAR(DATE_S)=$year_s AND MONTH(DATE_S)= $month_id
                             ) t2 ON (t2.range1 = price_range.price and tr.time_s = t2.TIME_S)  
                             group by tr.time_s,price_range.price
-
                         ) tt
-
                         GROUP BY time_s,price
                         ORDER BY sum_range desc ";
         
         
-
         $sql_positive = "SELECT 
                     tr.time_s,price_range.price as price_range,
                     count(t.range1) as count_price_by_range,
@@ -291,11 +228,8 @@ class SqlController extends CommonController {
                        as range1,TIME_S,DATE_S
                        from $currency_table where YEAR(DATE_S)= $year_s AND MONTH(DATE_S)=$month_id
                 ) t ON (t.range1 = price_range.price and tr.time_s = t.TIME_S)  
-
                 GROUP BY tr.time_s,price_range.price
                 ORDER BY price_range.no,tr.time_s ";
-
-
         $sql_negative = "SELECT 
                     tr.time_s,price_range.price as price_range,
                     concat('-',count(t.range1)) as count_price_by_range,
@@ -316,13 +250,8 @@ class SqlController extends CommonController {
                        as range1,TIME_S,DATE_S
                        from $currency_table where YEAR(DATE_S)= $year_s AND MONTH(DATE_S)=$month_id
                 ) t ON (t.range1 = price_range.price and tr.time_s = t.TIME_S)  
-
                 GROUP BY tr.time_s,price_range.price
                 ORDER BY price_range.no,tr.time_s ";
-
-
-
-
         try {
             $rawData = \yii::$app->db->createCommand($sql_total)->queryAll();
             $rawData_positive = \yii::$app->db->createCommand($sql_positive)->queryAll();
@@ -335,18 +264,14 @@ class SqlController extends CommonController {
             'allModels' => $rawData,
             'pagination' => FALSE,
         ]);
-
         $dataProvider_positive = new \yii\data\ArrayDataProvider([
             'allModels' => $rawData_positive,
             'pagination' => FALSE,
         ]);
-
         $dataProvider_negative = new \yii\data\ArrayDataProvider([
             'allModels' => $rawData_negative,
             'pagination' => FALSE,
         ]);
-
-
         return $this->render('report5', [
                     'dataProvider' => $dataProvider,
                     'dataProvider_positive' => $dataProvider_positive,
@@ -360,24 +285,17 @@ class SqlController extends CommonController {
                     'month_id' => $month_id,
         ]);
     }
-
     public function actionReport6($sub_currency_id, $date_s) {
         $currency_table = $sub_currency_id . "_h1";
-
         $report_name = "ข้อมูลสถิติของคู่เงิน $sub_currency_id วันที่ $date_s ";
-
         // sql find units in sub_current table
         $sql_find = "SELECT id,units FROM sub_currency WHERE id = '$sub_currency_id' ";
-
         try {
             $data_unit = \yii::$app->db->createCommand($sql_find)->queryAll();
         } catch (\yii\db\Exception $e) {
             throw new \yii\web\ConflictHttpException('sql error');
         }
-
         $unit = $data_unit[0]['units'];
-
-
         $sql = "SELECT 
                     '$sub_currency_id' as cur_name,
                      DATE_S as date_s,
@@ -389,19 +307,15 @@ class SqlController extends CommonController {
                 WHERE DATE_S = '$date_s'
               
                 ORDER BY DATE_S  ";
-
         try {
             $rawData = \yii::$app->db->createCommand($sql)->queryAll();
         } catch (\yii\db\Exception $e) {
             throw new \yii\web\ConflictHttpException('sql error');
         }
-
         $dataProvider = new \yii\data\ArrayDataProvider([
             'allModels' => $rawData,
             'pagination' => FALSE,
         ]);
-
-
         return $this->render('report6', [
                     'dataProvider' => $dataProvider,
                     'rawData' => $rawData,
@@ -411,11 +325,9 @@ class SqlController extends CommonController {
     }
     
     
-      public function actionReport7($sub_currency_id,$datestart,$dateend) {
-        $currency_table = $sub_currency_id."_h1";
-
+      public function actionReport7($datestart,$dateend,$sub_currency_id,$timeframe) {
+        $currency_table = $sub_currency_id.$timeframe;
         $report_name = "กราฟพฤติกรรมการแกว่งในคู่เงิน $sub_currency_id ระหว่างวันที่ $datestart ถึงวันที่ $dateend";
-
         // sql find units in sub_current table
         $sql_find = "SELECT id,units FROM sub_currency WHERE id = '$sub_currency_id' ";
         
@@ -427,110 +339,28 @@ class SqlController extends CommonController {
                 GROUP BY DATE_S
                 ORDER BY DATE_S   ";
         
-    
-        
         try {
             $data_unit = \yii::$app->db->createCommand($sql_find)->queryAll();
             $rawData = \yii::$app->db->createCommand($sql)->queryAll();  
         } catch (\yii\db\Exception $e) {
             throw new \yii\web\ConflictHttpException('sql error');
         }
-          echo $report_name;
-
         $unit = $data_unit[0]['units'];
-             
-        
+                   
         return $this->render('report7', [
                     'rawData' => $rawData,
                     'report_name' => $report_name,
                     'sub_currency_id' => $sub_currency_id,
-                    'datestart' => $datestart,
-                    'dateend' => $dateend,
-                    'unit' => $unit,
-        ]); 
-         
-         
-    }
-    
-    
-     public function actionReport8($datestart,$dateend,$sub_currency_id) {
-        $currency_table = $sub_currency_id . "_m5";
-
-        $report_name = "กราฟพฤติกรรมการแกว่งในคู่เงิน $sub_currency_id ระหว่างวันที่ $datestart ถึงวันที่ $dateend ";
-             
-        // sql find units in sub_current table
-        $sql_find = "SELECT id,units FROM sub_currency WHERE id = '$sub_currency_id' ";
-        
-        // เอาไว้ดึงช่วงวันที่ไปให้กราฟแสดงผล
-        $sql = "SELECT 
-                    '$sub_currency_id' as cur_name, DATE_S as date_s 
-                FROM $currency_table
-                WHERE DATE_S between '$datestart' and '$dateend'
-                GROUP BY DATE_S
-                ORDER BY DATE_S ";
-        
-        try {
-            $data_unit = \yii::$app->db->createCommand($sql_find)->queryAll();
-            $rawData = \yii::$app->db->createCommand($sql)->queryAll();  
-        } catch (\yii\db\Exception $e) {
-            throw new \yii\web\ConflictHttpException('sql error');
-        }
-
-        $unit = $data_unit[0]['units'];
-                           
-        return $this->render('report8', [
-                    'rawData' => $rawData,
-                    'report_name' => $report_name,
-                    'sub_currency_id' => $sub_currency_id,
-                    'datestart' => $datestart,
-                    'dateend' => $dateend,
-                  //  'timestart' => $timestart,
-                  //  'timeend' => $timeend,
-                    'unit' => $unit,
-        ]);
-         
-  
-    }
-    
-    
-     public function actionReport9($datestart,$dateend,$sub_currency_id) {
-        $currency_table = $sub_currency_id . "_m15";
-
-        $report_name = "กราฟพฤติกรรมการแกว่งในคู่เงิน $sub_currency_id ระหว่างวันที่ $datestart ถึงวันที่ $dateend ";
-             
-        // sql find units in sub_current table
-        $sql_find = "SELECT id,units FROM sub_currency WHERE id = '$sub_currency_id' ";
-        
-        // เอาไว้ดึงช่วงวันที่ไปให้กราฟแสดงผล
-        $sql = "SELECT 
-                    '$sub_currency_id' as cur_name, DATE_S as date_s 
-                FROM $currency_table
-                WHERE DATE_S between '$datestart' and '$dateend'
-                GROUP BY DATE_S
-                ORDER BY DATE_S ";
-        
-        try {
-            $data_unit = \yii::$app->db->createCommand($sql_find)->queryAll();
-            $rawData = \yii::$app->db->createCommand($sql)->queryAll();  
-        } catch (\yii\db\Exception $e) {
-            throw new \yii\web\ConflictHttpException('sql error');
-        }
-
-        $unit = $data_unit[0]['units'];
-                           
-        return $this->render('report9', [
-                    'rawData' => $rawData,
-                    'report_name' => $report_name,
-                    'sub_currency_id' => $sub_currency_id,
+                    'currency_table' => $currency_table,
+                    'timeframe' => $timeframe,
                     'datestart' => $datestart,
                     'dateend' => $dateend,
                     'unit' => $unit,
         ]);
-         
-  
     }
-
     
     
-
+ 
+    
+    
 }?>

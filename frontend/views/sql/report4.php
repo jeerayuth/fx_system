@@ -1,5 +1,4 @@
 <?php
-
 /* @var $this yii\web\View */
 use kartik\grid\GridView;
 use yii\helpers\Html;
@@ -7,21 +6,15 @@ use miloschuman\highcharts\Highcharts;
 use miloschuman\highcharts\HighchartsAsset;
 use miloschuman\highcharts\Highstock;
 use yii\web\JsExpression;
-
 use kartik\datecontrol\Module;
 use kartik\date\DatePicker;
 use kartik\datecontrol\DateControl;
-
 use kartik\time\TimePicker;
-
 \conquer\momentjs\MomentjsAsset::register($this);
-
 HighchartsAsset::register($this)->withScripts([
 	'highcharts-more',
 	'themes/grid'
 ]);
-
-
 $this->title = $report_name;
 //$this->params['breadcrumbs'][] = $this->title;
 ?>
@@ -30,7 +23,6 @@ $this->title = $report_name;
 <div id="chart"></div>
 
 <?php
-
 //เตรียมชุดข้อมูลไปใส่ให้กราฟ แกน x,y
 $data1 = [];
 for ($i = 0; $i < count($rawData); $i++) {   
@@ -39,7 +31,6 @@ for ($i = 0; $i < count($rawData); $i++) {
         'y' => $rawData[$i]['oh'] * 1,
     ];
 }
-
 $data2 = [];
 for ($i = 0; $i < count($rawData); $i++) {
     $data2[] = [
@@ -47,12 +38,9 @@ for ($i = 0; $i < count($rawData); $i++) {
         'y' => $rawData[$i]['ol'] * 1,
     ];
 }
-
 //convert array to json string;
 $js_data1 = json_encode($data1);
 $js_data2 = json_encode($data2);
-
-
 // chart
 $this->registerJs(" 
     Highcharts.chart('chart', {
@@ -114,6 +102,10 @@ $this->registerJs("
                             ]);
                             ?>
                             
+                            <label class="radio-inline"><input type="radio" name="opttimeframe" value="_h1" checked>1 ชม.</label>
+                            <label class="radio-inline"><input type="radio" name="opttimeframe" value="_m15">15 นาที</label>
+                            <label class="radio-inline"><input type="radio" name="opttimeframe" value="_m5">5 นาที</label>
+                            
                             <?php
                             /*
                                 echo '<label class="control-label">เวลาเริ่มต้น</label>';
@@ -133,8 +125,8 @@ $this->registerJs("
                                         ]);
                                  */
                             ?>
-                            <button type="button" class="btn btn-primary" onclick = "javascript:url()"><i class="fa fa-search"></i>ดูพฤติกรรมกราฟราย 1 ชั่วโมง</button> 
-                            <button type="button" class="btn btn-primary" onclick = "javascript:url_5m()"><i class="fa fa-search"></i>ดูพฤติกรรมกราฟราย 5 นาที</button>
+                            <button type="button" class="btn btn-primary" onclick = "javascript:url()"><i class="fa fa-search"></i>ดูพฤติกรรมกราฟตามเวลา</button> 
+                        <!--    <button type="button" class="btn btn-primary" onclick = "javascript:url_5m()"><i class="fa fa-search"></i>ดูพฤติกรรมกราฟราย 5 นาที</button> -->
                         </div>
                        
                     </div>
@@ -147,7 +139,6 @@ $this->registerJs("
 
 
 <?php
-
 echo GridView::widget([
     'dataProvider' => $dataProvider,
     'panel' => [
@@ -222,7 +213,10 @@ echo GridView::widget([
         m3 = arr2[2];
         dateend = m3+m2+m1;
         
-         window.open('http://localhost:8080/fx_system/frontend/web/index.php?r=sql/report7&datestart=' + datestart + '&dateend=' + dateend  );
+        timeframe = $("[name='opttimeframe']:checked").val()
+        
+        
+         window.open('http://localhost:8080/fx_system/frontend/web/index.php?r=sql/report7&datestart=' + datestart + '&dateend=' + dateend + '&sub_currency_id=<?php echo $sub_currency_id;?>' + '&timeframe=' + timeframe );
     }
     
     
@@ -279,7 +273,6 @@ echo GridView::widget([
          timestart = moment(cds).format('HH:mm:ss');
          timeend = moment(cde).format('HH:mm:ss');
          */
-
         window.open('http://localhost:8080/fx_system/frontend/web/index.php?r=sql/report8&datestart=' + datestart + '&dateend=' + dateend + '&sub_currency_id=<?php echo $sub_currency_id;?>' );
     }
     

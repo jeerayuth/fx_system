@@ -1,5 +1,4 @@
 <?php
-
 /* @var $this yii\web\View */
 use kartik\grid\GridView;
 use yii\helpers\Html;
@@ -7,13 +6,10 @@ use miloschuman\highcharts\Highcharts;
 use miloschuman\highcharts\HighchartsAsset;
 use miloschuman\highcharts\Highstock;
 use yii\web\JsExpression;
-
 HighchartsAsset::register($this)->withScripts([
 	'highcharts-more',
 	'themes/grid'
 ]);
-
-
 $this->title = $report_name;
 //$this->params['breadcrumbs'][] = $this->title;
 ?>
@@ -21,39 +17,36 @@ $this->title = $report_name;
 
 
 <?php
-
 //เตรียมชุดข้อมูลวันที่
 $text_date_s = array();
 $data_date_s = [];
-
 //เตรียมชุดข้อมูลไปใส่ให้กราฟ แกน x,y
 for ($i = 0; $i < count($rawData); $i++) {
     $text_date_s = $rawData[$i]['date_s'];
     array_push($data_date_s, $text_date_s);   
 }
-
 //print_r($data_date_s);
 $js_date_s = json_encode($data_date_s);
+
 
 ?>
 
 <center><h4><?php echo $report_name; ?></h4></center>
 
-<?php
 
+<?php
 $js = <<<MOO
     $(function () {
-        var sub_currency_id;
         var seriesOptions = [],
             seriesCounter = 0,
             date_s = $js_date_s;
             unit = $unit;      
             data_arr = [];
-            sub_currency_id = 'usdjpy';
-        
-        
+            currency_table = '$currency_table'; 
+            timeframe = '$timeframe';
+             
         $.each(date_s, function(i, name) {
-           $.getJSON('index.php?r=json/report1&date_s='+ name + '&unit='+ unit + '&sub_currency_id=' +  sub_currency_id + '&callback=?',	function(data) {  
+           $.getJSON('index.php?r=json/report1&date_s='+ name + '&unit='+ unit + '&currency_table=' + currency_table + '&timeframe=' + timeframe +  '&callback=?',	function(data) {  
                
                 // convert data object field to int,float
                 for (var l=0; l < data.length; l++) {
@@ -81,9 +74,7 @@ $js = <<<MOO
         });
     });
 MOO;
-
 $this->registerJs($js);
-
 echo Highstock::widget([
     // The highcharts initialization statement will be wrapped in a function
     // named 'createChart' with one parameter: data.
@@ -132,4 +123,3 @@ echo Highstock::widget([
     ]
 ]);
 ?>
-
