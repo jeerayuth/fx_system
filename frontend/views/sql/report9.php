@@ -39,21 +39,22 @@ $js_date_s = json_encode($data_date_s);
 
 <center><h4><?php echo $report_name; ?></h4></center>
 
+
+
 <?php
 
 $js = <<<MOO
     $(function () {
-        var sub_currency_id;
         var seriesOptions = [],
             seriesCounter = 0,
             date_s = $js_date_s;
             unit = $unit;      
             data_arr = [];
-            sub_currency_id = 'usdjpy';
-        
-        
+
+            
+       
         $.each(date_s, function(i, name) {
-           $.getJSON('index.php?r=json/report1&date_s='+ name + '&unit='+ unit + '&sub_currency_id=' +  sub_currency_id + '&callback=?',	function(data) {  
+           $.getJSON('index.php?r=json/report2&date_s='+ name  +  '&unit='+ unit + '&callback=?',	function(data) {  
                
                 // convert data object field to int,float
                 for (var l=0; l < data.length; l++) {

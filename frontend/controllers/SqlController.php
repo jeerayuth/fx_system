@@ -412,7 +412,7 @@ class SqlController extends CommonController {
     
     
       public function actionReport7($sub_currency_id,$datestart,$dateend) {
-        $currency_table = $sub_currency_id . "_h1";
+        $currency_table = $sub_currency_id."_h1";
 
         $report_name = "กราฟพฤติกรรมการแกว่งในคู่เงิน $sub_currency_id ระหว่างวันที่ $datestart ถึงวันที่ $dateend";
 
@@ -427,15 +427,19 @@ class SqlController extends CommonController {
                 GROUP BY DATE_S
                 ORDER BY DATE_S   ";
         
+    
+        
         try {
             $data_unit = \yii::$app->db->createCommand($sql_find)->queryAll();
             $rawData = \yii::$app->db->createCommand($sql)->queryAll();  
         } catch (\yii\db\Exception $e) {
             throw new \yii\web\ConflictHttpException('sql error');
         }
+          echo $report_name;
 
         $unit = $data_unit[0]['units'];
-                   
+             
+        
         return $this->render('report7', [
                     'rawData' => $rawData,
                     'report_name' => $report_name,
@@ -443,7 +447,9 @@ class SqlController extends CommonController {
                     'datestart' => $datestart,
                     'dateend' => $dateend,
                     'unit' => $unit,
-        ]);
+        ]); 
+         
+         
     }
     
     
@@ -480,6 +486,44 @@ class SqlController extends CommonController {
                     'dateend' => $dateend,
                   //  'timestart' => $timestart,
                   //  'timeend' => $timeend,
+                    'unit' => $unit,
+        ]);
+         
+  
+    }
+    
+    
+     public function actionReport9($datestart,$dateend,$sub_currency_id) {
+        $currency_table = $sub_currency_id . "_m15";
+
+        $report_name = "กราฟพฤติกรรมการแกว่งในคู่เงิน $sub_currency_id ระหว่างวันที่ $datestart ถึงวันที่ $dateend ";
+             
+        // sql find units in sub_current table
+        $sql_find = "SELECT id,units FROM sub_currency WHERE id = '$sub_currency_id' ";
+        
+        // เอาไว้ดึงช่วงวันที่ไปให้กราฟแสดงผล
+        $sql = "SELECT 
+                    '$sub_currency_id' as cur_name, DATE_S as date_s 
+                FROM $currency_table
+                WHERE DATE_S between '$datestart' and '$dateend'
+                GROUP BY DATE_S
+                ORDER BY DATE_S ";
+        
+        try {
+            $data_unit = \yii::$app->db->createCommand($sql_find)->queryAll();
+            $rawData = \yii::$app->db->createCommand($sql)->queryAll();  
+        } catch (\yii\db\Exception $e) {
+            throw new \yii\web\ConflictHttpException('sql error');
+        }
+
+        $unit = $data_unit[0]['units'];
+                           
+        return $this->render('report9', [
+                    'rawData' => $rawData,
+                    'report_name' => $report_name,
+                    'sub_currency_id' => $sub_currency_id,
+                    'datestart' => $datestart,
+                    'dateend' => $dateend,
                     'unit' => $unit,
         ]);
          

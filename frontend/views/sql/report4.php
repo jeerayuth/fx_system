@@ -222,7 +222,7 @@ echo GridView::widget([
         m3 = arr2[2];
         dateend = m3+m2+m1;
         
-         window.open('http://localhost:8080/fx_system/frontend/web/index.php?r=sql/report7&datestart=' + datestart + '&dateend=' + dateend + '&sub_currency_id=<?php echo $sub_currency_id;?>' );
+         window.open('http://localhost:8080/fx_system/frontend/web/index.php?r=sql/report7&datestart=' + datestart + '&dateend=' + dateend  );
     }
     
     
