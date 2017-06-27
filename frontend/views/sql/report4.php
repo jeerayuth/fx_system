@@ -106,6 +106,7 @@ $this->registerJs("
                             <label class="radio-inline"><input type="radio" name="opttimeframe" value="_m15">15 นาที</label>
                             <label class="radio-inline"><input type="radio" name="opttimeframe" value="_m5">5 นาที</label>
                             
+                            
                             <?php
                             /*
                                 echo '<label class="control-label">เวลาเริ่มต้น</label>';
@@ -126,7 +127,8 @@ $this->registerJs("
                                  */
                             ?>
                             <button type="button" class="btn btn-primary" onclick = "javascript:url()"><i class="fa fa-search"></i>ดูพฤติกรรมกราฟในรอบวัน</button> 
-                            <button type="button" class="btn btn-primary" onclick = "javascript:url_week()"><i class="fa fa-search"></i>ดูพฤติกรรมกราฟในรอบสัปดาห์</button> 
+                            <button type="button" class="btn btn-primary" onclick = "javascript:url_week()"><i class="fa fa-search"></i>ดูพฤติกรรมกราฟในรอบสัปดาห์</button>
+                            <button type="button" class="btn btn-primary" onclick = "javascript:url_price_range()"><i class="fa fa-search"></i>ดูระยะในกรอบเวลา</button> 
                         <!--    <button type="button" class="btn btn-primary" onclick = "javascript:url_5m()"><i class="fa fa-search"></i>ดูพฤติกรรมกราฟราย 5 นาที</button> -->
                         </div>
                        
@@ -244,7 +246,9 @@ echo GridView::widget([
     
     
     
-    
+    function url_price_range(){
+        window.open('http://localhost:8080/fx_system/frontend/web/index.php?r=sql/report9&sub_currency_id=<?php echo $sub_currency_id;?>' );
+    }
     
     
     

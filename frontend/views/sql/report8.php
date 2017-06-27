@@ -44,6 +44,9 @@ $categ = [];
                                     text: '$report_name',
                                     x: -20 //center
                                 },
+                                chart: {
+                                       height: 550
+                                },
                                 subtitle: {
                                     text: '',
                                     x: -20
