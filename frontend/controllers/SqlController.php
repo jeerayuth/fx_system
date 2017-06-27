@@ -377,12 +377,12 @@ class SqlController extends CommonController {
                     
                 FROM price_dynamic_h1 h1
                 LEFT JOIN (
-                            select DATE_S,TIME_S,`OPEN` from usdjpy_h1 where DATE_S BETWEEN '2017-01-04'  AND '2017-01-06' 
+                            select DATE_S,TIME_S,`OPEN` from usdjpy_h1 where DATE_S BETWEEN '$datestart'  AND '$dateend' 
 
                 ) t1 on (t1.TIME_S = h1.time_first)
 
                 LEFT JOIN (
-                            select DATE_S,TIME_S,`OPEN` from usdjpy_h1 where DATE_S BETWEEN '2017-01-04'  AND '2017-01-06' 
+                            select DATE_S,TIME_S,`OPEN` from usdjpy_h1 where DATE_S BETWEEN '$datestart'  AND '$dateend' 
 
                 ) t2 on (t2.TIME_S = h1.time_second)
                 

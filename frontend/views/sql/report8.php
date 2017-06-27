@@ -23,70 +23,63 @@ $this->title = $report_name;
 
 //เตรียมชุดข้อมูลไปใส่ให้กราฟ แกน x,y
 
-//เตรียมชุดข้อมูลวันที่
-$text_data_s = array();
-$data_s = [];
+$categ = [];
+        for ($i = 0; $i < count($rawData); $i++) {
+            $categ[] = $rawData[$i]['date_s'];
+        }
+        $js_categ = implode("','", $categ);
+
+        
+        $data = [];
+        for ($i = 0; $i < count($rawData); $i++) {
+            $data[] = $rawData[$i]['cal_price_range'];
+        }
+        $js_data = implode(",", $data);
 
 
-//เตรียมชุดข้อมูลไปใส่ให้กราฟ แกน x,y
-for ($i = 0; $i < count($rawData); $i++) {
-    $text_data_s = $rawData[$i]['cal_price_range']*1;
-    array_push($data_s, $text_data_s);   
-}
-//print_r($data_date_s);
-$js_data_s = json_encode($data_s);
 
-
-echo $js_data_s;
-
-
-// chart
-echo Highcharts::widget([
-    'scripts' => [
-        'modules/exporting',
-        'themes/grid-light',
-    ],
-    'options' => [
-        'title' => [
-            'text' => 'Combination chart',
-        ],
-       
-        'labels' => [
-            'items' => [
-                [
-                    'html' => 'Total fruit consumption',
-                    'style' => [
-                        'left' => '50px',
-                        'top' => '18px',
-                        'color' => new JsExpression('(Highcharts.theme && Highcharts.theme.textColor) || "black"'),
-                    ],
-                ],
-            ],
-        ],
-       
-        'series' => [         
-            [
-                'type' => 'spline',
-                'name' => 'Average',
-                'data' => $js_data_s,
-                'marker' => [
-                    'lineWidth' => 2,
-                    'lineColor' => new JsExpression('Highcharts.getOptions().colors[3]'),
-                    'fillColor' => 'white',
-                ],
-
-                'center' => [100, 80],
-                'size' => 100,
-                'showInLegend' => false,
-                'dataLabels' => [
-                    'enabled' => false,
-                ],
-            ],
-        ],
-    ]
-]);
-
-
-?>
+        $this->registerJs(" $(function () {
+                            $('#chart').highcharts({
+                                title: {
+                                    text: '$report_name',
+                                    x: -20 //center
+                                },
+                                subtitle: {
+                                    text: '',
+                                    x: -20
+                                },
+                                xAxis: {
+                                      categories: ['$js_categ'],
+                                },
+                                yAxis: {
+                                    title: {
+                                        text: 'ระยะการแกว่ง'
+                                    },
+                                    plotLines: [{
+                                        value: 0,
+                                        width: 1,
+                                        color: '#808080'
+                                    }]
+                                },
+                                tooltip: {
+                                    valueSuffix: ''
+                                },
+                                legend: {
+                                    layout: 'vertical',
+                                    align: 'right',
+                                    verticalAlign: 'middle',
+                                    borderWidth: 0
+                                },
+                                credits: {
+                                    enabled: false
+                                },
+                                series: [{
+                                    name: 'range',
+                                    data: [$js_data]
+                                }]
+                            });
+                        });
+             ");
+        ?>
 
 
