@@ -99,11 +99,7 @@ echo Highstock::widget([
                 'color' => 'silver'
             ]]
         ],
-        'plotOptions' => [
-            'series' => [
-                'compare' => 'percent'
-            ]
-        ],
+      
         'tooltip' => [
             'headerFormat' => '<b>{series.name} เวลา {series.x} </b><br/>',
             'valueDecimals' => 2 ,     
