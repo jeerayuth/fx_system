@@ -25,16 +25,16 @@ HighchartsAsset::register($this)->withScripts([
        $data1 = [];
         for ($i = 0; $i < count($rawData); $i++) {
             $data1[] = [
-                '0' => $rawData[$i]['open_to_hight'] * 1,
-                '1' => 0,
+                '0' => intval($rawData[$i]['open_to_hight']) * 1,
+                '1' => $i,
             ];
         }
         
            $data2 = [];
         for ($i = 0; $i < count($rawData); $i++) {
             $data2[] = [
-                '0' => $rawData[$i]['open_to_low'] * 1,
-                '1' => 0,
+                '0' => intval($rawData[$i]['open_to_low']) * 1,
+                '1' => $i,
             ];
         }
 
