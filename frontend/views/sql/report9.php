@@ -51,7 +51,7 @@ HighchartsAsset::register($this)->withScripts([
                                     zoomType: 'xy'
                                 },
                                 title: {
-                                    text: 'ระดับ Range การแกว่งของราคาค่าเงิน ในช่วงวันที่ xxx ถึง xxx ณ ช่วงเวลา 00:00:00 ถึง 99:99:99'
+                                    text: '$report_name'
                                 },
 
                                 subtitle: {

@@ -417,20 +417,29 @@ class SqlController extends CommonController {
     }
     
     
-    public function actionReport9($sub_currency_id) {
+    public function actionReport9($datestart,$dateend,$timestart,$timeend,$sub_currency_id) {
+        $currency_table = $sub_currency_id."_m5";
+        $report_name = "ระดับ Range การแกว่งของราคาค่าเงิน $sub_currency_id ระหว่างวันที่ $datestart ถึงวันที่ $dateend ณ ช่วงเวลา $timestart ถึง $timeend ";
+               
+        // sql find units in sub_current table
+        $sql_find = "SELECT id,units FROM sub_currency WHERE id = '$sub_currency_id' ";
+           
+        try {
+            $data_unit = \yii::$app->db->createCommand($sql_find)->queryAll();
+        } catch (\yii\db\Exception $e) {
+            throw new \yii\web\ConflictHttpException('sql error');
+        }
+        $unit = $data_unit[0]['units'];
         
         // เอาไว้ดึงข้อมูลไปแสดงในกราฟ
         $sql = "SELECT 
-                    DATE_S,`OPEN`,max(HIGHT) as max_hight, min(LOW) as min_low , 
-                    0 as fix_gan,
-                    (max(HIGHT)-`OPEN`)*1000 as open_to_hight, 
-                    (`OPEN`-min(LOW))*1000 as open_to_low
-
-                FROM usdjpy_m5
-
-                    where DATE_S BETWEEN '2017-05-01' and '2017-05-31' and TIME_S BETWEEN '11:00:00' and '20:00:00'
-
-                    group by DATE_S";
+                    DATE_S,`OPEN`,max(HIGHT) as max_hight, min(LOW) as min_low,
+                    (max(HIGHT)-`OPEN`)*$unit as open_to_hight, 
+                    (`OPEN`-min(LOW))*$unit as open_to_low
+                FROM $currency_table
+                WHERE 
+                    DATE_S BETWEEN '$datestart' and '$dateend' and TIME_S BETWEEN '$timestart' and '$timeend'
+                GROUP BY DATE_S ";
                     
         
         try {
@@ -443,6 +452,7 @@ class SqlController extends CommonController {
          return $this->render('report9', [
                     'rawData' => $rawData,
                     'sub_currency_id' => $sub_currency_id,
+                    'report_name' => $report_name,
         ]);
     }
     

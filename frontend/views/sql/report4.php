@@ -107,27 +107,30 @@ $this->registerJs("
                             <label class="radio-inline"><input type="radio" name="opttimeframe" value="_m5">5 นาที</label>
                             
                             
-                            <?php
-                            /*
+                            
+                            <button type="button" class="btn btn-primary" onclick = "javascript:url()"><i class="fa fa-search"></i>ดูพฤติกรรมกราฟในรอบวัน</button> 
+                            <button type="button" class="btn btn-primary" onclick = "javascript:url_week()"><i class="fa fa-search"></i>ดูพฤติกรรมกราฟในรอบสัปดาห์</button>
+                            
+                                <?php
+                            
                                 echo '<label class="control-label">เวลาเริ่มต้น</label>';
                                 echo TimePicker::widget(
                                         [
                                             'name' => 'begin_time',
-                                            'value' =>  '01:00',
+                                            'value' =>  '01:00', // Default set is AM
                                             
-                                        ]); */
+                                        ]); 
                             ?>
                             <?php
-                                /*
+                                
                                 echo '<label class="control-label">เวลาสิ้นสุด</label>';
                                 echo TimePicker::widget([
                                             'name' => 'end_time',
                                             'value' => '11:55 PM',
                                         ]);
-                                 */
+                                 
                             ?>
-                            <button type="button" class="btn btn-primary" onclick = "javascript:url()"><i class="fa fa-search"></i>ดูพฤติกรรมกราฟในรอบวัน</button> 
-                            <button type="button" class="btn btn-primary" onclick = "javascript:url_week()"><i class="fa fa-search"></i>ดูพฤติกรรมกราฟในรอบสัปดาห์</button>
+                            
                             <button type="button" class="btn btn-primary" onclick = "javascript:url_price_range()"><i class="fa fa-search"></i>ดูระยะในกรอบเวลา</button> 
                         <!--    <button type="button" class="btn btn-primary" onclick = "javascript:url_5m()"><i class="fa fa-search"></i>ดูพฤติกรรมกราฟราย 5 นาที</button> -->
                         </div>
@@ -247,7 +250,63 @@ echo GridView::widget([
     
     
     function url_price_range(){
-        window.open('http://localhost:8080/fx_system/frontend/web/index.php?r=sql/report9&sub_currency_id=<?php echo $sub_currency_id;?>' );
+        
+        //ตัดเครื่องหมาย - ออก แล้วส่ง datestart&dateend ไปยัง url ที่ต้องการ
+         //ตัดเครื่องหมาย - ออก แล้วส่ง datestart&dateend ไปยัง url ที่ต้องการ
+         
+        // ดึง date มาใช้
+        d1 = $('#w0').val();
+        var arr1 = d1.split("-");
+        s1 = arr1[0];
+        s2 = arr1[1];
+        s3 = arr1[2];
+        datestart = s3+"-"+s2+"-"+s1;
+        
+        d2 = $('#w0-2').val();
+        var arr2 = d2.split("-");
+        m1 = arr2[0];
+        m2 = arr2[1];
+        m3 = arr2[2];
+        dateend = m3+"-"+m2+"-"+m1;
+        
+         // ดึง time มาใช้      
+        t1 = $('#w1').val();
+        var arr1 = t1.split(" ");
+        s1 = arr1[0]+':00';
+        s2 = arr1[1];
+           
+        if (s2 == 'PM') {
+            ds = datestart + ' ' + s1;
+            cds = new Date(ds);
+            cds.setMinutes(cds.getMinutes()+720);
+        } else {
+            ds = datestart + ' ' + s1;
+            cds = new Date(ds);
+        }
+        
+        
+        t2 = $('#w2').val();
+        var arr2 = t2.split(" ");
+        m1 = arr2[0]+':00';
+        m2 = arr2[1];
+        
+        if (m2 == 'PM') {
+            de = dateend + ' ' + m1;
+            cde = new Date(de)
+            cde.setMinutes(cde.getMinutes()+720);
+        } else {
+            de = dateend + ' ' + m1;
+            cde = new Date(de)
+        }
+        
+       
+         timestart = moment(cds).format('HH:mm:ss');
+         timeend = moment(cde).format('HH:mm:ss');
+         
+       //  alert(timestart);
+       //  alert(timeend);
+        
+        window.open('http://localhost:8080/fx_system/frontend/web/index.php?r=sql/report9&datestart=' +  datestart + '&dateend=' + dateend + '&timestart=' + timestart + '&timeend=' + timeend + '&sub_currency_id=<?php echo $sub_currency_id;?>' );
     }
     
     
