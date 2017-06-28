@@ -22,56 +22,104 @@ $this->title = $report_name;
 
 <div id="chart"></div>
 
+
 <?php
 //เตรียมชุดข้อมูลไปใส่ให้กราฟ แกน x,y
 $data1 = [];
 for ($i = 0; $i < count($rawData); $i++) {   
     $data1[] = [
-        'name' => $rawData[$i]['date_s'],
-        'y' => $rawData[$i]['oh'] * 1,
+        '0' => $rawData[$i]['oh'] * 1,
+        '1' => 0,
     ];
 }
 $data2 = [];
 for ($i = 0; $i < count($rawData); $i++) {
     $data2[] = [
-        'name' => $rawData[$i]['date_s'],
-        'y' => $rawData[$i]['ol'] * 1,
+        '0' => $rawData[$i]['ol'] * 1,
+        '1' => 0,
     ];
 }
+
+
 //convert array to json string;
-$js_data1 = json_encode($data1);
-$js_data2 = json_encode($data2);
-// chart
-$this->registerJs(" 
-    Highcharts.chart('chart', {
-    chart: {
-        type: 'column'
-    },
-    tooltip: {
-        pointFormat: 'Value: {point.y:,.0f} Point'
-    }, 
-    title: {
-        text: '$report_name'
-    },
-    xAxis: {
-        categories: []
-    },
-    yAxis: {
-            tickInterval: 5
-        },
-    credits: {
-        enabled: false
-    },
-    series: [{
-        name: 'OPEN->Low',
-        data: $js_data1
-    }, {
-        name: 'OPEN->Hight',
-        data: $js_data2
-    }]
-});
-");
-// จบ chart
+$js_data_hight = json_encode($data1);
+$js_data_low = json_encode($data2);
+
+
+ $this->registerJs(" $(function () {
+                            $('#chart').highcharts({
+                               chart: {
+                                    type: 'scatter',
+                                    zoomType: 'xy'
+                                },
+                                title: {
+                                    text: '$report_name'
+                                },
+
+                                subtitle: {
+                                    text: ''
+                                },
+                                xAxis: {
+                                    title: {
+                                        enabled: true,
+                                        text: 'ระดับราคา'
+                                    },
+                                    startOnTick: true,
+                                    endOnTick: true,
+                                    showLastLabel: true
+                                },
+                                yAxis: {
+                                    title: {
+                                        text: 'ไม่ระบุ'
+                                    }
+                                },
+                                legend: {
+                                    layout: 'vertical',
+                                    align: 'left',
+                                    verticalAlign: 'top',
+                                    x: 100,
+                                    y: 70,
+                                    floating: true,
+                                    backgroundColor: (Highcharts.theme && Highcharts.theme.legendBackgroundColor) || '#FFFFFF',
+                                    borderWidth: 1
+                                },
+                                plotOptions: {
+                                    scatter: {
+                                        marker: {
+                                            radius: 5,
+                                            states: {
+                                                hover: {
+                                                    enabled: true,
+                                                    lineColor: 'rgb(100,100,100)'
+                                                }
+                                            }
+                                        },
+                                        states: {
+                                            hover: {
+                                                marker: {
+                                                    enabled: false
+                                                }
+                                            }
+                                        },
+                                        tooltip: {
+                                            headerFormat: '<b>{series.name}</b><br>',
+                                            pointFormat: '{point.x} จุด'
+                                        }
+                                    }
+                                },
+                                series: [{
+                                    name: 'แดนบวก',
+                                    color: 'rgba(223, 83, 83, .5)',
+                                    data: $js_data_hight
+
+                                }, {
+                                    name: 'แดนลบ',
+                                    color: 'rgba(119, 152, 191, .5)',
+                                    data: $js_data_low
+                                    }]
+                                });
+                            });
+             ");
 ?>
 
 
@@ -106,8 +154,7 @@ $this->registerJs("
                             <label class="radio-inline"><input type="radio" name="opttimeframe" value="_m15">15 นาที</label>
                             <label class="radio-inline"><input type="radio" name="opttimeframe" value="_m5">5 นาที</label>
                             
-                            
-                            
+                                                        
                             <button type="button" class="btn btn-primary" onclick = "javascript:url()"><i class="fa fa-search"></i>ดูพฤติกรรมกราฟในรอบวัน</button> 
                             <button type="button" class="btn btn-primary" onclick = "javascript:url_week()"><i class="fa fa-search"></i>ดูพฤติกรรมกราฟในรอบสัปดาห์</button>
                             
@@ -131,7 +178,7 @@ $this->registerJs("
                                  
                             ?>
                             
-                            <button type="button" class="btn btn-primary" onclick = "javascript:url_price_range()"><i class="fa fa-search"></i>ดูระยะในกรอบเวลา</button> 
+                            <button type="button" class="btn btn-primary" onclick = "javascript:url_price_range()"><i class="fa fa-search"></i>ดูระยะในกรอบเวลาในรอบวัน</button> 
                         <!--    <button type="button" class="btn btn-primary" onclick = "javascript:url_5m()"><i class="fa fa-search"></i>ดูพฤติกรรมกราฟราย 5 นาที</button> -->
                         </div>
                        

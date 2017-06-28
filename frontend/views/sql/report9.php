@@ -55,7 +55,7 @@ HighchartsAsset::register($this)->withScripts([
                                 },
 
                                 subtitle: {
-                                    text: 'Source: Heinz  2003'
+                                    text: ''
                                 },
                                 xAxis: {
                                     title: {
@@ -101,7 +101,7 @@ HighchartsAsset::register($this)->withScripts([
                                         },
                                         tooltip: {
                                             headerFormat: '<b>{series.name}</b><br>',
-                                            pointFormat: '{point.x} cm, {point.y} kg'
+                                            pointFormat: '{point.x} จุด'
                                         }
                                     }
                                 },

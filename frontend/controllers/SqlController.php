@@ -108,6 +108,7 @@ class SqlController extends CommonController {
                     'month_id' => $month_id,
         ]);
     }
+    
     public function actionReport4($sub_currency_id, $year_s, $month_id) {
         $currency_table = $sub_currency_id . "_d1";
         $report_name = "กราฟพฤติกรรมการแกว่งของราคาในคู่เงิน $sub_currency_id เดือน $month_id ปี $year_s ";
@@ -124,7 +125,7 @@ class SqlController extends CommonController {
                     DATE_S as date_s ,
                     open,hight,low,close,
                     ((hight-open)*$unit) as oh,
-                    ((low-open)*$unit) as ol
+                    ((open-low)*$unit) as ol
                 FROM $currency_table
                 WHERE YEAR(DATE_S) = $year_s and MONTH(DATE_S) = $month_id
               
@@ -150,6 +151,7 @@ class SqlController extends CommonController {
                     'month_id' => $month_id,
         ]);
     }
+    
     
     public function actionReport5($sub_currency_id, $year_s, $month_id) {
         $currency_table = $sub_currency_id . "_h4";
@@ -190,9 +192,9 @@ class SqlController extends CommonController {
                             INNER JOIN time_range tr ON tr.`level` = price_range.`level`
                             LEFT JOIN (
                             select case
-                                   when ((open-low)*1000)  between   0 and 300    then  '0-300' 
-                                   when ((open-low)*1000)  between  301 and 600 	then  '301-600'
-                                   when ((open-low)*1000)  between  601 and 900 	then  '601-900'
+                                   when ((open-low)*1000)  between   0 and 300          then    '0-300' 
+                                   when ((open-low)*1000)  between  301 and 600 	then    '301-600'
+                                   when ((open-low)*1000)  between  601 and 900 	then    '601-900'
                                    when ((open-low)*1000)  between  901 and 1200 	then 	'901-1200'
                                    when ((open-low)*1000)  between 1201 and 1500 	then 	'1201-1500'
                                    when ((open-low)*1000)  between 1501 and 1800 	then 	'1501-1800'
@@ -419,7 +421,7 @@ class SqlController extends CommonController {
     
     public function actionReport9($datestart,$dateend,$timestart,$timeend,$sub_currency_id) {
         $currency_table = $sub_currency_id."_m5";
-        $report_name = "ระดับ Range การแกว่งของราคาค่าเงิน $sub_currency_id ระหว่างวันที่ $datestart ถึงวันที่ $dateend ณ ช่วงเวลา $timestart ถึง $timeend ";
+        $report_name = "ระดับการแกว่งของราคาค่าเงิน $sub_currency_id ระหว่างวันที่ $datestart ถึงวันที่ $dateend ณ ช่วงเวลา $timestart ถึง $timeend ";
                
         // sql find units in sub_current table
         $sql_find = "SELECT id,units FROM sub_currency WHERE id = '$sub_currency_id' ";
