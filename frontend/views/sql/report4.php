@@ -208,26 +208,13 @@ echo GridView::widget([
     'columns' => [
         ['class' => 'yii\grid\SerialColumn'],
         
-      
+      [
+            'attribute' => 'cur_name',
+            'header' => 'คู่เงิน'
+        ],
         [
             'attribute' => 'date_s',
             'header' => 'วันที่'
-        ],
-        [
-            'attribute' => 'open',
-            'header' => 'OPEN'
-        ],
-        [
-            'attribute' => 'hight',
-            'header' => 'HIGHT'
-        ],
-        [
-            'attribute' => 'low',
-            'header' => 'LOW'
-        ],
-        [
-            'attribute' => 'close',
-            'header' => 'CLOSE'
         ],
           [
             'attribute' => 'oh',
