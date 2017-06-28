@@ -207,14 +207,14 @@ echo GridView::widget([
     ],
     'columns' => [
         ['class' => 'yii\grid\SerialColumn'],
-        
+      
+      [
+            'attribute' => 'date_s',
+            'header' => 'วันที่'
+        ],
       [
             'attribute' => 'cur_name',
             'header' => 'คู่เงิน'
-        ],
-        [
-            'attribute' => 'date_s',
-            'header' => 'วันที่'
         ],
           [
             'attribute' => 'oh',
