@@ -32,7 +32,7 @@ $categ = [];
         
         $data = [];
         for ($i = 0; $i < count($rawData); $i++) {
-            $data[] = $rawData[$i]['cal_price_range'];
+            $data[] = intval($rawData[$i]['cal_price_range']);
         }
         $js_data = implode(",", $data);
 

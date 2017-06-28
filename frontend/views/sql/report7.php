@@ -51,7 +51,7 @@ $js = <<<MOO
                 // convert data object field to int,float
                 for (var l=0; l < data.length; l++) {
                     if(data[l].price_range!= 0) {
-                        data_arr[l] = data[l].price_range * 1; 
+                        data_arr[l] = parseInt(data[l].price_range) * 1; 
                     } else {
                         data_arr[l] = 1 ; 
                     }     
@@ -90,7 +90,7 @@ echo Highstock::widget([
         'yAxis' => [
             'labels' => [
                 'formatter' => new JsExpression("function () {
-                    return (this.value > 0 ? ' + ' : '') + this.value + '%';
+                    return (this.value > 0 ? ' + ' : '') + this.value + ' จุด';
                 }")
             ],
             'plotLines' => [[
@@ -112,7 +112,7 @@ echo Highstock::widget([
                     text = '';
                     
                     $.each(this.points, function(i, point) {
-                         text +=   '<br/><span style=\"color:' + this.series.color + '\">' + this.series.name + ' เวลา' +  s + ' ราคา ' + point.y + '</span> ';                           
+                         text +=   '<br/><span style=\"color:' + this.series.color + '\">' + this.series.name + ' เวลา' +  s + ' ราคา ' + point.y + 'จุด</span> ';                           
                     });
      
                     return text ;
