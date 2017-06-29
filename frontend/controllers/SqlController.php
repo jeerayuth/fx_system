@@ -423,6 +423,12 @@ class SqlController extends CommonController {
     
     public function actionReport9($datestart,$dateend,$timestart,$timeend,$sub_currency_id) {
         $currency_table = $sub_currency_id."_m5";
+        
+        if($timestart == '01:00:00') {
+            $timestart = '00:00:00';
+        }
+        
+        
         $report_name = "ระดับการแกว่งของราคาค่าเงิน $sub_currency_id ระหว่างวันที่ $datestart ถึงวันที่ $dateend ณ ช่วงเวลา $timestart ถึง $timeend ";
                
         // sql find units in sub_current table
@@ -435,9 +441,8 @@ class SqlController extends CommonController {
         }
         $unit = $data_unit[0]['units'];
         
-        if($timestart == '01:00:00') {
-            $timestart = '00:00:00';
-        }
+   
+   
        
         // เอาไว้ดึงข้อมูลไปแสดงในกราฟ
         $sql = "SELECT 

@@ -26,7 +26,7 @@ HighchartsAsset::register($this)->withScripts([
         for ($i = 0; $i < count($rawData); $i++) {
             $data1[] = [
                 '0' => intval($rawData[$i]['open_to_hight']) * 1,
-                '1' => $i,
+                '1' => 0,
             ];
         }
         
@@ -34,7 +34,7 @@ HighchartsAsset::register($this)->withScripts([
         for ($i = 0; $i < count($rawData); $i++) {
             $data2[] = [
                 '0' => intval($rawData[$i]['open_to_low']) * 1,
-                '1' => $i,
+                '1' => 0,
             ];
         }
 
