@@ -46,6 +46,7 @@ $js = <<<MOO
             timeframe = '$timeframe';
              
         $.each(date_s, function(i, name) {
+                  
            $.getJSON('index.php?r=json/report1&date_s='+ name + '&unit='+ unit + '&currency_table=' + currency_table + '&timeframe=' + timeframe +  '&callback=?',	function(data) {  
                
                 // convert data object field to int,float

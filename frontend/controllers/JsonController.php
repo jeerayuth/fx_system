@@ -13,9 +13,13 @@ class JsonController extends CommonController {
                 tb.time_second as `time_second` , 
                 
                    IF(t1.`open` < t2.`OPEN`,t2.open-t1.open,
-                                IF(t1.`open` > t2.`OPEN`, t1.open - t2.open, 1
+                                IF(t1.`open` > t2.`OPEN`, t2.open - t1.open, 1
                            )                  
                 )*$unit as `price_range`
+                    
+ 
+                        
+
                 FROM price_dynamic$timeframe tb
                 LEFT JOIN (
                         select DATE_S ,TIME_S,`OPEN` from $currency_table where DATE_S = '$date_s'

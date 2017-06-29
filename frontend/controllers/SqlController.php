@@ -381,6 +381,7 @@ class SqlController extends CommonController {
         // เอาไว้ดึงข้อมูลไปแสดงในกราฟ
         $sql = "SELECT 
                     concat(t1.DATE_S,'   time@ ', h1.time_second) as date_s,h1.time_first,t1.open as price_open1,h1.time_second,t2.open as price_open2, 
+                    
                     IF(t1.`open` < t2.`OPEN`,t2.open-t1.open,
                                     IF(t1.`open` > t2.`OPEN`, t2.open - t1.open, 1
                           )
