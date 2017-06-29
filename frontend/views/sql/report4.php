@@ -129,7 +129,7 @@ $js_data_low = json_encode($data2);
     <div class="col-md-6">
         <center>
         <button type="button" class="btn btn-success" onclick = "javascript:(history.go(-1))"><i class="glyphicon glyphicon-menu-left"></i> ย้อนกลับ</button>
-        <a href="index.php?r=sql/report5&sub_currency_id=<?php echo  $sub_currency_id; ?>&year_s=<?php echo $year_s;?>&month_id=<?php echo $month_id;?>" class="btn btn-danger"><i class="glyphicon glyphicon-menu-right"></i> ระดับราคาเฉลี่ยราย 4 ชั่วโมง</a>
+      <!--  <a href="index.php?r=sql/report5&sub_currency_id=<?php //echo  $sub_currency_id; ?>&year_s=<?php //echo $year_s;?>&month_id=<?php //echo $month_id;?>" class="btn btn-danger"><i class="glyphicon glyphicon-menu-right"></i> ระดับราคาเฉลี่ยราย 4 ชั่วโมง</a> -->
         </center>
     </div>
     <div class="col-md-6">
@@ -342,6 +342,11 @@ echo GridView::widget([
         
         window.open('http://localhost:8080/fx_system/frontend/web/index.php?r=sql/report9&datestart=' +  datestart + '&dateend=' + dateend + '&timestart=' + timestart + '&timeend=' + timeend + '&sub_currency_id=<?php echo $sub_currency_id;?>' );
     }
+    
+    
+    
+    
+    
     
     
     

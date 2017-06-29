@@ -380,11 +380,12 @@ class SqlController extends CommonController {
             
         // เอาไว้ดึงข้อมูลไปแสดงในกราฟ
         $sql = "SELECT 
-                    concat(t1.DATE_S,'   time@ ', h1.time_first) as date_s,h1.time_first,t1.open as price_open1,h1.time_second,t2.open as price_open2, 
+                    concat(t1.DATE_S,'   time@ ', h1.time_second) as date_s,h1.time_first,t1.open as price_open1,h1.time_second,t2.open as price_open2, 
                     IF(t1.`open` < t2.`OPEN`,t2.open-t1.open,
                                     IF(t1.`open` > t2.`OPEN`, t2.open - t1.open, 1
                           )
                     )*$unit as cal_price_range
+                                           
                     
                 FROM price_dynamic_h1 h1
                 LEFT JOIN (
@@ -397,8 +398,8 @@ class SqlController extends CommonController {
 
                 ) t2 on (t2.TIME_S = h1.time_second)
                 
-                GROUP BY t1.DATE_S,h1.time_first
-                ORDER BY t1.DATE_S,h1.time_first ";
+                GROUP BY t1.DATE_S,h1.time_second
+                ORDER BY t1.DATE_S,h1.time_second ";
                     
         
         try {
@@ -434,6 +435,10 @@ class SqlController extends CommonController {
         }
         $unit = $data_unit[0]['units'];
         
+        if($timestart == '01:00:00') {
+            $timestart = '00:00:00';
+        }
+       
         // เอาไว้ดึงข้อมูลไปแสดงในกราฟ
         $sql = "SELECT 
                     DATE_S,`OPEN`,max(HIGHT) as max_hight, min(LOW) as min_low,

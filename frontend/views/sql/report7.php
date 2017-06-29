@@ -104,7 +104,7 @@ echo Highstock::widget([
             'headerFormat' => '<b>{series.name} เวลา {series.x} </b><br/>',
             'valueDecimals' => 2 ,     
             'formatter' => new JsExpression("function() {   
-                    s = this.x+2;
+                    s = this.x;
                     text = '';
                     
                     $.each(this.points, function(i, point) {

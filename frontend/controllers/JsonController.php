@@ -8,12 +8,12 @@ class JsonController extends CommonController {
     //รายงานดูพฤติกรรมราคาในกราฟราย
     public function actionReport1($date_s,$unit,$currency_table,$timeframe,$callback = null) {
           \Yii::$app->response->format = \yii\web\Response::FORMAT_JSONP;
-          
+                    
          $sql="select 
                 tb.time_second as `time_second` , 
                 
-                   IF(t2.`open` < t1.`OPEN`,t1.open-t2.open,
-                                IF(t2.`open` > t1.`OPEN`, t2.open - t1.open, 1
+                   IF(t1.`open` < t2.`OPEN`,t2.open-t1.open,
+                                IF(t1.`open` > t2.`OPEN`, t1.open - t2.open, 1
                            )                  
                 )*$unit as `price_range`
                 FROM price_dynamic$timeframe tb
