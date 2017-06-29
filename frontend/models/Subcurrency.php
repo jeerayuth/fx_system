@@ -10,13 +10,13 @@ use Yii;
  * @property string $pttype
  * @property string $name
  */
-class Pttype extends \yii\db\ActiveRecord {
+class Subcurrency extends \yii\db\ActiveRecord {
 
     /**
      * @inheritdoc
      */
     public static function tableName() {
-        return 'pttype';
+        return 'sub_currency';
     }
 
     /**
@@ -34,8 +34,8 @@ class Pttype extends \yii\db\ActiveRecord {
      */
     public function attributeLabels() {
         return [
-            'pttype' => 'รหัสสิทธิ์',
-            'name' => 'ชื่อสิทธิ์',
+            'id' => 'รหัส',
+            'name' => 'สกุลเงิน',
                   
         ];
     }

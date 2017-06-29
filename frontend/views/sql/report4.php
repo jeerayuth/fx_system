@@ -19,8 +19,11 @@ $this->title = $report_name;
 //$this->params['breadcrumbs'][] = $this->title;
 ?>
 
-
-<div id="chart"></div>
+<div class="row">
+    <div class="col-md-12">
+        <div id="chart"></div>
+    </div>
+</div>
 
 
 <?php
@@ -127,10 +130,10 @@ $js_data_low = json_encode($data2);
 
 <div class="row">
     <div class="col-md-6">
-        <center>
+       
         <button type="button" class="btn btn-success" onclick = "javascript:(history.go(-1))"><i class="glyphicon glyphicon-menu-left"></i> ย้อนกลับ</button>
       <!--  <a href="index.php?r=sql/report5&sub_currency_id=<?php //echo  $sub_currency_id; ?>&year_s=<?php //echo $year_s;?>&month_id=<?php //echo $month_id;?>" class="btn btn-danger"><i class="glyphicon glyphicon-menu-right"></i> ระดับราคาเฉลี่ยราย 4 ชั่วโมง</a> -->
-        </center>
+       
     </div>
     <div class="col-md-6">
                  <form novalidate="" id="demo-form2" data-parsley-validate="" class="form-horizontal form-label-left">
@@ -155,8 +158,8 @@ $js_data_low = json_encode($data2);
                             <label class="radio-inline"><input type="radio" name="opttimeframe" value="_m5">5 นาที</label>
                             
                                                         
-                            <button type="button" class="btn btn-primary" onclick = "javascript:url()"><i class="fa fa-search"></i>ดูพฤติกรรมกราฟในรอบวัน</button> 
-                            <button type="button" class="btn btn-primary" onclick = "javascript:url_week()"><i class="fa fa-search"></i>ดูพฤติกรรมกราฟในรอบสัปดาห์</button>
+                            <button type="button" class="btn btn-info btn-block" onclick = "javascript:url()"><i class="fa fa-search"></i>ดูพฤติกรรมกราฟในรอบวัน</button> 
+                            <button type="button" class="btn btn-info btn-block" onclick = "javascript:url_week()"><i class="fa fa-search"></i>ดูพฤติกรรมกราฟในรอบสัปดาห์</button>
                             
                                 <?php
                             
@@ -178,7 +181,8 @@ $js_data_low = json_encode($data2);
                                  
                             ?>
                             
-                            <button type="button" class="btn btn-primary" onclick = "javascript:url_price_range()"><i class="fa fa-search"></i>ดูระยะในกรอบเวลาในรอบวัน</button> 
+                            <button type="button" class="btn btn-danger btn-block" onclick = "javascript:url_price_range()"><i class="fa fa-search"></i>ดูระยะในกรอบเวลาในรอบวัน</button> 
+                               
                         <!--    <button type="button" class="btn btn-primary" onclick = "javascript:url_5m()"><i class="fa fa-search"></i>ดูพฤติกรรมกราฟราย 5 นาที</button> -->
                         </div>
                        

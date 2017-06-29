@@ -17,9 +17,7 @@ class JsonController extends CommonController {
                            )                  
                 )*$unit as `price_range`
                     
- 
                         
-
                 FROM price_dynamic$timeframe tb
                 LEFT JOIN (
                         select DATE_S ,TIME_S,`OPEN` from $currency_table where DATE_S = '$date_s'

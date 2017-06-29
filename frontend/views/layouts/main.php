@@ -41,6 +41,7 @@ $session = Yii::$app->session;
             ];
             if ($session["loginname"] != null) {
                 $menuItems[] = ['label' => 'กลุ่มประเภทข้อมูล', 'url' => ['/report/index']];
+                $menuItems[] = ['label' => 'เปรียบเทียบคู่เงิน', 'url' => ['/compare/index']];
                 $menuItems[] = ['label' => 'ออกจากระบบ', 'url' => ['/site/logout']];
             } else {
                 $menuItems[] = ['label' => 'ลงชื่อเข้าใช้งาน', 'url' => ['/site/login']];
