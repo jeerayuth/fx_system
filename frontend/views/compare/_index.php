@@ -56,7 +56,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                         ArrayHelper::map(Subcurrency::find()->all(), 'id', 'name'), [
                                       // 'multiple' => 'multiple',
                                         'class' => 'form-control',
-                                        'id' => 'id',
+                                        'id' => 'sub_currency1',
                                         'prompt' => ' -- คู่เงินที่ 1 --'
                                   ]) ?>
                             </div>   
@@ -66,7 +66,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                         ArrayHelper::map(Subcurrency::find()->all(), 'id', 'name'), [
                                       // 'multiple' => 'multiple',
                                         'class' => 'form-control',
-                                        'id' => 'id',
+                                        'id' => 'sub_currency2',
                                         'prompt' => ' -- คู่เงินที่ 2 --'
                                   ]) ?>
                             </div>
@@ -86,3 +86,40 @@ $this->params['breadcrumbs'][] = $this->title;
         </div>
         </div>
 
+
+
+
+<script type="text/javascript">
+    //function เรียกหน้ารายงาน
+    function url_day_compare() {
+        
+        //ตัดเครื่องหมาย - ออก แล้วส่ง datestart&dateend ไปยัง url ที่ต้องการ
+         //ตัดเครื่องหมาย - ออก แล้วส่ง datestart&dateend ไปยัง url ที่ต้องการ
+        d1 = $('#w0').val();
+        var arr1 = d1.split("-");
+        s1 = arr1[0];
+        s2 = arr1[1];
+        s3 = arr1[2];
+        datestart = s3+s2+s1;
+        d2 = $('#w0-2').val();
+        var arr2 = d2.split("-");
+        m1 = arr2[0];
+        m2 = arr2[1];
+        m3 = arr2[2];
+        dateend = m3+m2+m1;
+        
+     //   timeframe = $("[name='opttimeframe']:checked").val()
+     
+        sub_currency1 = $("#sub_currency1 option:selected").val();
+        sub_currency2 = $("#sub_currency2 option:selected").val();
+       
+   
+        
+         window.open('http://localhost:8080/fx_system/frontend/web/index.php?r=compare/compare1&datestart=' + datestart + '&dateend=' + dateend + '&sub_currency1=' +  sub_currency1 + '&sub_currency2=' +  sub_currency2 );
+    }
+    
+    
+    
+    
+    
+    </script>

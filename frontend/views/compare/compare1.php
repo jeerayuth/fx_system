@@ -48,7 +48,7 @@ $categ = [];
         $this->registerJs(" $(function () {
                             $('#chart').highcharts({
                                 title: {
-                                    text: 'test1',
+                                    text: 'กราฟเปรียบเทียบ N-Core, P-Core ระหว่าง 2 คู่เงิน',
                                     x: -20 //center
                                 },
                                 chart: {
