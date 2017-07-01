@@ -74,7 +74,7 @@ $this->params['breadcrumbs'][] = $this->title;
            
                                                            
                             <a  class="btn btn-info btn-block" onclick = "javascript:url_day_compare()"><i class="fa fa-search"></i>ดูพฤติกรรมกราฟในรอบวัน</a> 
-                            <a  class="btn btn-danger btn-block" onclick = "javascript:url_week_compare()"><i class="fa fa-search"></i>ดูพฤติกรรมกราฟในรอบสัปดาห์</a>
+                           
                                                     
                         </div>
                                       

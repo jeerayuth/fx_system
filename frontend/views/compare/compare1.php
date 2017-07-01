@@ -24,21 +24,21 @@ $this->title = $report_name;
 //เตรียมชุดข้อมูลไปใส่ให้กราฟ แกน x,y
 
 $categ = [];
-        for ($i = 0; $i < count($rawData); $i++) {
-            $categ[] = $rawData[$i]['date_s'];
+        for ($i = 0; $i < count($rawData1); $i++) {
+            $categ[] = $rawData1[$i]['date_s'];
         }
         $js_categ = implode("','", $categ);
 
         
         $data1 = [];
-        for ($i = 0; $i < count($rawData); $i++) {
-            $data1[] = intval($rawData[$i]['price_range_1']);
+        for ($i = 0; $i < count($rawData1); $i++) {
+            $data1[] = intval($rawData1[$i]['price_range_1']);
         }
   
         
         $data2 = [];
-        for ($i = 0; $i < count($rawData); $i++) {
-            $data2[] = intval($rawData[$i]['price_range_2']);
+        for ($i = 0; $i < count($rawData2); $i++) {
+            $data2[] = intval($rawData2[$i]['price_range_2']);
         }
         
         $js_data1 = implode(",", $data1);
