@@ -367,48 +367,54 @@ class SqlController extends CommonController {
     public function actionReport8($datestart,$dateend,$sub_currency_id) {
         $currency_table = $sub_currency_id."_h1";
         $report_name = "กราฟพฤติกรรมการแกว่งในคู่เงิน $sub_currency_id ระหว่างวันที่ $datestart ถึงวันที่ $dateend";
+       
         // sql find units in sub_current table
         $sql_find = "SELECT id,units FROM sub_currency WHERE id = '$sub_currency_id' ";
+        
+        
+        // sql find first open price @ first day select
+        $sql_find_open_price_first = "SELECT open FROM $currency_table WHERE DATE_S = '$datestart' ORDER BY DATE_S LIMIT 0,1 ";
+        
            
         try {
             $data_unit = \yii::$app->db->createCommand($sql_find)->queryAll();
+            $data_open_price_first = \yii::$app->db->createCommand($sql_find_open_price_first)->queryAll();
         } catch (\yii\db\Exception $e) {
             throw new \yii\web\ConflictHttpException('sql error');
         }
+        
         $unit = $data_unit[0]['units'];
+        $open_price_first = $data_open_price_first[0]['open'];
         
             
         // เอาไว้ดึงข้อมูลไปแสดงในกราฟ
         $sql = "SELECT 
-                    concat(t1.DATE_S,'   time@ ', h1.time_second) as date_s,h1.time_first,t1.open as price_open1,h1.time_second,t2.open as price_open2, 
-                    
-                    IF(t1.`open` < t2.`OPEN`,t2.open-t1.open,
-                                    IF(t1.`open` > t2.`OPEN`, t2.open - t1.open, 1
+                    concat(t1.DATE_S,'   time@ ', h1.time_second) as date_s,h1.time_first,t1.open as price_open,h1.time_second, 
+                                           
+                    IF($open_price_first < t1.`OPEN`,t1.open-$open_price_first,
+                                    IF($open_price_first > t1.`open`, t1.open - $open_price_first  , 1
                           )
                     )*$unit as cal_price_range
-                                           
-                    
+                                                             
                 FROM price_dynamic_h1 h1
-                LEFT JOIN (
-                            select DATE_S,TIME_S,`OPEN` from $currency_table where DATE_S BETWEEN '$datestart'  AND '$dateend' 
-
-                ) t1 on (t1.TIME_S = h1.time_first)
-
-                LEFT JOIN (
-                            select DATE_S,TIME_S,`OPEN` from $currency_table where DATE_S BETWEEN '$datestart'  AND '$dateend' 
-
-                ) t2 on (t2.TIME_S = h1.time_second)
                 
+                LEFT JOIN (
+                            select DATE_S,TIME_S,`OPEN` from $currency_table where DATE_S BETWEEN '$datestart'  AND '$dateend' 
+
+                ) t1 on (t1.TIME_S = h1.time_second)
+
+
                 GROUP BY t1.DATE_S,h1.time_second
                 ORDER BY t1.DATE_S,h1.time_second ";
-                    
+        
+        
         
         try {
             $rawData = \yii::$app->db->createCommand($sql)->queryAll();  
         } catch (\yii\db\Exception $e) {
             throw new \yii\web\ConflictHttpException('sql error');
         }
-        $unit = $data_unit[0]['units'];
+   
                    
         return $this->render('report8', [
                     'rawData' => $rawData,
@@ -418,7 +424,7 @@ class SqlController extends CommonController {
                     'datestart' => $datestart,
                     'dateend' => $dateend,
                     'unit' => $unit,
-        ]);
+        ]); 
     }
     
     
@@ -442,9 +448,7 @@ class SqlController extends CommonController {
         }
         $unit = $data_unit[0]['units'];
         
-   
-   
-       
+          
         // เอาไว้ดึงข้อมูลไปแสดงในกราฟ
         $sql = "SELECT 
                     DATE_S,`OPEN`,max(HIGHT) as max_hight, min(LOW) as min_low,

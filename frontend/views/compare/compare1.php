@@ -12,7 +12,7 @@ HighchartsAsset::register($this)->withScripts([
 ]);
 
 
-$this->title = 'test';
+$this->title = $report_name;
 //$this->params['breadcrumbs'][] = $this->title;
 ?>
 
@@ -34,7 +34,8 @@ $categ = [];
         for ($i = 0; $i < count($rawData); $i++) {
             $data1[] = intval($rawData[$i]['price_range_1']);
         }
-                     
+  
+        
         $data2 = [];
         for ($i = 0; $i < count($rawData); $i++) {
             $data2[] = intval($rawData[$i]['price_range_2']);
@@ -44,11 +45,10 @@ $categ = [];
         $js_data2 = implode(",", $data2);
 
 
-
         $this->registerJs(" $(function () {
                             $('#chart').highcharts({
                                 title: {
-                                    text: 'กราฟเปรียบเทียบ N-Core, P-Core ระหว่าง 2 คู่เงิน',
+                                    text: '$report_name',
                                     x: -20 //center
                                 },
                                 chart: {
@@ -84,15 +84,16 @@ $categ = [];
                                     enabled: false
                                 },
                                 series: [{
-                                    name: 'คู่เงินที่ 1',
+                                    name: '$sub_currency1',
                                     data: [$js_data1]
                                 }, {
-                                    name: 'คู่เงินที่ 2',
+                                    name: '$sub_currency2',
                                     data: [$js_data2]
                                 }]
                             });
                         });
              ");
-        ?>
+
+?>
 
 

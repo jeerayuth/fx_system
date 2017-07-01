@@ -18,6 +18,8 @@ class CompareController extends \yii\web\Controller {
         
          $currency_table1 = $sub_currency1."_h1";
          $currency_table2 = $sub_currency2."_h1";
+         
+         $report_name = "กราฟเปรียบเทียบ N-Core, P-Core ระหว่างค่าเงิน $sub_currency1 กับ $sub_currency2 ระหว่างวันที่ $datestart ถึงวันที่ $dateend ";
                 
          // sql find units in sub_current table
         $sql_find1 = "SELECT id,units FROM sub_currency WHERE id = '$sub_currency1' ";
@@ -54,16 +56,19 @@ class CompareController extends \yii\web\Controller {
                         select DATE_S ,TIME_S,`OPEN` from $currency_table1 where DATE_S between '$datestart' and '$dateend'
                 ) t1 on (t1.TIME_S = tb.time_first)
                 LEFT JOIN (
-                        select DATE_S,TIME_S,`OPEN` from $currency_table1 where DATE_S = '$datestart' and '$dateend'
+                        select DATE_S,TIME_S,`OPEN` from $currency_table1 where DATE_S between '$datestart' and '$dateend'
                 ) t2 on (t2.TIME_S = tb.time_second) 
 
 
                 LEFT JOIN (
-                        select DATE_S ,TIME_S,`OPEN` from $currency_table2 where DATE_S = '$datestart' and '$dateend'
+                        select DATE_S ,TIME_S,`OPEN` from $currency_table2 where DATE_S between '$datestart' and '$dateend'
                 ) t3 on (t3.TIME_S = tb.time_first)
                 LEFT JOIN (
-                        select DATE_S,TIME_S,`OPEN` from $currency_table2  where DATE_S = '$datestart' and '$dateend'
+                        select DATE_S,TIME_S,`OPEN` from $currency_table2  where DATE_S between '$datestart' and '$dateend'
                 ) t4 on (t4.TIME_S = tb.time_second)  ";
+        
+                
+          
                  
         
         try {
@@ -73,7 +78,13 @@ class CompareController extends \yii\web\Controller {
         }
                    
         return $this->render('compare1', [
-                    'rawData' => $rawData,             
+                    'rawData' => $rawData,   
+                    'report_name' => $report_name,
+                    'sub_currency1' => $sub_currency1,
+                    'sub_currency2' => $sub_currency2,
+                    'datestart' => $datestart,
+                    'dateend' => $dateend,
+                     
         ]); 
     }
 
