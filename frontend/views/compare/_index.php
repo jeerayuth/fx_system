@@ -52,12 +52,12 @@ $this->params['breadcrumbs'][] = $this->title;
                             ?>
                             
                             <div class="form-group">
-                                    <?php echo Html::dropDownList('sub_currency1', null,
+                                <?php echo Html::dropDownList('sub_currency1', null,
                                         ArrayHelper::map(Subcurrency::find()->all(), 'id', 'name'), [
                                       // 'multiple' => 'multiple',
                                         'class' => 'form-control',
                                         'id' => 'sub_currency1',
-                                        'prompt' => ' -- คู่เงินที่ 1 --'
+                                        'prompt' => ' -- คู่เงินที่ 1 --',                                    
                                   ]) ?>
                             </div>   
                             
@@ -67,15 +67,12 @@ $this->params['breadcrumbs'][] = $this->title;
                                       // 'multiple' => 'multiple',
                                         'class' => 'form-control',
                                         'id' => 'sub_currency2',
-                                        'prompt' => ' -- คู่เงินที่ 2 --'
+                                        'prompt' => ' -- คู่เงินที่ 2 --',                                    
                                   ]) ?>
                             </div>
-                                
-           
-                                                           
-                            <a  class="btn btn-info btn-block" onclick = "javascript:url_day_compare()"><i class="fa fa-search"></i>ดูพฤติกรรมกราฟในรอบวัน</a> 
-                           
-                                                    
+                                                                                      
+                            <a  class="btn btn-info btn-block" onclick = "javascript:url_day_compare()"><i class="fa fa-search"></i>ดูพฤติกรรมกราฟ</a> 
+                                                                             
                         </div>
                                       
                     </div>
