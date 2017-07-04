@@ -46,9 +46,21 @@ $categ = [];
             $data3[] = intval($rawData3[$i]['price_range_3']);
         }
         
+        $data4 = [];
+        for ($i = 0; $i < count($rawData4); $i++) {
+            $data4[] = intval($rawData4[$i]['price_range_4']);
+        }
+        
+        $data5 = [];
+        for ($i = 0; $i < count($rawData5); $i++) {
+            $data5[] = intval($rawData5[$i]['price_range_5']);
+        }
+        
         $js_data1 = implode(",", $data1);
         $js_data2 = implode(",", $data2);
         $js_data3 = implode(",", $data3);
+        $js_data4 = implode(",", $data4);
+        $js_data5 = implode(",", $data5);
         
 
         $this->registerJs(" $(function () {
@@ -98,6 +110,12 @@ $categ = [];
                                 },  {
                                     name: '$sub_currency3',
                                     data: [$js_data3]
+                                },  {
+                                    name: '$sub_currency4',
+                                    data: [$js_data4]
+                                },  {
+                                    name: '$sub_currency5',
+                                    data: [$js_data5]
                                 }]
                             });
                         });
