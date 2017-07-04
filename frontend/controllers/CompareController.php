@@ -117,7 +117,7 @@ class CompareController extends \yii\web\Controller {
     }
     
     
-    public function actionCompare2($datestart,$dateend,$sub_currency1,$sub_currency2,$sub_currency3,$sub_currency4,$sub_currency5,$sub_currency6) {
+    public function actionCompare2($datestart,$dateend,$sub_currency1,$sub_currency2,$sub_currency3,$sub_currency4,$sub_currency5,$sub_currency6,$sub_currency7,$sub_currency8) {
         
          $currency_table1 = $sub_currency1."_h1";
          $currency_table2 = $sub_currency2."_h1";
@@ -125,6 +125,8 @@ class CompareController extends \yii\web\Controller {
          $currency_table4 = $sub_currency4."_h1";
          $currency_table5 = $sub_currency5."_h1";
          $currency_table6 = $sub_currency6."_h1";
+         $currency_table7 = $sub_currency7."_h1";
+         $currency_table8 = $sub_currency8."_h1";
          
          $report_name = "กราฟเปรียบเทียบ N-Core, P-Core  ระหว่างวันที่ $datestart ถึงวันที่ $dateend ";
                 
@@ -135,6 +137,8 @@ class CompareController extends \yii\web\Controller {
         $sql_find4 = "SELECT id,units FROM sub_currency WHERE id = '$sub_currency4' ";
         $sql_find5 = "SELECT id,units FROM sub_currency WHERE id = '$sub_currency5' ";
         $sql_find6 = "SELECT id,units FROM sub_currency WHERE id = '$sub_currency6' ";
+        $sql_find7 = "SELECT id,units FROM sub_currency WHERE id = '$sub_currency7' ";
+        $sql_find8 = "SELECT id,units FROM sub_currency WHERE id = '$sub_currency8' ";
         
         
         // sql find first open price @ first day select
@@ -144,6 +148,8 @@ class CompareController extends \yii\web\Controller {
         $sql_find_open_price_first4 = "SELECT open FROM $currency_table4 WHERE DATE_S = '$datestart' ORDER BY DATE_S LIMIT 0,1 ";
         $sql_find_open_price_first5 = "SELECT open FROM $currency_table5 WHERE DATE_S = '$datestart' ORDER BY DATE_S LIMIT 0,1 ";
         $sql_find_open_price_first6 = "SELECT open FROM $currency_table6 WHERE DATE_S = '$datestart' ORDER BY DATE_S LIMIT 0,1 ";
+        $sql_find_open_price_first7 = "SELECT open FROM $currency_table7 WHERE DATE_S = '$datestart' ORDER BY DATE_S LIMIT 0,1 ";
+        $sql_find_open_price_first8 = "SELECT open FROM $currency_table8 WHERE DATE_S = '$datestart' ORDER BY DATE_S LIMIT 0,1 ";
 
         
         
@@ -154,6 +160,8 @@ class CompareController extends \yii\web\Controller {
             $data_unit4 = \yii::$app->db->createCommand($sql_find4)->queryAll();
             $data_unit5 = \yii::$app->db->createCommand($sql_find5)->queryAll();
             $data_unit6 = \yii::$app->db->createCommand($sql_find6)->queryAll();
+            $data_unit7 = \yii::$app->db->createCommand($sql_find7)->queryAll();
+            $data_unit8 = \yii::$app->db->createCommand($sql_find8)->queryAll();
             
             $data_open_price_first1 = \yii::$app->db->createCommand($sql_find_open_price_first1)->queryAll();
             $data_open_price_first2 = \yii::$app->db->createCommand($sql_find_open_price_first2)->queryAll();
@@ -161,6 +169,9 @@ class CompareController extends \yii\web\Controller {
             $data_open_price_first4 = \yii::$app->db->createCommand($sql_find_open_price_first4)->queryAll();
             $data_open_price_first5 = \yii::$app->db->createCommand($sql_find_open_price_first5)->queryAll();
             $data_open_price_first6 = \yii::$app->db->createCommand($sql_find_open_price_first6)->queryAll();
+            $data_open_price_first7 = \yii::$app->db->createCommand($sql_find_open_price_first7)->queryAll();
+            $data_open_price_first8 = \yii::$app->db->createCommand($sql_find_open_price_first8)->queryAll();
+            
         } catch (\yii\db\Exception $e) {
             throw new \yii\web\ConflictHttpException('sql error');
         }
@@ -171,6 +182,8 @@ class CompareController extends \yii\web\Controller {
         $unit4 = $data_unit4[0]['units'];
         $unit5 = $data_unit5[0]['units'];
         $unit6 = $data_unit6[0]['units'];
+        $unit7 = $data_unit7[0]['units'];
+        $unit8 = $data_unit8[0]['units'];
         
         // first open price @ date first selected
         $open_price_first1 = $data_open_price_first1[0]['open'];
@@ -179,6 +192,8 @@ class CompareController extends \yii\web\Controller {
         $open_price_first4 = $data_open_price_first4[0]['open'];
         $open_price_first5 = $data_open_price_first5[0]['open'];
         $open_price_first6 = $data_open_price_first6[0]['open'];
+        $open_price_first7 = $data_open_price_first7[0]['open'];
+        $open_price_first8 = $data_open_price_first8[0]['open'];
 
             
         // เอาไว้ดึงข้อมูลไปแสดงในกราฟ
@@ -306,6 +321,50 @@ class CompareController extends \yii\web\Controller {
                 GROUP BY t1.DATE_S,h1.time_second
                 ORDER BY t1.DATE_S,h1.time_second  ";
         
+        
+        
+        // เอาไว้ดึงข้อมูลไปแสดงในกราฟ
+        $sql7 = "SELECT 
+                    concat(t1.DATE_S,'   time@ ', h1.time_second) as date_s,h1.time_first,t1.open as price_open,h1.time_second, 
+                                           
+                    IF($open_price_first7 < t1.`OPEN`,t1.open-$open_price_first7,
+                                    IF($open_price_first7 > t1.`open`, t1.open - $open_price_first7  , 1
+                          )
+                    )*$unit7 as price_range_7
+                                                             
+                FROM price_dynamic_h1 h1
+                
+                LEFT JOIN (
+                            select DATE_S,TIME_S,`OPEN` from $currency_table7 where DATE_S BETWEEN '$datestart'  AND '$dateend' 
+
+                ) t1 on (t1.TIME_S = h1.time_second)
+
+
+                GROUP BY t1.DATE_S,h1.time_second
+                ORDER BY t1.DATE_S,h1.time_second  ";
+        
+        
+        
+          // เอาไว้ดึงข้อมูลไปแสดงในกราฟ
+        $sql8 = "SELECT 
+                    concat(t1.DATE_S,'   time@ ', h1.time_second) as date_s,h1.time_first,t1.open as price_open,h1.time_second, 
+                                           
+                    IF($open_price_first8 < t1.`OPEN`,t1.open-$open_price_first8,
+                                    IF($open_price_first8 > t1.`open`, t1.open - $open_price_first8  , 1
+                          )
+                    )*$unit8 as price_range_8
+                                                             
+                FROM price_dynamic_h1 h1
+                
+                LEFT JOIN (
+                            select DATE_S,TIME_S,`OPEN` from $currency_table8 where DATE_S BETWEEN '$datestart'  AND '$dateend' 
+
+                ) t1 on (t1.TIME_S = h1.time_second)
+
+
+                GROUP BY t1.DATE_S,h1.time_second
+                ORDER BY t1.DATE_S,h1.time_second  ";
+        
 
         
                       
@@ -318,6 +377,8 @@ class CompareController extends \yii\web\Controller {
             $rawData4 = \yii::$app->db->createCommand($sql4)->queryAll();
             $rawData5 = \yii::$app->db->createCommand($sql5)->queryAll();
             $rawData6 = \yii::$app->db->createCommand($sql6)->queryAll();
+            $rawData7 = \yii::$app->db->createCommand($sql7)->queryAll();
+            $rawData8 = \yii::$app->db->createCommand($sql8)->queryAll();
         } catch (\yii\db\Exception $e) {
             throw new \yii\web\ConflictHttpException('sql error');
         }
@@ -330,6 +391,8 @@ class CompareController extends \yii\web\Controller {
                     'rawData4' => $rawData4, 
                     'rawData5' => $rawData5,
                     'rawData6' => $rawData6,
+                    'rawData7' => $rawData7,
+                    'rawData8' => $rawData8,
                     'report_name' => $report_name,
                     'sub_currency1' => $sub_currency1,
                     'sub_currency2' => $sub_currency2,
@@ -337,6 +400,8 @@ class CompareController extends \yii\web\Controller {
                     'sub_currency4' => $sub_currency4,
                     'sub_currency5' => $sub_currency5,
                     'sub_currency6' => $sub_currency6,
+                    'sub_currency7' => $sub_currency7,
+                    'sub_currency8' => $sub_currency8,
                     'datestart' => $datestart,
                     'dateend' => $dateend,
                      
