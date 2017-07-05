@@ -197,10 +197,11 @@ $this->params['breadcrumbs'][] = $this->title;
         sub_currency7 = $("#sub_currency7 option:selected").val();
         sub_currency8 = $("#sub_currency8 option:selected").val();
         sub_currency9 = $("#sub_currency9 option:selected").val();
+        sub_currency10 = $("#sub_currency10 option:selected").val();
        
    
         
-         window.open('http://localhost:8080/fx_system/frontend/web/index.php?r=compare/compare2&datestart=' + datestart + '&dateend=' + dateend + '&sub_currency1=' +  sub_currency1 + '&sub_currency2=' +  sub_currency2 + '&sub_currency3=' +  sub_currency3 + '&sub_currency4=' +  sub_currency4 + '&sub_currency5=' +  sub_currency5 + '&sub_currency6=' +  sub_currency6 + '&sub_currency7=' +  sub_currency7 + '&sub_currency8=' +  sub_currency8 + '&sub_currency9=' +  sub_currency9);
+         window.open('http://localhost:8080/fx_system/frontend/web/index.php?r=compare/compare2&datestart=' + datestart + '&dateend=' + dateend + '&sub_currency1=' +  sub_currency1 + '&sub_currency2=' +  sub_currency2 + '&sub_currency3=' +  sub_currency3 + '&sub_currency4=' +  sub_currency4 + '&sub_currency5=' +  sub_currency5 + '&sub_currency6=' +  sub_currency6 + '&sub_currency7=' +  sub_currency7 + '&sub_currency8=' +  sub_currency8 + '&sub_currency9=' +  sub_currency9 + '&sub_currency10=' +  sub_currency10);
     }
     
     
