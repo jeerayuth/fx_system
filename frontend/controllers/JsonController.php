@@ -13,7 +13,7 @@ class JsonController extends CommonController {
                 tb.time_second as `time_second` , 
                 
                    IF(t1.`open` < t2.`OPEN`,t2.open-t1.open,
-                                IF(t1.`open` > t2.`OPEN`, t2.open - t1.open, 1
+                                IF(t1.`open` > t2.`OPEN`, t2.open - t1.open, 0.001
                            )                  
                 )*$unit as `price_range`
                     
