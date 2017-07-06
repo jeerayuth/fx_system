@@ -35,6 +35,13 @@ $categ = [];
             $data[] = intval($rawData[$i]['cal_price_range']);
         }
         $js_data = implode(",", $data);
+        
+        $data2 = [];
+        for ($i = 0; $i < count($rawData); $i++) {
+            $data2[] = intval($rawData[$i]['cal_price_range_inverse']);
+        }
+        $js_data = implode(",", $data);
+        $js_data2 = implode(",", $data2);
 
 
 
@@ -79,6 +86,9 @@ $categ = [];
                                 series: [{
                                     name: 'range',
                                     data: [$js_data]
+                                }, {
+                                    name: 'range_inverse',
+                                    data: [$js_data2]
                                 }]
                             });
                         });

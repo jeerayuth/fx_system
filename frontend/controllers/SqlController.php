@@ -394,7 +394,13 @@ class SqlController extends CommonController {
                     IF($open_price_first < t1.`OPEN`,t1.open-$open_price_first,
                                     IF($open_price_first > t1.`open`, t1.open - $open_price_first  , 1
                           )
-                    )*$unit as cal_price_range
+                    )*$unit as cal_price_range,
+                        
+                    (IF($open_price_first < t1.`OPEN`,t1.open-$open_price_first,
+                                    IF($open_price_first > t1.`open`, t1.open - $open_price_first  , 1
+                          )
+                    )*$unit)*-1 as cal_price_range_inverse
+                        
                                                              
                 FROM price_dynamic_h1 h1
                 
