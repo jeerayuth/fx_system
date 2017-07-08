@@ -19,6 +19,11 @@ $this->title = $report_name;
 
 <div id="chart"></div>
 
+<br/>
+<br/>
+
+<div id="chart_sum"></div>
+
 <?php
 
 //เตรียมชุดข้อมูลไปใส่ให้กราฟ แกน x,y
@@ -81,6 +86,18 @@ $categ = [];
             $data10[] = intval($rawData10[$i]['price_range_10']);
         }
         
+        
+        $data_sum1 = [];
+        for ($i = 0; $i < count($rawData_sum1); $i++) {
+            $data_sum1[] = intval($rawData_sum1[$i]['sum_price_range1']);
+        }
+        
+        $data_sum2 = [];
+        for ($i = 0; $i < count($rawData_sum2); $i++) {
+            $data_sum2[] = intval($rawData_sum2[$i]['sum_price_range2']);
+        }
+        
+        
         $js_data1 = implode(",", $data1);
         $js_data2 = implode(",", $data2);
         $js_data3 = implode(",", $data3);
@@ -92,6 +109,9 @@ $categ = [];
         $js_data9 = implode(",", $data9);
         $js_data10 = implode(",", $data10);
         
+        $js_data_sum1 = implode(",", $data_sum1);
+        $js_data_sum2 = implode(",", $data_sum2);
+        
 
         $this->registerJs(" $(function () {
                             $('#chart').highcharts({
@@ -100,7 +120,7 @@ $categ = [];
                                     x: -20 //center
                                 },
                                 chart: {
-                                       height: 550
+                                       height: 500
                                 },
                                 subtitle: {
                                     text: '',
@@ -161,6 +181,61 @@ $categ = [];
                                 },  {
                                     name: '$sub_currency10',
                                     data: [$js_data10]
+                                }]
+                            });
+                        });
+             ");
+        
+        
+        
+        
+        
+        
+        
+        $this->registerJs(" $(function () {
+                            $('#chart_sum').highcharts({
+                                title: {
+                                    text: '$report_name',
+                                    x: -20 //center
+                                },
+                                chart: {
+                                       height: 500
+                                },
+                                subtitle: {
+                                    text: '',
+                                    x: -20
+                                },
+                                xAxis: {
+                                      categories: ['$js_categ'],
+                                },
+                                yAxis: {
+                                    title: {
+                                        text: 'ระยะการแกว่ง'
+                                    },
+                                    plotLines: [{
+                                        value: 0,
+                                        width: 1,
+                                        color: '#808080'
+                                    }]
+                                },
+                                tooltip: {
+                                    valueSuffix: ''
+                                },
+                                legend: {
+                                    layout: 'vertical',
+                                    align: 'right',
+                                    verticalAlign: 'middle',
+                                    borderWidth: 0
+                                },
+                                credits: {
+                                    enabled: false
+                                },
+                                series: [{
+                                    name: 'sum ชุด1',
+                                    data: [$js_data_sum1]
+                                }, {
+                                    name: 'sum ชุด2',
+                                    data: [$js_data_sum2]
                                 }]
                             });
                         });

@@ -168,6 +168,8 @@ class SqlController extends CommonController {
         
         $sql_total = "SELECT 
                         time_s,price as price,sum(count_range) as sum_range FROM 
+                        
+
                         (
                             SELECT tr.time_s,price_range.price,count(t.range1) as count_range
                             FROM price_range
@@ -187,7 +189,10 @@ class SqlController extends CommonController {
                                    from usdjpy_h4 where YEAR(DATE_S)=$year_s AND MONTH(DATE_S)= $month_id
                             ) t ON (t.range1 = price_range.price and tr.time_s = t.TIME_S)  
                             group by tr.time_s,price_range.price
+                            
+
                             UNION ALL
+                            
                             SELECT tr.time_s,price_range.price,count(t2.range1) as count_range
                             FROM price_range
                             INNER JOIN time_range tr ON tr.`level` = price_range.`level`

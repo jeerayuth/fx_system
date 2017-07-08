@@ -124,6 +124,7 @@ class CompareController extends \yii\web\Controller {
          $currency_table3 = $sub_currency3."_h1";
          $currency_table4 = $sub_currency4."_h1";
          $currency_table5 = $sub_currency5."_h1";
+         
          $currency_table6 = $sub_currency6."_h1";
          $currency_table7 = $sub_currency7."_h1";
          $currency_table8 = $sub_currency8."_h1";
@@ -143,6 +144,7 @@ class CompareController extends \yii\web\Controller {
         $sql_find8 = "SELECT id,units FROM sub_currency WHERE id = '$sub_currency8' ";
         $sql_find9 = "SELECT id,units FROM sub_currency WHERE id = '$sub_currency9' ";
         $sql_find10 = "SELECT id,units FROM sub_currency WHERE id = '$sub_currency10' ";
+        
         
         
         // sql find first open price @ first day select
@@ -425,9 +427,222 @@ class CompareController extends \yii\web\Controller {
         
         
         
+       
+                                            
         
+         $sql_sum1 = "SELECT  date_s, time_second , sum(price_range_1) as sum_price_range1   FROM (
+
+                             SELECT 
+                                concat(t1.DATE_S,'   time@ ', h1.time_second) as date_s,h1.time_first,t1.open as price_open,h1.time_second, 
+
+                                IF($open_price_first1 < t1.`OPEN`,t1.open-$open_price_first1,
+                                                IF($open_price_first1 > t1.`open`, t1.open - $open_price_first1  , 1
+                                      )
+                                )*$unit1 as price_range_1
+
+                            FROM price_dynamic_h1 h1
+
+                            LEFT JOIN (
+                                        select DATE_S,TIME_S,`OPEN` from $currency_table1 where DATE_S BETWEEN '$datestart'  AND '$dateend' 
+
+                            ) t1 on (t1.TIME_S = h1.time_second)
+
+
+                            GROUP BY t1.DATE_S,h1.time_second
+
+                    UNION ALL
+
+                            SELECT 
+                                concat(t1.DATE_S,'   time@ ', h1.time_second) as date_s,h1.time_first,t1.open as price_open,h1.time_second, 
+
+                                IF($open_price_first2 < t1.`OPEN`,t1.open-$open_price_first2,
+                                                IF($open_price_first2 > t1.`open`, t1.open - $open_price_first2  , 1
+                                      )
+                                )*$unit2 as price_range_1
+
+                            FROM price_dynamic_h1 h1
+
+                            LEFT JOIN (
+                                        select DATE_S,TIME_S,`OPEN` from $currency_table2 where DATE_S BETWEEN '$datestart'  AND '$dateend' 
+
+                            ) t1 on (t1.TIME_S = h1.time_second)
+
+                            GROUP BY t1.DATE_S,h1.time_second
+                            
+                    
+                    UNION ALL
+
+
+                    SELECT 
+                    concat(t1.DATE_S,'   time@ ', h1.time_second) as date_s,h1.time_first,t1.open as price_open,h1.time_second, 
+                                           
+                        IF($open_price_first3 < t1.`OPEN`,t1.open-$open_price_first3,
+                                        IF($open_price_first3 > t1.`open`, t1.open - $open_price_first3  , 1
+                              )
+                        )*$unit3 as price_range_1
+
+                    FROM price_dynamic_h1 h1
+
+                    LEFT JOIN (
+                                select DATE_S,TIME_S,`OPEN` from $currency_table3 where DATE_S BETWEEN '$datestart'  AND '$dateend' 
+
+                    ) t1 on (t1.TIME_S = h1.time_second)
+                    
+                    GROUP BY t1.DATE_S,h1.time_second
+                    
+                    UNION ALL
+                    
+                    SELECT 
+                        concat(t1.DATE_S,'   time@ ', h1.time_second) as date_s,h1.time_first,t1.open as price_open,h1.time_second, 
+
+                        IF($open_price_first4 < t1.`OPEN`,t1.open-$open_price_first4,
+                                        IF($open_price_first4 > t1.`open`, t1.open - $open_price_first4  , 1
+                              )
+                        )*$unit4 as price_range_1
+
+                    FROM price_dynamic_h1 h1
+
+                    LEFT JOIN (
+                                select DATE_S,TIME_S,`OPEN` from $currency_table4 where DATE_S BETWEEN '$datestart'  AND '$dateend' 
+
+                    ) t1 on (t1.TIME_S = h1.time_second)
+
+                    GROUP BY t1.DATE_S,h1.time_second
+
+                
+                UNION ALL
+                
+                    SELECT 
+                    concat(t1.DATE_S,'   time@ ', h1.time_second) as date_s,h1.time_first,t1.open as price_open,h1.time_second, 
+                                           
+                    IF($open_price_first5 < t1.`OPEN`,t1.open-$open_price_first5,
+                                    IF($open_price_first5 > t1.`open`, t1.open - $open_price_first5  , 1
+                          )
+                    )*$unit5 as price_range_1
+                                                             
+                FROM price_dynamic_h1 h1
+                
+                LEFT JOIN (
+                            select DATE_S,TIME_S,`OPEN` from $currency_table5 where DATE_S BETWEEN '$datestart'  AND '$dateend' 
+
+                ) t1 on (t1.TIME_S = h1.time_second)
+                GROUP BY t1.DATE_S,h1.time_second
+                
+
+                        ) ts
+
+                GROUP BY date_s,time_second ";
+
+
 
         
+         
+         $sql_sum2 = "SELECT  date_s, time_second , sum(price_range_2) as sum_price_range2   FROM (
+                                
+                        SELECT 
+                            concat(t1.DATE_S,'   time@ ', h1.time_second) as date_s,h1.time_first,t1.open as price_open,h1.time_second, 
+
+                            IF($open_price_first6 < t1.`OPEN`,t1.open-$open_price_first6,
+                                            IF($open_price_first6 > t1.`open`, t1.open - $open_price_first6  , 1
+                                  )
+                            )*$unit6 as price_range_2
+
+                        FROM price_dynamic_h1 h1
+
+                        LEFT JOIN (
+                                    select DATE_S,TIME_S,`OPEN` from $currency_table6 where DATE_S BETWEEN '$datestart'  AND '$dateend' 
+
+                        ) t1 on (t1.TIME_S = h1.time_second)
+                        GROUP BY t1.DATE_S,h1.time_second
+                        
+             UNION ALL
+             
+                        SELECT 
+                            concat(t1.DATE_S,'   time@ ', h1.time_second) as date_s,h1.time_first,t1.open as price_open,h1.time_second, 
+
+                            IF($open_price_first7 < t1.`OPEN`,t1.open-$open_price_first7,
+                                            IF($open_price_first7 > t1.`open`, t1.open - $open_price_first7  , 1
+                                  )
+                            )*$unit7 as price_range_2
+
+                        FROM price_dynamic_h1 h1
+
+                        LEFT JOIN (
+                                    select DATE_S,TIME_S,`OPEN` from $currency_table7 where DATE_S BETWEEN '$datestart'  AND '$dateend' 
+
+                        ) t1 on (t1.TIME_S = h1.time_second)
+
+
+                        GROUP BY t1.DATE_S,h1.time_second
+                        
+            UNION ALL
+            
+                        SELECT 
+                            concat(t1.DATE_S,'   time@ ', h1.time_second) as date_s,h1.time_first,t1.open as price_open,h1.time_second, 
+
+                            IF($open_price_first8 < t1.`OPEN`,t1.open-$open_price_first8,
+                                            IF($open_price_first8 > t1.`open`, t1.open - $open_price_first8  , 1
+                                  )
+                            )*$unit8 as price_range_2
+
+                        FROM price_dynamic_h1 h1
+
+                        LEFT JOIN (
+                                    select DATE_S,TIME_S,`OPEN` from $currency_table8 where DATE_S BETWEEN '$datestart'  AND '$dateend' 
+
+                        ) t1 on (t1.TIME_S = h1.time_second)
+
+                        GROUP BY t1.DATE_S,h1.time_second
+                        
+
+            UNION ALL
+            
+                    SELECT 
+                        concat(t1.DATE_S,'   time@ ', h1.time_second) as date_s,h1.time_first,t1.open as price_open,h1.time_second, 
+
+                        IF($open_price_first9 < t1.`OPEN`,t1.open-$open_price_first9,
+                                        IF($open_price_first9 > t1.`open`, t1.open - $open_price_first9  , 1
+                              )
+                        )*$unit9 as price_range_2
+
+                    FROM price_dynamic_h1 h1
+
+                    LEFT JOIN (
+                                select DATE_S,TIME_S,`OPEN` from $currency_table9 where DATE_S BETWEEN '$datestart'  AND '$dateend' 
+
+                    ) t1 on (t1.TIME_S = h1.time_second)
+
+                    GROUP BY t1.DATE_S,h1.time_second
+                    
+
+            UNION ALL
+            
+
+                SELECT 
+                    concat(t1.DATE_S,'   time@ ', h1.time_second) as date_s,h1.time_first,t1.open as price_open,h1.time_second, 
+                                           
+                    IF($open_price_first10 < t1.`OPEN`,t1.open-$open_price_first10,
+                                    IF($open_price_first10 > t1.`open`, t1.open - $open_price_first10  , 1
+                          )
+                    )*$unit10 as price_range_2
+                                                             
+                FROM price_dynamic_h1 h1
+                
+                LEFT JOIN (
+                            select DATE_S,TIME_S,`OPEN` from $currency_table10 where DATE_S BETWEEN '$datestart'  AND '$dateend' 
+
+                ) t1 on (t1.TIME_S = h1.time_second)
+
+
+                GROUP BY t1.DATE_S,h1.time_second
+
+        
+        
+         ) ts
+
+                GROUP BY date_s,time_second ";
+
+  
                       
                 
         
@@ -442,10 +657,14 @@ class CompareController extends \yii\web\Controller {
             $rawData8 = \yii::$app->db->createCommand($sql8)->queryAll();
             $rawData9 = \yii::$app->db->createCommand($sql9)->queryAll();
             $rawData10 = \yii::$app->db->createCommand($sql10)->queryAll();
+            
+            $rawData_sum1 = \yii::$app->db->createCommand($sql_sum1)->queryAll();
+            $rawData_sum2 = \yii::$app->db->createCommand($sql_sum2)->queryAll();
+            
         } catch (\yii\db\Exception $e) {
             throw new \yii\web\ConflictHttpException('sql error');
         }
-        
+             
                
         return $this->render('compare2', [
                     'rawData1' => $rawData1,  
@@ -458,6 +677,11 @@ class CompareController extends \yii\web\Controller {
                     'rawData8' => $rawData8,
                     'rawData9' => $rawData9,
                     'rawData10' => $rawData10,
+                    
+                    'rawData_sum1' => $rawData_sum1,
+                    'rawData_sum2' => $rawData_sum2,
+            
+            
                     'report_name' => $report_name,
                     'sub_currency1' => $sub_currency1,
                     'sub_currency2' => $sub_currency2,
