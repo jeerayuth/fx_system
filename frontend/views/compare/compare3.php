@@ -61,6 +61,11 @@ $categ = [];
             $data5[] = intval($rawData5[$i]['price_range_5']);
         }
         
+        $data6 = [];
+        for ($i = 0; $i < count($rawData6); $i++) {
+            $data6[] = intval($rawData6[$i]['price_range_6']);
+        }
+        
                
         $data_sum1 = [];
         for ($i = 0; $i < count($rawData_sum1); $i++) {
@@ -79,6 +84,7 @@ $categ = [];
         $js_data3 = implode(",", $data3);
         $js_data4 = implode(",", $data4);
         $js_data5 = implode(",", $data5);
+        $js_data6 = implode(",", $data6);
         
         $js_data_sum1 = implode(",", $data_sum1);
         $js_data_sum1_inverse = implode(",", $data_sum1_inverse);
@@ -138,6 +144,9 @@ $categ = [];
                                 },  {
                                     name: '$sub_currency5',
                                     data: [$js_data5]
+                                },  {
+                                    name: '$sub_currency6',
+                                    data: [$js_data6]
                                 }]
                             });
                         });

@@ -99,6 +99,17 @@ $this->params['breadcrumbs'][] = $this->title;
                                   ]) ?>
                             </div>
                             
+                            
+                            <div class="form-group">
+                                    <?php echo Html::dropDownList('sub_currency6', null,
+                                        ArrayHelper::map(Subcurrency::find()->all(), 'id', 'name'), [
+                                        'class' => 'form-control',
+                                        'id' => 'sub_currency6',
+                                        'prompt' => ' -- คู่เงินที่ 6 --',
+                                        'options'=>['chfjpy'=>['Selected'=>true]]
+                                  ]) ?>
+                            </div>
+                            
                                                       
                                                                                       
                             <a  class="btn btn-info btn-block" onclick = "javascript:url_day_compare()"><i class="fa fa-search"></i>ดูพฤติกรรมกราฟ</a> 
@@ -141,10 +152,11 @@ $this->params['breadcrumbs'][] = $this->title;
         sub_currency3 = $("#sub_currency3 option:selected").val();
         sub_currency4 = $("#sub_currency4 option:selected").val();
         sub_currency5 = $("#sub_currency5 option:selected").val();
+        sub_currency6 = $("#sub_currency6 option:selected").val();
 
        
            
-         window.open('http://localhost:8080/fx_system/frontend/web/index.php?r=compare/compare3&datestart=' + datestart + '&dateend=' + dateend + '&sub_currency1=' +  sub_currency1 + '&sub_currency2=' +  sub_currency2 + '&sub_currency3=' +  sub_currency3 + '&sub_currency4=' +  sub_currency4 + '&sub_currency5=' +  sub_currency5);
+         window.open('http://localhost:8080/fx_system/frontend/web/index.php?r=compare/compare3&datestart=' + datestart + '&dateend=' + dateend + '&sub_currency1=' +  sub_currency1 + '&sub_currency2=' +  sub_currency2 + '&sub_currency3=' +  sub_currency3 + '&sub_currency4=' +  sub_currency4 + '&sub_currency5=' +  sub_currency5 + '&sub_currency6=' +  sub_currency6);
     }
     
     
