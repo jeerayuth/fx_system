@@ -281,8 +281,9 @@ echo GridView::widget([
         m3 = arr2[2];
         dateend = m3+m2+m1;
         
+        timeframe = $("[name='opttimeframe']:checked").val()
         
-         window.open('http://localhost:8080/fx_system/frontend/web/index.php?r=sql/report8&datestart=' + datestart + '&dateend=' + dateend + '&sub_currency_id=<?php echo $sub_currency_id;?>' );
+         window.open('http://localhost:8080/fx_system/frontend/web/index.php?r=sql/report8&datestart=' + datestart + '&dateend=' + dateend + '&sub_currency_id=<?php echo $sub_currency_id;?>' + '&timeframe=' + timeframe );
     }
     
     
@@ -373,41 +374,7 @@ echo GridView::widget([
         dateend = m3+"-"+m2+"-"+m1;
         
         
-        // ดึง time มาใช้
-        /*
-        t1 = $('#w1').val();
-        var arr1 = t1.split(" ");
-        s1 = arr1[0]+':00';
-        s2 = arr1[1];
-           
-        if (s2 == 'PM') {
-            ds = datestart + ' ' + s1;
-            cds = new Date(ds);
-            cds.setMinutes(cds.getMinutes()+720);
-        } else {
-            ds = datestart + ' ' + s1;
-            cds = new Date(ds);
-        }
         
-        
-        t2 = $('#w2').val();
-        var arr2 = t2.split(" ");
-        m1 = arr2[0]+':00';
-        m2 = arr2[1];
-        
-        if (m2 == 'PM') {
-            de = dateend + ' ' + m1;
-            cde = new Date(de)
-            cde.setMinutes(cde.getMinutes()+720);
-        } else {
-            de = dateend + ' ' + m1;
-            cde = new Date(de)
-        }
-        
-       
-         timestart = moment(cds).format('HH:mm:ss');
-         timeend = moment(cde).format('HH:mm:ss');
-         */
         window.open('http://localhost:8080/fx_system/frontend/web/index.php?r=sql/report8&datestart=' + datestart + '&dateend=' + dateend + '&sub_currency_id=<?php echo $sub_currency_id;?>' );
     }
     

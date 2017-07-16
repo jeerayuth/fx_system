@@ -369,8 +369,10 @@ class SqlController extends CommonController {
     
     
     
-    public function actionReport8($datestart,$dateend,$sub_currency_id) {
-        $currency_table = $sub_currency_id."_h1";
+    public function actionReport8($datestart,$dateend,$sub_currency_id,$timeframe) {
+        $currency_table = $sub_currency_id.$timeframe;
+        $price_dynamic_table = "price_dynamic".$timeframe;
+        
         $report_name = "กราฟพฤติกรรมการแกว่งในคู่เงิน $sub_currency_id ระหว่างวันที่ $datestart ถึงวันที่ $dateend";
        
         // sql find units in sub_current table
@@ -407,7 +409,7 @@ class SqlController extends CommonController {
                     )*$unit)*-1 as cal_price_range_inverse
                         
                                                              
-                FROM price_dynamic_h1 h1
+                FROM $price_dynamic_table h1
                 
                 LEFT JOIN (
                             select DATE_S,TIME_S,`OPEN` from $currency_table where DATE_S BETWEEN '$datestart'  AND '$dateend' 
