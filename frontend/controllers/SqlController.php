@@ -110,7 +110,7 @@ class SqlController extends CommonController {
     }
     
     public function actionReport4($sub_currency_id, $year_s, $month_id) {
-        $currency_table = $sub_currency_id . "_m5";
+        $currency_table = $sub_currency_id . "_m1";
         $report_name = "กราฟพฤติกรรมการแกว่งของราคาในคู่เงิน $sub_currency_id เดือน $month_id ปี $year_s ในกรอบระยะ 1 วัน";
         // sql find units in sub_current table
         $sql_find = "SELECT id,units FROM sub_currency WHERE id = '$sub_currency_id' ";
@@ -442,7 +442,7 @@ class SqlController extends CommonController {
     
     
     public function actionReport9($datestart,$dateend,$timestart,$timeend,$sub_currency_id) {
-        $currency_table = $sub_currency_id."_m5";
+        $currency_table = $sub_currency_id."_m1";
         
         if($timestart == '01:00:00') {
             $timestart = '00:00:00';
