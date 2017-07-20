@@ -51,7 +51,15 @@ echo GridView::widget([
         ],
         [
             'attribute' => 'cal_gap_pending_order',
-            'header' => 'ราคาเป้าหมาย gap pending'
+            'header' => 'คำนวณ gap pending'
+        ], 
+        [
+            'attribute' => 'time_to_pending_order_start',
+            'header' => 'เวลาที่เริ่มแตะ Pending'
+        ],
+        [
+            'attribute' => 'price_on_pending_start',
+            'header' => 'ราคาที่เริ่มแตะ Pending'
         ],
          [
             'attribute' => 'price_on_tp',
@@ -60,15 +68,6 @@ echo GridView::widget([
         [
             'attribute' => 'price_on_stop_loss',
             'header' => 'คำนวณ SL'
-        ],
-  
-        [
-            'attribute' => 'time_to_pending_order_start',
-            'header' => 'เวลาที่เริ่มแตะ Pending'
-        ],
-        [
-            'attribute' => 'price_on_pending_start',
-            'header' => 'ราคาที่เริ่มแตะ Pending'
         ],
         [
             'attribute' => 'time_at_low_price',
@@ -87,9 +86,18 @@ echo GridView::widget([
             'header' => 'ระดับราคาสูงสุดในคาบเวลา'
         ],
         [
-            'attribute' => 'cal_score',
-            'header' => 'คำนวณระยะ'
+            'attribute' => 'time_at_last_close_price',
+            'header' => 'เวลาสุดท้ายตามที่เลือก'
         ],
+        [
+            'attribute' => 'price_at_last_close_price',
+            'header' => 'ราคา ณ เวลาสุดท้าย'
+        ],
+        [
+            'attribute' => 'cal_score',
+            'header' => 'Profit/Loss(Point)'
+        ],
+   
 
        
       

@@ -52,10 +52,10 @@ class BacktestController extends \yii\web\Controller {
                     tt.price_on_pending_start,
 
                     /* ราคา @ จุด stop loss */
-                    tt.price_on_pending_start - 0.0030 as price_on_stop_loss, 
+                    TRUNCATE(tt.price_on_pending_start - 0.0030,5) as price_on_stop_loss, 
 
                     /* ราคา @ จุด  tp */
-                    tt.price_on_pending_start + 0.0020 as price_on_tp, 
+                     TRUNCATE(tt.price_on_pending_start + 0.0020,5) as price_on_tp, 
 
                     /*  ระดับราคาสูงสุด ณ ช่วงคาบเวลา */ + 
                     tt2.time_at_hight_price,
@@ -73,6 +73,8 @@ class BacktestController extends \yii\web\Controller {
                     /*  1. ตรวจสอบว่าแตะราคา Pending หรือเปล่า    
                         2. ตรวจสอบว่าแตะ ราคาไม่แตะ  STop Loss  
                         3. ตรวจสอบว่าราคาแตะ TP หรือเปล่า        */
+                        
+                    /* !!! ราคาที่แตะ TP อย่าลืมหักค่า Gap ออกด้วยนะครับ */
 
                     if(tt.price_on_pending_start >= TRUNCATE(a1.`OPEN` + 0.0003,5),
                                             if(tt3.price_at_low > (tt.price_on_pending_start - 0.0030) ,
@@ -83,52 +85,53 @@ class BacktestController extends \yii\web\Controller {
 
 
 
-
-
                     from eurusd_m1 a1
 
 
                     /* หาราคา Pending ณ ช่วงเวลานั้นๆ */
                     left join 
                     (
-                                    select a2.DATE_S,a2.TIME_S as time_to_pending_order_start,a2.HIGHT as price_on_pending_start from eurusd_m1 a2 where a2.DATE_S between '2017-05-01' and '2017-05-02' 
-                                                                    and a2.TIME_S BETWEEN '11:45:00' and '12:45:00'  and a2.HIGHT >= (select (a3.`OPEN` + 0.0003) from eurusd_m1 a3 
-                                                                                                                                                                                                                                                                                                                                                    where a3.DATE_S = a2.DATE_S
-                                                                                                                                                                                                                                                                                                                                                    and a3.TIME_S = '11:45:00' 
-                                                                                                                                                                                                                                                                                                                                               limit 1
-                                                                                                                                                                                                                                                                                                                                                    )
-                                                              group by a2.DATE_S
-
+                                    select 
+                                        a2.DATE_S,a2.TIME_S as time_to_pending_order_start,a2.HIGHT as price_on_pending_start 
+                                    from eurusd_m1 a2 
+                                    where a2.DATE_S between '$datestart'  AND '$dateend'   and a2.TIME_S BETWEEN '11:45:00' and '12:45:00'                                     
+                                    and a2.HIGHT >= (select (a3.`OPEN` + 0.0003) from eurusd_m1 a3 
+                                                             where a3.DATE_S = a2.DATE_S
+                                                             and a3.TIME_S = '11:45:00' 
+                                                             limit 1
+                                                     )
+                                    group by a2.DATE_S
 
                     ) tt on tt.DATE_S = a1.DATE_S
-
 
 
                     /* หาราคาสูงสุด ณ ช่วงเวลานั้นๆ */
                     left join 
                     (
-                                    select a4.DATE_S,a4.TIME_S as time_at_hight_price,a4.HIGHT as price_at_hight from eurusd_m1 a4 where a4.DATE_S between '2017-05-01' and '2017-05-02' 
-                                                                    and a4.TIME_S BETWEEN '11:45:00' and '17:55:00'  and a4.HIGHT = (select max(a5.hight) from eurusd_m1 a5
-                                                                                                                                                                                                                                                                                                                                                    where a5.DATE_S = a4.DATE_S and a5.TIME_S BETWEEN '11:45:00' and '17:55:00'  																																						
-                                                                                                                                                                                                                                                                                                                                              limit 1
-                                                                                                                                                                                                                                                                                                                                                    )
-                                                              group by a4.DATE_S
-
+                                    select 
+                                        a4.DATE_S,a4.TIME_S as time_at_hight_price,a4.HIGHT as price_at_hight 
+                                    from eurusd_m1 a4 
+                                    where a4.DATE_S between '$datestart'  AND '$dateend' and a4.TIME_S BETWEEN '11:45:00' and '17:55:00' 
+                                    and a4.HIGHT = (select max(a5.hight) from eurusd_m1 a5
+                                                             where a5.DATE_S = a4.DATE_S and a5.TIME_S BETWEEN '11:45:00' and '17:55:00'  																																						
+                                                             limit 1
+                                                    )
+                                    group by a4.DATE_S
 
                     ) tt2 on tt2.DATE_S = a1.DATE_S
 
 
-
                     /* หาราคาต่ำสุด ณ ช่วงเวลานั้นๆ */
-                    left join 
-                    (
-                                    select a6.DATE_S,a6.TIME_S as time_at_low_price,a6.LOW as price_at_low from eurusd_m1 a6 where a6.DATE_S between '2017-05-01' and '2017-05-02' 
-                                                                    and a6.TIME_S BETWEEN '11:45:00' and '17:55:00'  and a6.LOW = (select min(a7.low) from eurusd_m1 a7
-                                                                                                                                                                                                                                                                                                                                                    where a7.DATE_S = a6.DATE_S and a7.TIME_S BETWEEN '11:45:00' and '17:55:00'  																																						
-                                                                                                                                                                                                                                                                                                                                              limit 1
-                                                                                                                                                                                                                                                                                                                                                    )
-                                                              group by a6.DATE_S
-
+                    left join  (              
+                                    select 
+                                        a6.DATE_S,a6.TIME_S as time_at_low_price,a6.LOW as price_at_low 
+                                    from eurusd_m1 a6 where a6.DATE_S between '$datestart'  AND '$dateend' 
+                                    and a6.TIME_S BETWEEN '11:45:00' and '17:55:00'  
+                                    and a6.LOW = (select min(a7.low) from eurusd_m1 a7
+                                    where a7.DATE_S = a6.DATE_S and a7.TIME_S BETWEEN '11:45:00' and '17:55:00'  																																						
+                                    limit 1
+                                )
+                                    group by a6.DATE_S
 
                     ) tt3 on tt3.DATE_S = a1.DATE_S
 
@@ -136,23 +139,21 @@ class BacktestController extends \yii\web\Controller {
 
 
                     /*   หาราคาสุดท้าย  */
-                    left join 
-                    (
-                                    select a8.DATE_S,a8.TIME_S as time_at_last_close_price,a8.`CLOSE` as price_at_last_close_price from eurusd_m1 a8 where a8.DATE_S between '2017-05-01' and '2017-05-02' 
-                                                                    and a8.TIME_S = '17:55:00'  
-                                                              group by a8.DATE_S		
-
+                    left join  (                 
+                                    select 
+                                        a8.DATE_S,a8.TIME_S as time_at_last_close_price,
+                                        a8.`CLOSE` as price_at_last_close_price 
+                                    from eurusd_m1 a8 
+                                    where a8.DATE_S between '$datestart'  AND '$dateend'  and a8.TIME_S = '17:55:00' 
+                                    group by a8.DATE_S                                  
+                                                              		
                     ) tt4 on tt4.DATE_S = a1.DATE_S
 
+                    WHERE a1.DATE_S between '$datestart'  AND '$dateend' and a1.TIME_S BETWEEN '11:45:00' and '17:55:00'
+                    GROUP BY a1.DATE_S ";
 
 
-                    WHERE a1.DATE_S between '2017-05-01' and '2017-05-02' and a1.TIME_S BETWEEN '11:45:00' and '17:55:00'
-                    GROUP BY a1.DATE_S
-
-
-                    ";
-        
-                      
+                                  
         
         try {
             $rawData = \yii::$app->db->createCommand($sql)->queryAll();  
