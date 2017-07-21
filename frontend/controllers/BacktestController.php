@@ -79,7 +79,7 @@ class BacktestController extends \yii\web\Controller {
                     if(tt.price_on_pending_start >= TRUNCATE(a1.`OPEN` + 0.0003,5),
                                             if(tt3.price_at_low > (tt.price_on_pending_start - 0.0030) ,
                                                             if(tt2.price_at_hight >= tt.price_on_pending_start + 0.0020, 200, 
-                                                                            if(tt.price_on_pending_start < tt4.price_at_last_close_price, (tt4.price_at_last_close_price-tt.price_on_pending_start)*100000, (-tt4.price_at_last_close_price+tt.price_on_pending_start)*100000 )), 
+                                                                            if(tt.price_on_pending_start < tt4.price_at_last_close_price, (tt4.price_at_last_close_price-tt.price_on_pending_start)*100000,   -(-tt4.price_at_last_close_price+tt.price_on_pending_start)*100000)), 
                                                     -300) 
                             ,0) as cal_score
 
