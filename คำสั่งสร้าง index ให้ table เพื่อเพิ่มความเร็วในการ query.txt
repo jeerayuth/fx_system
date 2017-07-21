@@ -1,0 +1,6 @@
+﻿sql คำสั่งสร้าง index ให้ table เพื่อเพิ่มความเร็วในการ query
+
+https://spalinux.com/2008/06/indexing_mysql_database
+
+
+ALTER TABLE  ADD KEY (item_name1,item_name2);

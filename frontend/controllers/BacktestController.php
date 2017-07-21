@@ -14,12 +14,16 @@ class BacktestController extends \yii\web\Controller {
     }
     
     
-    public function actionBacktest1($datestart,$dateend,$sub_currency) {
+    public function actionBacktest1($datestart,$dateend,$timestart,$timepending,$timeend,$gap,$tp,$sl,$sub_currency) {
         
-         $currency_table = $sub_currency."_m1";
+        $currency_table = $sub_currency."_m1";
+         
+        if($timestart == '01:00:00') {
+            $timestart = '00:00:00';
+        }
    
          
-         $report_name = "กราฟ backtest ของค่าเงิน $sub_currency ระหว่างวันที่ $datestart ถึงวันที่ $dateend ";
+         $report_name = "กราฟ backtest ของค่าเงิน $sub_currency ระหว่างวันที่ $datestart ถึงวันที่ $dateend  ตั้งแต่เวลา $timestart ถึง  $timeend ";
                 
          // sql find units in sub_current table
         $sql_find = "SELECT id,units FROM sub_currency WHERE id = '$sub_currency' ";
@@ -32,7 +36,7 @@ class BacktestController extends \yii\web\Controller {
             throw new \yii\web\ConflictHttpException('sql error');
         }
         $unit = $data_unit[0]['units'];
-
+        
             
         // เอาไว้ดึงข้อมูลไปแสดงในกราฟ
         $sql = "SELECT 
@@ -45,17 +49,17 @@ class BacktestController extends \yii\web\Controller {
                     a1.`OPEN` as first_open,
 
                     /* ราคาเป้าหมายที่คำนวณ gap แล้ว*/
-                    TRUNCATE(a1.`OPEN` + 0.0003,5) as cal_gap_pending_order,
+                    TRUNCATE(a1.`OPEN` + $gap,5) as cal_gap_pending_order,
 
                     /*  ราคาเวลาที่แตะ Pending */
                     tt.time_to_pending_order_start,
                     tt.price_on_pending_start,
 
                     /* ราคา @ จุด stop loss */
-                    TRUNCATE(tt.price_on_pending_start - 0.0030,5) as price_on_stop_loss, 
+                    TRUNCATE(tt.price_on_pending_start - $sl,5) as price_on_stop_loss, 
 
                     /* ราคา @ จุด  tp */
-                     TRUNCATE(tt.price_on_pending_start + 0.0020,5) as price_on_tp, 
+                     TRUNCATE(tt.price_on_pending_start + $tp,5) as price_on_tp, 
 
                     /*  ระดับราคาสูงสุด ณ ช่วงคาบเวลา */ + 
                     tt2.time_at_hight_price,
@@ -76,16 +80,16 @@ class BacktestController extends \yii\web\Controller {
                         
                     /* !!! ราคาที่แตะ TP อย่าลืมหักค่า Gap ออกด้วยนะครับ */
 
-                    if(tt.price_on_pending_start >= TRUNCATE(a1.`OPEN` + 0.0003,5),
-                                            if(tt3.price_at_low > (tt.price_on_pending_start - 0.0030) ,
-                                                            if(tt2.price_at_hight >= tt.price_on_pending_start + 0.0020, 200, 
-                                                                            if(tt.price_on_pending_start < tt4.price_at_last_close_price, (tt4.price_at_last_close_price-tt.price_on_pending_start)*100000,   -(-tt4.price_at_last_close_price+tt.price_on_pending_start)*100000)), 
-                                                    -300) 
+                    if(tt.price_on_pending_start >= TRUNCATE(a1.`OPEN` + $gap,5),
+                                            if(tt3.price_at_low > (tt.price_on_pending_start - $sl) ,
+                                                            if(tt2.price_at_hight >= tt.price_on_pending_start + $tp, TRUNCATE(($tp*$unit)-($gap*$unit),5), 
+                                                                            if(tt.price_on_pending_start < tt4.price_at_last_close_price, (tt4.price_at_last_close_price-tt.price_on_pending_start)*$unit,   -(-tt4.price_at_last_close_price+tt.price_on_pending_start)*$unit)), 
+                                                    -($sl*$unit)) 
                             ,0) as cal_score
 
 
 
-                    from eurusd_m1 a1
+                    from $currency_table  a1
 
 
                     /* หาราคา Pending ณ ช่วงเวลานั้นๆ */
@@ -93,11 +97,11 @@ class BacktestController extends \yii\web\Controller {
                     (
                                     select 
                                         a2.DATE_S,a2.TIME_S as time_to_pending_order_start,a2.HIGHT as price_on_pending_start 
-                                    from eurusd_m1 a2 
-                                    where a2.DATE_S between '$datestart'  AND '$dateend'   and a2.TIME_S BETWEEN '11:45:00' and '12:45:00'                                     
-                                    and a2.HIGHT >= (select (a3.`OPEN` + 0.0003) from eurusd_m1 a3 
+                                    from $currency_table a2 
+                                    where a2.DATE_S between '$datestart'  AND '$dateend'   and a2.TIME_S BETWEEN '$timestart' and '$timepending'                                    
+                                    and a2.HIGHT >= (select (a3.`OPEN` + $gap) from $currency_table a3 
                                                              where a3.DATE_S = a2.DATE_S
-                                                             and a3.TIME_S = '11:45:00' 
+                                                             and a3.TIME_S = '$timestart'
                                                              limit 1
                                                      )
                                     group by a2.DATE_S
@@ -110,10 +114,10 @@ class BacktestController extends \yii\web\Controller {
                     (
                                     select 
                                         a4.DATE_S,a4.TIME_S as time_at_hight_price,a4.HIGHT as price_at_hight 
-                                    from eurusd_m1 a4 
-                                    where a4.DATE_S between '$datestart'  AND '$dateend' and a4.TIME_S BETWEEN '11:45:00' and '17:55:00' 
-                                    and a4.HIGHT = (select max(a5.hight) from eurusd_m1 a5
-                                                             where a5.DATE_S = a4.DATE_S and a5.TIME_S BETWEEN '11:45:00' and '17:55:00'  																																						
+                                    from $currency_table a4 
+                                    where a4.DATE_S between '$datestart'  AND '$dateend' and a4.TIME_S BETWEEN '$timestart' and '$timeend'
+                                    and a4.HIGHT = (select max(a5.hight) from $currency_table a5
+                                                             where a5.DATE_S = a4.DATE_S and a5.TIME_S BETWEEN '$timestart' and '$timeend'																																						
                                                              limit 1
                                                     )
                                     group by a4.DATE_S
@@ -125,10 +129,10 @@ class BacktestController extends \yii\web\Controller {
                     left join  (              
                                     select 
                                         a6.DATE_S,a6.TIME_S as time_at_low_price,a6.LOW as price_at_low 
-                                    from eurusd_m1 a6 where a6.DATE_S between '$datestart'  AND '$dateend' 
-                                    and a6.TIME_S BETWEEN '11:45:00' and '17:55:00'  
-                                    and a6.LOW = (select min(a7.low) from eurusd_m1 a7
-                                    where a7.DATE_S = a6.DATE_S and a7.TIME_S BETWEEN '11:45:00' and '17:55:00'  																																						
+                                    from $currency_table a6 where a6.DATE_S between '$datestart'  AND '$dateend' 
+                                    and a6.TIME_S BETWEEN '$timestart' and '$timeend'  
+                                    and a6.LOW = (select min(a7.low) from $currency_table a7
+                                    where a7.DATE_S = a6.DATE_S and a7.TIME_S BETWEEN '$timestart' and '$timeend' 																																						
                                     limit 1
                                 )
                                     group by a6.DATE_S
@@ -143,14 +147,14 @@ class BacktestController extends \yii\web\Controller {
                                     select 
                                         a8.DATE_S,a8.TIME_S as time_at_last_close_price,
                                         a8.`CLOSE` as price_at_last_close_price 
-                                    from eurusd_m1 a8 
-                                    where a8.DATE_S between '$datestart'  AND '$dateend'  and a8.TIME_S = '17:55:00' 
+                                    from $currency_table a8 
+                                    where a8.DATE_S between '$datestart'  AND '$dateend'  and a8.TIME_S = '$timeend'
                                     group by a8.DATE_S                                  
                                                               		
                     ) tt4 on tt4.DATE_S = a1.DATE_S
 
-                    WHERE a1.DATE_S between '$datestart'  AND '$dateend' and a1.TIME_S BETWEEN '11:45:00' and '17:55:00'
-                    GROUP BY a1.DATE_S ";
+                    WHERE a1.DATE_S between '$datestart'  AND '$dateend' and a1.TIME_S BETWEEN '$timestart' and '$timeend'
+                    GROUP BY a1.DATE_S  ";
 
 
                                   

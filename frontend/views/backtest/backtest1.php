@@ -95,7 +95,8 @@ echo GridView::widget([
         ],
         [
             'attribute' => 'cal_score',
-            'header' => 'Profit/Loss(Point)'
+            'header' => 'Profit/Loss(Point)',
+             'format'=>['decimal',0]
         ],
    
 
