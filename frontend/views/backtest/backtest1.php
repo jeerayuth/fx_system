@@ -15,7 +15,15 @@ $this->title = $report_name;
 //$this->params['breadcrumbs'][] = $this->title;
 ?>
 
+<?php 
 
+$total = 0; // ผลรวม Point
+
+for ($i = 0; $i < count($rawData); $i++) {
+    $total += $rawData[$i]['cal_score']; 
+}
+
+?>
 
 
 <?php
@@ -33,6 +41,7 @@ echo GridView::widget([
         'showConfirmAlert' => false,
         'target' => GridView::TARGET_BLANK
     ],
+    'showFooter' => true,
     'columns' => [
         ['class' => 'yii\grid\SerialColumn'],
         
@@ -91,12 +100,15 @@ echo GridView::widget([
         ],
         [
             'attribute' => 'price_at_last_close_price',
-            'header' => 'ราคา ณ เวลาสุดท้าย'
+            'header' => 'ราคา ณ เวลาสุดท้าย',
+            'footerOptions' => ['class'=>'text-right'],
+            'footer' => 'รวม'
         ],
         [
             'attribute' => 'cal_score',
             'header' => 'Profit/Loss(Point)',
-             'format'=>['decimal',0]
+             'format'=>['decimal',0],
+            'footer' => number_format($total),
         ],
    
 
