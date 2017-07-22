@@ -80,11 +80,12 @@ $this->registerJs("
 <br/>
 <center>
     <button type="button" class="btn btn-success" onclick = "javascript:(history.go(-1))"><i class="glyphicon glyphicon-menu-left"></i> ย้อนกลับ</button>   
+    <a href="index.php?r=sql/report3&sub_currency_id=<?php echo  $sub_currency_id; ?>&year_s=<?php echo $year_s;?>" class="btn btn-danger"><i class="glyphicon glyphicon-menu-right"></i> ข้อมูลรายสัปดาห์</a>
 </center>
 <br/>
 
 <?php
-
+/*
 echo GridView::widget([
     'dataProvider' => $dataProvider,
     'panel' => [
@@ -146,6 +147,6 @@ echo GridView::widget([
        
           
     ]
-])
+]) */
 ?>
 

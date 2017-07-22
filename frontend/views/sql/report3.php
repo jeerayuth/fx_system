@@ -21,7 +21,105 @@ $this->title = $report_name;
 <?php
 
 //เตรียมชุดข้อมูลไปใส่ให้กราฟ แกน x,y
+$data1 = [];
+for ($i = 0; $i < count($rawData); $i++) {   
+    $data1[] = [
+        '0' => intval($rawData[$i]['oh']) * 1,
+        '1' => 0,
+    ];
+}
+$data2 = [];
+for ($i = 0; $i < count($rawData); $i++) {
+    $data2[] = [
+        '0' => intval($rawData[$i]['ol']) * 1,
+        '1' => 0,
+    ];
+}
 
+
+//convert array to json string;
+$js_data_hight = json_encode($data1);
+$js_data_low = json_encode($data2);
+
+
+ $this->registerJs(" $(function () {
+                            $('#chart').highcharts({
+                               chart: {
+                                    type: 'scatter',
+                                    zoomType: 'xy'
+                                },
+                                title: {
+                                    text: '$report_name'
+                                },
+
+                                subtitle: {
+                                    text: ''
+                                },
+                                xAxis: {
+                                    title: {
+                                        enabled: true,
+                                        text: 'ระดับราคา'
+                                    },
+                                    startOnTick: true,
+                                    endOnTick: true,
+                                    showLastLabel: true
+                                },
+                                yAxis: {
+                                    title: {
+                                        text: 'ไม่ระบุ'
+                                    }
+                                },
+                                legend: {
+                                    layout: 'vertical',
+                                    align: 'left',
+                                    verticalAlign: 'top',
+                                    x: 100,
+                                    y: 70,
+                                    floating: true,
+                                    backgroundColor: (Highcharts.theme && Highcharts.theme.legendBackgroundColor) || '#FFFFFF',
+                                    borderWidth: 1
+                                },
+                                plotOptions: {
+                                    scatter: {
+                                        marker: {
+                                            radius: 5,
+                                            states: {
+                                                hover: {
+                                                    enabled: true,
+                                                    lineColor: 'rgb(100,100,100)'
+                                                }
+                                            }
+                                        },
+                                        states: {
+                                            hover: {
+                                                marker: {
+                                                    enabled: false
+                                                }
+                                            }
+                                        },
+                                        tooltip: {
+                                            headerFormat: '<b>{series.name}</b><br>',
+                                            pointFormat: '{point.x} จุด'
+                                        }
+                                    }
+                                },
+                                series: [{
+                                    name: 'แดนบวก',
+                                    color: 'rgba(223, 83, 83, .5)',
+                                    data: $js_data_hight
+
+                                }, {
+                                    name: 'แดนลบ',
+                                    color: 'rgba(119, 152, 191, .5)',
+                                    data: $js_data_low
+                                    }]
+                                });
+                            });
+             ");
+
+
+//เตรียมชุดข้อมูลไปใส่ให้กราฟ แกน x,y
+/*
 $data1 = [];
 for ($i = 0; $i < count($rawData); $i++) {
     $data1[] = [
@@ -72,6 +170,8 @@ $this->registerJs("
     }]
 });
 ");
+ 
+ */
 // จบ chart
 ?>
 
@@ -80,12 +180,12 @@ $this->registerJs("
 <br/>
 <center>
 <button type="button" class="btn btn-primary" onclick = "javascript:(history.go(-1))"><i class="glyphicon glyphicon-menu-left"></i> ย้อนกลับ</button>
-<a href="index.php?r=sql/report4&sub_currency_id=<?php echo  $sub_currency_id; ?>&year_s=<?php echo $year_s;?>&month_id=<?php echo $month_id;?>" class="btn btn-danger"><i class="glyphicon glyphicon-menu-right"></i> ข้อมูลรายวัน</a>
+<a href="index.php?r=sql/report4&sub_currency_id=<?php echo  $sub_currency_id; ?>&year_s=<?php echo $year_s;?>" class="btn btn-danger"><i class="glyphicon glyphicon-menu-right"></i> ข้อมูลรายวัน</a>
 </center>
 <br/>
 
 <?php
-
+/*
 echo GridView::widget([
     'dataProvider' => $dataProvider,
     'panel' => [
@@ -137,6 +237,6 @@ echo GridView::widget([
       
           
     ]
-])
+]) */
 ?>
 

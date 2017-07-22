@@ -32,14 +32,14 @@ $data1 = [];
 for ($i = 0; $i < count($rawData); $i++) {   
     $data1[] = [
         '0' => intval($rawData[$i]['oh']) * 1,
-        '1' => 0,
+        '1' => 1,
     ];
 }
 $data2 = [];
 for ($i = 0; $i < count($rawData); $i++) {
     $data2[] = [
         '0' => intval($rawData[$i]['ol']) * 1,
-        '1' => 0,
+        '1' => -1,
     ];
 }
 
