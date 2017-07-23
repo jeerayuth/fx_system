@@ -132,6 +132,7 @@ Highcharts.chart('chart-range', {
 
 
 <?php
+/*
 echo GridView::widget([
     'dataProvider' => $dataProvider,
     'panel' => [
@@ -160,6 +161,6 @@ echo GridView::widget([
             'header' => 'จำนวนครั้ง'
         ],
     ]
-])
+]) */
 ?>
 

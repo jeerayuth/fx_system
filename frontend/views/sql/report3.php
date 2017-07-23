@@ -16,7 +16,7 @@ $this->title = $report_name;
 ?>
 
 
-<div id="chart"></div>
+<div id="chart" style="min-width: 310px; height: 500px; margin: 0 auto"></div>
 
 <?php
 

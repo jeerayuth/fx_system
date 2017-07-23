@@ -200,9 +200,9 @@ class SqlController extends CommonController {
     }
     
     
-    public function actionReport5($sub_currency_id, $year_s, $month_id) {
+    public function actionReport5($sub_currency_id, $year_s) {
         $currency_table = $sub_currency_id . "_h4";
-        $report_name = "ข้อมูลสถิติของคู่เงิน $sub_currency_id  เดือน $month_id ปี $year_s ";
+        $report_name = "ข้อมูลสถิติของคู่เงิน $sub_currency_id  ปี $year_s ";
         // sql find units in sub_current table
         $sql_find = "SELECT id,units FROM sub_currency WHERE id = '$sub_currency_id' ";
         try {
@@ -211,7 +211,8 @@ class SqlController extends CommonController {
             throw new \yii\web\ConflictHttpException('sql error');
         }
         $unit = $data_unit[0]['units'];
-        
+         
+        /*
         $sql_total = "SELECT 
                         time_s,price as price,sum(count_range) as sum_range FROM 
                         
@@ -232,7 +233,7 @@ class SqlController extends CommonController {
                                    when ((hight-open)*1000)  between 2101 and 2400 	then 	'2101-2400'
                                   end
                                  as range1,TIME_S,DATE_S
-                                   from usdjpy_h4 where YEAR(DATE_S)=$year_s AND MONTH(DATE_S)= $month_id
+                                   from usdjpy_h4 where YEAR(DATE_S)=$year_s AND MONTH(DATE_S)= 06
                             ) t ON (t.range1 = price_range.price and tr.time_s = t.TIME_S)  
                             group by tr.time_s,price_range.price
                             
@@ -254,12 +255,12 @@ class SqlController extends CommonController {
                                    when ((open-low)*1000)  between 2101 and 2400 	then 	'2101-2400'
                                   end
                                    as range1,TIME_S,DATE_S
-                                   from usdjpy_h4 where YEAR(DATE_S)=$year_s AND MONTH(DATE_S)= $month_id
+                                   from usdjpy_h4 where YEAR(DATE_S)=$year_s AND MONTH(DATE_S)= 06
                             ) t2 ON (t2.range1 = price_range.price and tr.time_s = t2.TIME_S)  
                             group by tr.time_s,price_range.price
                         ) tt
                         GROUP BY time_s,price
-                        ORDER BY sum_range desc ";
+                        ORDER BY sum_range desc "; */
         
         
         $sql_positive = "SELECT 
@@ -280,10 +281,11 @@ class SqlController extends CommonController {
                            when ((hight-open)*$unit)  between 2101 and 2400  then    '2101-2400'
                     end
                        as range1,TIME_S,DATE_S
-                       from $currency_table where YEAR(DATE_S)= $year_s AND MONTH(DATE_S)=$month_id
+                       from $currency_table where YEAR(DATE_S)= $year_s 
                 ) t ON (t.range1 = price_range.price and tr.time_s = t.TIME_S)  
                 GROUP BY tr.time_s,price_range.price
                 ORDER BY price_range.no,tr.time_s ";
+        
         $sql_negative = "SELECT 
                     tr.time_s,price_range.price as price_range,
                     concat('-',count(t.range1)) as count_price_by_range,
@@ -302,22 +304,26 @@ class SqlController extends CommonController {
                            when ((low-open)*$unit)  between -2400 and -2101  then    '2101-2400'
                     end
                        as range1,TIME_S,DATE_S
-                       from $currency_table where YEAR(DATE_S)= $year_s AND MONTH(DATE_S)=$month_id
+                       from $currency_table where YEAR(DATE_S)= $year_s 
                 ) t ON (t.range1 = price_range.price and tr.time_s = t.TIME_S)  
                 GROUP BY tr.time_s,price_range.price
                 ORDER BY price_range.no,tr.time_s ";
+        
         try {
-            $rawData = \yii::$app->db->createCommand($sql_total)->queryAll();
+          //  $rawData = \yii::$app->db->createCommand($sql_total)->queryAll();
             $rawData_positive = \yii::$app->db->createCommand($sql_positive)->queryAll();
             $rawData_negative = \yii::$app->db->createCommand($sql_negative)->queryAll();
         } catch (\yii\db\Exception $e) {
             throw new \yii\web\ConflictHttpException('sql error');
         }
         
+         
+        /*
         $dataProvider = new \yii\data\ArrayDataProvider([
             'allModels' => $rawData,
             'pagination' => FALSE,
-        ]);
+        ]); */
+        
         $dataProvider_positive = new \yii\data\ArrayDataProvider([
             'allModels' => $rawData_positive,
             'pagination' => FALSE,
@@ -326,19 +332,26 @@ class SqlController extends CommonController {
             'allModels' => $rawData_negative,
             'pagination' => FALSE,
         ]);
+        
+      
         return $this->render('report5', [
-                    'dataProvider' => $dataProvider,
+                //    'dataProvider' => $dataProvider,
                     'dataProvider_positive' => $dataProvider_positive,
                     'dataProvider_negative' => $dataProvider_negative,
-                    'rawData' => $rawData,
+                 //   'rawData' => $rawData,
                     'rawData_positive' => $rawData_positive,
                     'rawData_negative' => $rawData_negative,
                     'report_name' => $report_name,
                     'sub_currency_id' => $sub_currency_id,
                     'year_s' => $year_s,
-                    'month_id' => $month_id,
         ]);
+         
+         
     }
+    
+    
+    
+    
     public function actionReport6($sub_currency_id, $date_s) {
         $currency_table = $sub_currency_id . "_h1";
         $report_name = "ข้อมูลสถิติของคู่เงิน $sub_currency_id วันที่ $date_s ";
