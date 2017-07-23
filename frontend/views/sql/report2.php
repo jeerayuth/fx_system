@@ -16,7 +16,7 @@ $this->title = $report_name;
 ?>
 
 
-<div id="chart"></div>
+<div id="chart" style="min-width: 310px; height: 500px; margin: 0 auto"></div>
 
 <?php
 
@@ -72,6 +72,22 @@ for ($i = 0; $i < count($rawData3); $i++) {
 }
 
 
+$data7 = [];
+for ($i = 0; $i < count($rawData4); $i++) {
+    $data7[] = [
+        'name' => $rawData4[$i]['month_s'],
+        'y' => $rawData4[$i]['oh'] * 1,
+    ];
+}
+
+$data8 = [];
+for ($i = 0; $i < count($rawData4); $i++) {
+    $data8[] = [
+        'name' => $rawData4[$i]['month_s'],
+        'y' => $rawData4[$i]['ol'] * 1,
+    ];
+}
+
 
 
 
@@ -81,6 +97,8 @@ $js_data3 = json_encode($data3);
 $js_data4 = json_encode($data4);
 $js_data5 = json_encode($data5);
 $js_data6 = json_encode($data6);
+$js_data7 = json_encode($data7);
+$js_data8 = json_encode($data8);
 
 
 // chart
@@ -122,6 +140,24 @@ $this->registerJs("
     }, {
         name: '',
         data: $js_data6
+    }, {
+        type: 'spline',
+        name: 'Average Positive',
+        data: $js_data7,
+        marker: {
+            lineWidth: 2,
+            lineColor: Highcharts.getOptions().colors[1],
+            fillColor: 'white'
+        }
+    }, {
+        type: 'spline',
+        name: 'Average Negative',
+        data: $js_data8,
+        marker: {
+            lineWidth: 2,
+            lineColor: Highcharts.getOptions().colors[2],
+            fillColor: 'white'
+        }
     }]
 });
 ");
