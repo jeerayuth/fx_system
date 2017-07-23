@@ -29,7 +29,8 @@ class SqlController extends CommonController {
     }
     public function actionReport2($sub_currency_id, $year_s) {
         $currency_table = $sub_currency_id . "_mn";
-        $report_name = "ข้อมูลสถิติของคู่เงิน $sub_currency_id ปี $year_s";
+               
+        $report_name = "ข้อมูลสถิติการแกว่ง(Volatility) รายเดือนของคู่เงิน $sub_currency_id ตั้งแต่ ปี $year_s ถึงปี ".($year_s-2);
         // sql find units in sub_current table
         $sql_find = "SELECT id,units FROM sub_currency WHERE id = '$sub_currency_id' ";
         try {
@@ -52,8 +53,42 @@ class SqlController extends CommonController {
                 ORDER BY DATE_S
                           
             ";
+        
+            $sql2 = "SELECT 
+                    '$sub_currency_id' as cur_name,
+                    CONCAT(MONTH(DATE_S),'-',YEAR(DATE_S))  as month_s,
+                    MONTH(DATE_S) as month_id,
+                    open,hight,low,close,
+                    ((hight-open)*$unit) as oh,
+                    ((low-open)*$unit) as ol
+                FROM $currency_table
+                WHERE YEAR(DATE_S) = ($year_s-1)
+                GROUP BY  CONCAT(YEAR(DATE_S),'-',MONTH(DATE_S))
+                
+                ORDER BY DATE_S
+                          
+            ";
+            
+            $sql3 = "SELECT 
+                    '$sub_currency_id' as cur_name,
+                    CONCAT(MONTH(DATE_S),'-',YEAR(DATE_S))  as month_s,
+                    MONTH(DATE_S) as month_id,
+                    open,hight,low,close,
+                    ((hight-open)*$unit) as oh,
+                    ((low-open)*$unit) as ol
+                FROM $currency_table
+                WHERE YEAR(DATE_S) = ($year_s-2)
+                GROUP BY  CONCAT(YEAR(DATE_S),'-',MONTH(DATE_S))
+                
+                ORDER BY DATE_S
+                          
+            ";
+        
+        
         try {
             $rawData = \yii::$app->db->createCommand($sql)->queryAll();
+            $rawData2 = \yii::$app->db->createCommand($sql2)->queryAll();
+            $rawData3 = \yii::$app->db->createCommand($sql3)->queryAll();
         } catch (\yii\db\Exception $e) {
             throw new \yii\web\ConflictHttpException('sql error');
         }
@@ -61,14 +96,30 @@ class SqlController extends CommonController {
             'allModels' => $rawData,
             'pagination' => FALSE,
         ]);
+        $dataProvider2 = new \yii\data\ArrayDataProvider([
+            'allModels' => $rawData2,
+            'pagination' => FALSE,
+        ]);
+        
+        $dataProvider3 = new \yii\data\ArrayDataProvider([
+            'allModels' => $rawData3,
+            'pagination' => FALSE,
+        ]);
+         
         return $this->render('report2', [
                     'dataProvider' => $dataProvider,
+                    'dataProvider2' => $dataProvider2,
+                    'dataProvider3' => $dataProvider3,
                     'rawData' => $rawData,
+                    'rawData2' => $rawData2,
+                    'rawData3' => $rawData3,
                     'report_name' => $report_name,
                     'sub_currency_id' => $sub_currency_id,
                     'year_s' => $year_s,
         ]);
     }
+    
+    
     public function actionReport3($sub_currency_id, $year_s) {
         $currency_table = $sub_currency_id . "_w1";
         $report_name = "ข้อมูลสถิติการแกว่ง(Volatility) รายสัปดาห์ ของคู่เงิน $sub_currency_id  ปี $year_s ";

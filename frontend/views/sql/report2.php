@@ -38,8 +38,49 @@ for ($i = 0; $i < count($rawData); $i++) {
     ];
 }
 
+
+$data3 = [];
+for ($i = 0; $i < count($rawData2); $i++) {
+    $data3[] = [
+        'name' => $rawData2[$i]['month_s'],
+        'y' => $rawData2[$i]['oh'] * 1,
+    ];
+}
+
+$data4 = [];
+for ($i = 0; $i < count($rawData2); $i++) {
+    $data4[] = [
+        'name' => $rawData2[$i]['month_s'],
+        'y' => $rawData2[$i]['ol'] * 1,
+    ];
+}
+
+$data5 = [];
+for ($i = 0; $i < count($rawData3); $i++) {
+    $data5[] = [
+        'name' => $rawData3[$i]['month_s'],
+        'y' => $rawData3[$i]['oh'] * 1,
+    ];
+}
+
+$data6 = [];
+for ($i = 0; $i < count($rawData3); $i++) {
+    $data6[] = [
+        'name' => $rawData3[$i]['month_s'],
+        'y' => $rawData3[$i]['ol'] * 1,
+    ];
+}
+
+
+
+
+
 $js_data1 = json_encode($data1);
 $js_data2 = json_encode($data2);
+$js_data3 = json_encode($data3);
+$js_data4 = json_encode($data4);
+$js_data5 = json_encode($data5);
+$js_data6 = json_encode($data6);
 
 
 // chart
@@ -64,11 +105,23 @@ $this->registerJs("
         enabled: false
     },
     series: [{
-        name: 'OPEN->Low',
+        name: '',
         data: $js_data1
     }, {
-        name: 'OPEN->Hight',
+        name: '',
         data: $js_data2
+    }, {
+        name: '',
+        data: $js_data3
+    }, {
+        name: '',
+        data: $js_data4
+    }, {
+        name: '',
+        data: $js_data5
+    }, {
+        name: '',
+        data: $js_data6
     }]
 });
 ");
