@@ -30,7 +30,7 @@ class SqlController extends CommonController {
     public function actionReport2($sub_currency_id, $year_s) {
         $currency_table = $sub_currency_id . "_mn";
                
-        $report_name = "ข้อมูลสถิติการแกว่ง(Volatility) รายเดือนของคู่เงิน $sub_currency_id ตั้งแต่ ปี $year_s ถึงปี ".($year_s-2);
+        $report_name = "ข้อมูลสถิติการแกว่ง(Volatility) เฉลี่ยราย 3 เดือนของคู่เงิน $sub_currency_id ตั้งแต่ ปี $year_s ถึงปี ".($year_s-2);
         // sql find units in sub_current table
         $sql_find = "SELECT id,units FROM sub_currency WHERE id = '$sub_currency_id' ";
         try {
@@ -89,7 +89,7 @@ class SqlController extends CommonController {
                 WHERE YEAR(DATE_S) BETWEEN ($year_s-2) AND $year_s
                 GROUP BY  MONTH(DATE_S)           
                 ORDER BY month_s  ";
-                          
+            
              
         try {
             $rawData = \yii::$app->db->createCommand($sql)->queryAll();
@@ -99,9 +99,17 @@ class SqlController extends CommonController {
         } catch (\yii\db\Exception $e) {
             throw new \yii\web\ConflictHttpException('sql error');
         }
+        
+                    
+        $dataProvider = new \yii\data\ArrayDataProvider([
+            'allModels' => $rawData4,
+            'pagination' => FALSE,
+        ]);
+              
    
          
         return $this->render('report2', [
+                    'dataProvider' => $dataProvider,
                     'rawData' => $rawData,
                     'rawData2' => $rawData2,
                     'rawData3' => $rawData3,

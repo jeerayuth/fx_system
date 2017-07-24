@@ -174,7 +174,7 @@ $this->registerJs("
 <br/>
 
 <?php
-/*
+
 echo GridView::widget([
     'dataProvider' => $dataProvider,
     'panel' => [
@@ -195,23 +195,7 @@ echo GridView::widget([
         [
             'attribute' => 'month_s',
             'header' => 'เดือน'
-        ],
-        [
-            'attribute' => 'open',
-            'header' => 'OPEN'
-        ],
-        [
-            'attribute' => 'hight',
-            'header' => 'HIGHT'
-        ],
-        [
-            'attribute' => 'low',
-            'header' => 'LOW'
-        ],
-        [
-            'attribute' => 'close',
-            'header' => 'CLOSE'
-        ],
+        ],     
           [
             'attribute' => 'oh',
             'header' => 'OH',
@@ -223,6 +207,7 @@ echo GridView::widget([
              'format' => ['decimal',0] 
         ],
         
+        /*
         [
             'attribute' => '',
             'header' => '',
@@ -232,10 +217,9 @@ echo GridView::widget([
                 return Html::a(Html::encode('ข้อมูลรายสัปดาห์'), 
                     ['sql/report3','sub_currency_id' => $sub_currency_id, 'year_s'=> $year_s, 'month_id'=>$month_id]);
                     }
-                ]
-       
-          
+                ] */
+                
     ]
-]) */
+]) 
 ?>
 
