@@ -121,6 +121,14 @@ $js_data_low = json_encode($data2);
 
 //เตรียมชุดข้อมูลไปใส่ให้กราฟ แกน x,y
 
+$categ = [];
+for ($i = 0; $i < count($rawData); $i++) {
+    $categ[] = $rawData[$i]['month_s'];
+}
+$js_categ = implode("','", $categ);
+
+        
+
 $data1 = [];
 for ($i = 0; $i < count($rawData); $i++) {
     $data1[] = [
@@ -154,7 +162,7 @@ $this->registerJs("
         text: '$report_name'
     },
     xAxis: {
-        categories: []
+        categories: ['$js_categ'],
     },
     yAxis: {
             tickInterval: 5
