@@ -46,7 +46,7 @@ class SqlController extends CommonController {
                     MONTH(DATE_S) as month_id,
                     open,hight,low,close,
                     ((hight-open)*$unit) as oh,
-                    ((low-open)*$unit) as ol
+                    ((open-low)*$unit) as ol
                 FROM $currency_table
                 WHERE YEAR(DATE_S) = $year_s
                 GROUP BY  CONCAT(YEAR(DATE_S),'-',MONTH(DATE_S))
@@ -60,7 +60,7 @@ class SqlController extends CommonController {
                     MONTH(DATE_S) as month_id,
                     open,hight,low,close,
                     ((hight-open)*$unit) as oh,
-                    ((low-open)*$unit) as ol
+                    ((open-low)*$unit) as ol
                 FROM $currency_table
                 WHERE YEAR(DATE_S) = ($year_s-1)
                 GROUP BY  CONCAT(YEAR(DATE_S),'-',MONTH(DATE_S))                
@@ -73,7 +73,7 @@ class SqlController extends CommonController {
                     MONTH(DATE_S) as month_id,
                     open,hight,low,close,
                     ((hight-open)*$unit) as oh,
-                    ((low-open)*$unit) as ol
+                    ((open-low)*$unit) as ol
                 FROM $currency_table
                 WHERE YEAR(DATE_S) = ($year_s-2)
                 GROUP BY  CONCAT(YEAR(DATE_S),'-',MONTH(DATE_S))                
@@ -84,7 +84,7 @@ class SqlController extends CommonController {
                     '$sub_currency_id' as cur_name,
                     MONTH(DATE_S) as month_s,
                     avg(((hight-open)*$unit)) as oh,
-                    avg(((low-open)*$unit)) as ol
+                    avg(((open-low)*$unit)) as ol
                 FROM $currency_table
                 WHERE YEAR(DATE_S) BETWEEN ($year_s-2) AND $year_s
                 GROUP BY  MONTH(DATE_S)           
@@ -133,14 +133,13 @@ class SqlController extends CommonController {
         }
         $unit = $data_unit[0]['units'];
         
-
-        
+     
         $sql = "SELECT 
               '$sub_currency_id' as cur_name,
                DATE_S as date_s,
                MONTH(DATE_S) as month_s,
                ((hight-open)*$unit) as oh,
-               ((low-open)*$unit) as ol
+               ((open-low)*$unit) as ol
          FROM $currency_table
          WHERE 
                YEAR(DATE_S) =  $year_s
