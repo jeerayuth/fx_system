@@ -21,6 +21,7 @@ $this->title = $report_name;
 <?php
 
 //เตรียมชุดข้อมูลไปใส่ให้กราฟ แกน x,y
+/*
 $data1 = [];
 for ($i = 0; $i < count($rawData); $i++) {   
     $data1[] = [
@@ -116,10 +117,10 @@ $js_data_low = json_encode($data2);
                                 });
                             });
              ");
-
+*/
 
 //เตรียมชุดข้อมูลไปใส่ให้กราฟ แกน x,y
-/*
+
 $data1 = [];
 for ($i = 0; $i < count($rawData); $i++) {
     $data1[] = [
@@ -153,7 +154,7 @@ $this->registerJs("
         text: '$report_name'
     },
     xAxis: {
-        categories: ['สัปดาห์ที่ 1', 'สัปดาห์ที่ 2', 'สัปดาห์ที่ 3', 'สัปดาห์ที่ 4', 'สัปดาห์ที่ 5']
+        categories: []
     },
     yAxis: {
             tickInterval: 5
@@ -162,16 +163,14 @@ $this->registerJs("
         enabled: false
     },
     series: [{
-        name: 'OPEN->Low',
+        name: 'แกนบวก',
         data: $js_data1
     }, {
-        name: 'OPEN->Hight',
+        name: 'แกนลบ',
         data: $js_data2
     }]
 });
 ");
- 
- */
 // จบ chart
 ?>
 
@@ -185,7 +184,7 @@ $this->registerJs("
 <br/>
 
 <?php
-/*
+
 echo GridView::widget([
     'dataProvider' => $dataProvider,
     'panel' => [
@@ -202,27 +201,15 @@ echo GridView::widget([
     'columns' => [
         ['class' => 'yii\grid\SerialColumn'],
         
-      
+         [
+            'attribute' => 'date_s',
+            'header' => 'วันีที่'
+        ],
         [
             'attribute' => 'month_s',
             'header' => 'เดือน'
         ],
-        [
-            'attribute' => 'open',
-            'header' => 'OPEN'
-        ],
-        [
-            'attribute' => 'hight',
-            'header' => 'HIGHT'
-        ],
-        [
-            'attribute' => 'low',
-            'header' => 'LOW'
-        ],
-        [
-            'attribute' => 'close',
-            'header' => 'CLOSE'
-        ],
+
           [
             'attribute' => 'oh',
             'header' => 'OH',
@@ -237,6 +224,6 @@ echo GridView::widget([
       
           
     ]
-]) */
+]) 
 ?>
 

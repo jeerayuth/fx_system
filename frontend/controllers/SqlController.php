@@ -133,17 +133,21 @@ class SqlController extends CommonController {
         }
         $unit = $data_unit[0]['units'];
         
+
+        
         $sql = "SELECT 
               '$sub_currency_id' as cur_name,
-               DATE_S as date_s,`OPEN`,max(HIGHT) as max_hight, min(LOW) as min_low,
-               (max(HIGHT)-`OPEN`)*$unit as oh, 
-               (`OPEN`-min(LOW))*$unit as ol
+               DATE_S as date_s,
+               MONTH(DATE_S) as month_s,
+               ((hight-open)*$unit) as oh,
+               ((low-open)*$unit) as ol
          FROM $currency_table
          WHERE 
-               YEAR(DATE_S) = $year_s
+               YEAR(DATE_S) =  $year_s
          GROUP BY DATE_S ";
-            
-                     
+        
+    
+                            
             
         try {
             $rawData = \yii::$app->db->createCommand($sql)->queryAll();
