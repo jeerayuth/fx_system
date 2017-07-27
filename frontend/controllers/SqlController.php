@@ -46,7 +46,7 @@ class SqlController extends CommonController {
                     MONTH(DATE_S) as month_id,
                     open,hight,low,close,
                     ((hight-open)*$unit) as oh,
-                    ((open-low)*$unit) as ol
+                    ((low-open)*$unit) as ol
                 FROM $currency_table
                 WHERE YEAR(DATE_S) = $year_s
                 GROUP BY  CONCAT(YEAR(DATE_S),'-',MONTH(DATE_S))
@@ -60,7 +60,7 @@ class SqlController extends CommonController {
                     MONTH(DATE_S) as month_id,
                     open,hight,low,close,
                     ((hight-open)*$unit) as oh,
-                    ((open-low)*$unit) as ol
+                    ((low-open)*$unit) as ol
                 FROM $currency_table
                 WHERE YEAR(DATE_S) = ($year_s-1)
                 GROUP BY  CONCAT(YEAR(DATE_S),'-',MONTH(DATE_S))                
@@ -73,7 +73,7 @@ class SqlController extends CommonController {
                     MONTH(DATE_S) as month_id,
                     open,hight,low,close,
                     ((hight-open)*$unit) as oh,
-                    ((open-low)*$unit) as ol
+                    ((low-open)*$unit) as ol
                 FROM $currency_table
                 WHERE YEAR(DATE_S) = ($year_s-2)
                 GROUP BY  CONCAT(YEAR(DATE_S),'-',MONTH(DATE_S))                
@@ -84,7 +84,7 @@ class SqlController extends CommonController {
                     '$sub_currency_id' as cur_name,
                     MONTH(DATE_S) as month_s,
                     avg(((hight-open)*$unit)) as oh,
-                    avg(((open-low)*$unit)) as ol
+                    avg(((low-open)*$unit)) as ol
                 FROM $currency_table
                 WHERE YEAR(DATE_S) BETWEEN ($year_s-2) AND $year_s
                 GROUP BY  MONTH(DATE_S)           
@@ -139,7 +139,7 @@ class SqlController extends CommonController {
                DATE_S as date_s,
                MONTH(DATE_S) as month_s,
                ((hight-open)*$unit) as oh,
-               ((open-low)*$unit) as ol
+               ((low-open)*$unit) as ol
          FROM $currency_table
          WHERE 
                YEAR(DATE_S) =  $year_s
@@ -151,7 +151,7 @@ class SqlController extends CommonController {
                 DATE_S as date_s,
                 MONTH(DATE_S) as month_s,
                ((hight-open)*$unit) as oh,
-               ((open-low)*$unit) as ol
+               ((low-open)*$unit) as ol
             FROM $currency_table
             WHERE YEAR(DATE_S) = ($year_s-1)
             GROUP BY  DATE_S ";  
@@ -161,7 +161,7 @@ class SqlController extends CommonController {
                 DATE_S as date_s,
                 MONTH(DATE_S) as month_s,
                ((hight-open)*$unit) as oh,
-               ((open-low)*$unit) as ol
+               ((low-open)*$unit) as ol
             FROM $currency_table
             WHERE YEAR(DATE_S) = ($year_s-2)
             GROUP BY  DATE_S ";       
@@ -207,8 +207,8 @@ class SqlController extends CommonController {
                '$sub_currency_id' as cur_name,
                e.DATE_S as date_s,
                MONTH(e.DATE_S) as month_s,
-               ((e.hight-open)*$unit) as oh,
-               ((e.open-low)*$unit) as ol
+               ((e.hight-e.open)*$unit) as oh,
+               ((e.low-e.open)*$unit) as ol
             FROM $currency_table e
             LEFT JOIN alldates a ON a.date_s = e.date_s
             WHERE YEAR(e.DATE_S) = $year_s AND a.date_code = 1 ";
@@ -218,8 +218,8 @@ class SqlController extends CommonController {
                '$sub_currency_id' as cur_name,
                e.DATE_S as date_s,
                MONTH(e.DATE_S) as month_s,
-               ((e.hight-open)*$unit) as oh,
-               ((e.open-low)*$unit) as ol
+               ((e.hight-e.open)*$unit) as oh,
+               ((e.low-e.open)*$unit) as ol
             FROM $currency_table e
             LEFT JOIN alldates a ON a.date_s = e.date_s
             WHERE YEAR(e.DATE_S) = $year_s AND a.date_code = 2 ";
@@ -229,8 +229,8 @@ class SqlController extends CommonController {
                '$sub_currency_id' as cur_name,
                e.DATE_S as date_s,
                MONTH(e.DATE_S) as month_s,
-               ((e.hight-open)*$unit) as oh,
-               ((e.open-low)*$unit) as ol
+               ((e.hight-e.open)*$unit) as oh,
+               ((e.low-e.open)*$unit) as ol
             FROM $currency_table e
             LEFT JOIN alldates a ON a.date_s = e.date_s
             WHERE YEAR(e.DATE_S) = $year_s AND a.date_code = 3 ";
@@ -240,8 +240,8 @@ class SqlController extends CommonController {
                '$sub_currency_id' as cur_name,
                e.DATE_S as date_s,
                MONTH(e.DATE_S) as month_s,
-               ((e.hight-open)*$unit) as oh,
-               ((e.open-low)*$unit) as ol
+               ((e.hight-e.open)*$unit) as oh,
+               ((e.low-e.open)*$unit) as ol
             FROM $currency_table e
             LEFT JOIN alldates a ON a.date_s = e.date_s
             WHERE YEAR(e.DATE_S) = $year_s AND a.date_code = 4 ";
@@ -252,7 +252,7 @@ class SqlController extends CommonController {
                e.DATE_S as date_s,
                MONTH(e.DATE_S) as month_s,
                ((e.hight-open)*$unit) as oh,
-               ((e.open-low)*$unit) as ol
+               ((e.low-e.open)*$unit) as ol
             FROM $currency_table e
             LEFT JOIN alldates a ON a.date_s = e.date_s
             WHERE YEAR(e.DATE_S) = $year_s AND a.date_code = 5 ";
