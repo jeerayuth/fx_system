@@ -154,13 +154,24 @@ class SqlController extends CommonController {
                ((open-low)*$unit) as ol
             FROM $currency_table
             WHERE YEAR(DATE_S) = ($year_s-1)
-            GROUP BY  DATE_S ";              
+            GROUP BY  DATE_S ";  
+        
+        $sql3 = "SELECT 
+                '$sub_currency_id' as cur_name,
+                DATE_S as date_s,
+                MONTH(DATE_S) as month_s,
+               ((hight-open)*$unit) as oh,
+               ((open-low)*$unit) as ol
+            FROM $currency_table
+            WHERE YEAR(DATE_S) = ($year_s-2)
+            GROUP BY  DATE_S ";       
         
                                   
             
         try {
             $rawData = \yii::$app->db->createCommand($sql)->queryAll();
             $rawData2 = \yii::$app->db->createCommand($sql2)->queryAll();
+            $rawData3 = \yii::$app->db->createCommand($sql3)->queryAll();
         } catch (\yii\db\Exception $e) {
             throw new \yii\web\ConflictHttpException('sql error');
         }
@@ -172,6 +183,7 @@ class SqlController extends CommonController {
                     'dataProvider' => $dataProvider,
                     'rawData' => $rawData,
                     'rawData2' => $rawData2,
+                    'rawData3' => $rawData3,
                     'report_name' => $report_name,
                     'sub_currency_id' => $sub_currency_id,
                     'year_s' => $year_s,
@@ -190,21 +202,68 @@ class SqlController extends CommonController {
             throw new \yii\web\ConflictHttpException('sql error');
         }
         $unit = $data_unit[0]['units'];
-        
+         //วันจันทร์   
         $sql = "SELECT 
-              '$sub_currency_id' as cur_name,
-               DATE_S as date_s,`OPEN`,max(HIGHT) as max_hight, min(LOW) as min_low,
-               (max(HIGHT)-`OPEN`)*$unit as oh, 
-               (`OPEN`-min(LOW))*$unit as ol
-         FROM $currency_table
-         WHERE 
-               YEAR(DATE_S) = $year_s 
-         GROUP BY DATE_S ";
-               
-           
+               '$sub_currency_id' as cur_name,
+               e.DATE_S as date_s,
+               MONTH(e.DATE_S) as month_s,
+               ((e.hight-open)*$unit) as oh,
+               ((e.open-low)*$unit) as ol
+            FROM $currency_table e
+            LEFT JOIN alldates a ON a.date_s = e.date_s
+            WHERE YEAR(e.DATE_S) = $year_s AND a.date_code = 1 ";
+        
+        //วันอังคาร
+        $sql2 = "SELECT 
+               '$sub_currency_id' as cur_name,
+               e.DATE_S as date_s,
+               MONTH(e.DATE_S) as month_s,
+               ((e.hight-open)*$unit) as oh,
+               ((e.open-low)*$unit) as ol
+            FROM $currency_table e
+            LEFT JOIN alldates a ON a.date_s = e.date_s
+            WHERE YEAR(e.DATE_S) = $year_s AND a.date_code = 2 ";
+        
+        //วันพุธ
+        $sql3 = "SELECT 
+               '$sub_currency_id' as cur_name,
+               e.DATE_S as date_s,
+               MONTH(e.DATE_S) as month_s,
+               ((e.hight-open)*$unit) as oh,
+               ((e.open-low)*$unit) as ol
+            FROM $currency_table e
+            LEFT JOIN alldates a ON a.date_s = e.date_s
+            WHERE YEAR(e.DATE_S) = $year_s AND a.date_code = 3 ";
+        
+        //วันพฤหัสบดี
+        $sql4 = "SELECT 
+               '$sub_currency_id' as cur_name,
+               e.DATE_S as date_s,
+               MONTH(e.DATE_S) as month_s,
+               ((e.hight-open)*$unit) as oh,
+               ((e.open-low)*$unit) as ol
+            FROM $currency_table e
+            LEFT JOIN alldates a ON a.date_s = e.date_s
+            WHERE YEAR(e.DATE_S) = $year_s AND a.date_code = 4 ";
+        
+        //วันศุกร์
+        $sql5 = "SELECT 
+               '$sub_currency_id' as cur_name,
+               e.DATE_S as date_s,
+               MONTH(e.DATE_S) as month_s,
+               ((e.hight-open)*$unit) as oh,
+               ((e.open-low)*$unit) as ol
+            FROM $currency_table e
+            LEFT JOIN alldates a ON a.date_s = e.date_s
+            WHERE YEAR(e.DATE_S) = $year_s AND a.date_code = 5 ";
+                      
         
         try {
-            $rawData = \yii::$app->db->createCommand($sql)->queryAll();         
+            $rawData = \yii::$app->db->createCommand($sql)->queryAll(); 
+            $rawData2 = \yii::$app->db->createCommand($sql2)->queryAll();  
+            $rawData3 = \yii::$app->db->createCommand($sql3)->queryAll(); 
+            $rawData4 = \yii::$app->db->createCommand($sql4)->queryAll(); 
+            $rawData5 = \yii::$app->db->createCommand($sql5)->queryAll();
         } catch (\yii\db\Exception $e) {
             throw new \yii\web\ConflictHttpException('sql error');
         }
@@ -215,7 +274,11 @@ class SqlController extends CommonController {
             
         return $this->render('report4', [
                     'dataProvider' => $dataProvider,               
-                    'rawData' => $rawData,             
+                    'rawData' => $rawData,
+                    'rawData2' => $rawData2,
+                    'rawData3' => $rawData3, 
+                    'rawData4' => $rawData4,
+                    'rawData5' => $rawData5,
                     'report_name' => $report_name,
                     'sub_currency_id' => $sub_currency_id,
                     'year_s' => $year_s,
