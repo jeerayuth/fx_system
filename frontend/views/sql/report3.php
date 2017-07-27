@@ -145,8 +145,18 @@ for ($i = 0; $i < count($rawData); $i++) {
     ];
 }
 
+$data3 = [];
+for ($i = 0; $i < count($rawData2); $i++) {
+    $data3[] = [
+        'name' => $rawData2[$i]['date_s'],
+        'y' => $rawData2[$i]['ol'] * 1,
+    ];
+}
+
 $js_data1 = json_encode($data1);
 $js_data2 = json_encode($data2);
+
+$js_data3 = json_encode($data3);
 
 
 // chart
@@ -176,6 +186,15 @@ $this->registerJs("
     }, {
         name: 'แกนลบ',
         data: $js_data2
+    }, {
+        type: 'spline',
+        name: 'แกนบวก ปี..',
+        data: $js_data3,
+        marker: {
+            lineWidth: 2,
+            lineColor: Highcharts.getOptions().colors[1],
+            fillColor: 'white'
+        }
     }]
 });
 ");

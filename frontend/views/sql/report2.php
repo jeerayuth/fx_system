@@ -124,22 +124,22 @@ $this->registerJs("
     },
     series: [{
         name: '',
-        data: $js_data1
-    }, {
-        name: '',
-        data: $js_data2
-    }, {
-        name: '',
-        data: $js_data3
-    }, {
-        name: '',
-        data: $js_data4
+        data: $js_data6
     }, {
         name: '',
         data: $js_data5
     }, {
         name: '',
-        data: $js_data6
+        data: $js_data4
+    }, {
+        name: '',
+        data: $js_data3
+    }, {
+        name: '',
+        data: $js_data2
+    }, {
+        name: '',
+        data: $js_data1
     }, {
         type: 'spline',
         name: 'Average Positive',
