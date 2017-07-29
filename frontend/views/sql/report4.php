@@ -39,7 +39,7 @@ $js_categ = implode("','", $categ);
 $data1 = [];
 for ($i = 0; $i < count($rawData); $i++) {
     $data1[] = [
-        'name' => $rawData[$i]['month_s'],
+        'name' => $rawData[$i]['date_s'],
         'y' => $rawData[$i]['oh'] * 1,
     ];
 }
@@ -47,7 +47,7 @@ for ($i = 0; $i < count($rawData); $i++) {
 $data2 = [];
 for ($i = 0; $i < count($rawData); $i++) {
     $data2[] = [
-        'name' => $rawData[$i]['month_s'],
+        'name' => $rawData[$i]['date_s'],
         'y' => $rawData[$i]['ol'] * 1,
     ];
 }
@@ -56,7 +56,7 @@ for ($i = 0; $i < count($rawData); $i++) {
 $data3 = [];
 for ($i = 0; $i < count($rawData2); $i++) {
     $data3[] = [
-        'name' => $rawData2[$i]['month_s'],
+        'name' => $rawData2[$i]['date_s'],
         'y' => $rawData2[$i]['oh'] * 1,
     ];
 }
@@ -64,7 +64,7 @@ for ($i = 0; $i < count($rawData2); $i++) {
 $data4 = [];
 for ($i = 0; $i < count($rawData2); $i++) {
     $data4[] = [
-        'name' => $rawData2[$i]['month_s'],
+        'name' => $rawData2[$i]['date_s'],
         'y' => $rawData2[$i]['ol'] * 1,
     ];
 }
@@ -73,7 +73,7 @@ for ($i = 0; $i < count($rawData2); $i++) {
 $data5 = [];
 for ($i = 0; $i < count($rawData3); $i++) {
     $data5[] = [
-        'name' => $rawData3[$i]['month_s'],
+        'name' => $rawData3[$i]['date_s'],
         'y' => $rawData3[$i]['oh'] * 1,
     ];
 }
@@ -81,7 +81,7 @@ for ($i = 0; $i < count($rawData3); $i++) {
 $data6 = [];
 for ($i = 0; $i < count($rawData3); $i++) {
     $data6[] = [
-        'name' => $rawData3[$i]['month_s'],
+        'name' => $rawData3[$i]['date_s'],
         'y' => $rawData3[$i]['ol'] * 1,
     ];
 }
@@ -91,7 +91,7 @@ for ($i = 0; $i < count($rawData3); $i++) {
 $data7 = [];
 for ($i = 0; $i < count($rawData4); $i++) {
     $data7[] = [
-        'name' => $rawData4[$i]['month_s'],
+        'name' => $rawData4[$i]['date_s'],
         'y' => $rawData4[$i]['oh'] * 1,
     ];
 }
@@ -99,7 +99,7 @@ for ($i = 0; $i < count($rawData4); $i++) {
 $data8 = [];
 for ($i = 0; $i < count($rawData4); $i++) {
     $data8[] = [
-        'name' => $rawData4[$i]['month_s'],
+        'name' => $rawData4[$i]['date_s'],
         'y' => $rawData4[$i]['ol'] * 1,
     ];
 }
@@ -109,7 +109,7 @@ for ($i = 0; $i < count($rawData4); $i++) {
 $data9 = [];
 for ($i = 0; $i < count($rawData5); $i++) {
     $data9[] = [
-        'name' => $rawData5[$i]['month_s'],
+        'name' => $rawData5[$i]['date_s'],
         'y' => $rawData5[$i]['oh'] * 1,
     ];
 }
@@ -117,7 +117,7 @@ for ($i = 0; $i < count($rawData5); $i++) {
 $data10 = [];
 for ($i = 0; $i < count($rawData5); $i++) {
     $data10[] = [
-        'name' => $rawData5[$i]['month_s'],
+        'name' => $rawData5[$i]['date_s'],
         'y' => $rawData5[$i]['ol'] * 1,
     ];
 }
@@ -288,6 +288,7 @@ $this->registerJs("
                                                         
                             <button type="button" class="btn btn-info btn-block" onclick = "javascript:url()"><i class="fa fa-search"></i>ดูพฤติกรรมกราฟในรอบวัน</button> 
                             <button type="button" class="btn btn-info btn-block" onclick = "javascript:url_week()"><i class="fa fa-search"></i>ดูพฤติกรรมกราฟในรอบสัปดาห์</button>
+                            <button type="button" class="btn btn-info btn-block" onclick = "javascript:url_volatility()"><i class="fa fa-search"></i>ดู Volatility กราฟในกรอบชั่วโมง</button>
                             
                                 <?php
                             
@@ -412,6 +413,30 @@ echo GridView::widget([
         timeframe = $("[name='opttimeframe']:checked").val()
         
          window.open('http://localhost:8080/fx_system/frontend/web/index.php?r=sql/report8&datestart=' + datestart + '&dateend=' + dateend + '&sub_currency_id=<?php echo $sub_currency_id;?>' + '&timeframe=' + timeframe );
+    }
+    
+    
+    //function เรียกหน้ารายงาน
+    function url_volatility() {
+        
+        //ตัดเครื่องหมาย - ออก แล้วส่ง datestart&dateend ไปยัง url ที่ต้องการ
+         //ตัดเครื่องหมาย - ออก แล้วส่ง datestart&dateend ไปยัง url ที่ต้องการ
+        d1 = $('#w0').val();
+        var arr1 = d1.split("-");
+        s1 = arr1[0];
+        s2 = arr1[1];
+        s3 = arr1[2];
+        datestart = s3+s2+s1;
+        d2 = $('#w0-2').val();
+        var arr2 = d2.split("-");
+        m1 = arr2[0];
+        m2 = arr2[1];
+        m3 = arr2[2];
+        dateend = m3+m2+m1;
+        
+        timeframe = $("[name='opttimeframe']:checked").val()
+        
+         window.open('http://localhost:8080/fx_system/frontend/web/index.php?r=sql/report10&datestart=' + datestart + '&dateend=' + dateend + '&sub_currency_id=<?php echo $sub_currency_id;?>' + '&timeframe=' + timeframe );
     }
     
     

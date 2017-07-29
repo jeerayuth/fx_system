@@ -205,7 +205,7 @@ class SqlController extends CommonController {
          //วันจันทร์   
         $sql = "SELECT 
                '$sub_currency_id' as cur_name,
-               e.DATE_S as date_s,
+               'วันจันทร์' as date_s,
                MONTH(e.DATE_S) as month_s,
                ((e.hight-e.open)*$unit) as oh,
                ((e.low-e.open)*$unit) as ol
@@ -216,7 +216,7 @@ class SqlController extends CommonController {
         //วันอังคาร
         $sql2 = "SELECT 
                '$sub_currency_id' as cur_name,
-               e.DATE_S as date_s,
+               'วันอังคาร' as date_s,
                MONTH(e.DATE_S) as month_s,
                ((e.hight-e.open)*$unit) as oh,
                ((e.low-e.open)*$unit) as ol
@@ -227,7 +227,7 @@ class SqlController extends CommonController {
         //วันพุธ
         $sql3 = "SELECT 
                '$sub_currency_id' as cur_name,
-               e.DATE_S as date_s,
+               'วันพุธ' as date_s,
                MONTH(e.DATE_S) as month_s,
                ((e.hight-e.open)*$unit) as oh,
                ((e.low-e.open)*$unit) as ol
@@ -238,7 +238,7 @@ class SqlController extends CommonController {
         //วันพฤหัสบดี
         $sql4 = "SELECT 
                '$sub_currency_id' as cur_name,
-               e.DATE_S as date_s,
+               'วันพฤหัสบดี' as date_s,
                MONTH(e.DATE_S) as month_s,
                ((e.hight-e.open)*$unit) as oh,
                ((e.low-e.open)*$unit) as ol
@@ -249,7 +249,7 @@ class SqlController extends CommonController {
         //วันศุกร์
         $sql5 = "SELECT 
                '$sub_currency_id' as cur_name,
-               e.DATE_S as date_s,
+               'วันศุกร์' as date_s,
                MONTH(e.DATE_S) as month_s,
                ((e.hight-open)*$unit) as oh,
                ((e.low-e.open)*$unit) as ol
@@ -629,6 +629,99 @@ class SqlController extends CommonController {
                     'rawData' => $rawData,
                     'sub_currency_id' => $sub_currency_id,
                     'report_name' => $report_name,
+        ]);
+    }
+    
+    
+    
+    
+    public function actionReport10($datestart,$dateend,$sub_currency_id,$timeframe) {
+        $currency_table = $sub_currency_id.$timeframe;
+        $report_name = "กราฟพฤติกรรมการแกว่ง(Volatility) ของราคาในคู่เงิน $sub_currency_id ระหว่างวันที่ $datestart ถึง $dateend ในกรอบชั่วโมง";
+        // sql find units in sub_current table
+        $sql_find = "SELECT id,units FROM sub_currency WHERE id = '$sub_currency_id' ";
+        try {
+            $data_unit = \yii::$app->db->createCommand($sql_find)->queryAll();
+        } catch (\yii\db\Exception $e) {
+            throw new \yii\web\ConflictHttpException('sql error');
+        }
+        $unit = $data_unit[0]['units'];
+        
+         //วันจันทร์   
+        $sql = "SELECT 
+               '$sub_currency_id' as cur_name,
+               concat('วันจันทร์ที่ ',e.date_s,'เวลา ', e.time_s) as date_s,
+               e.TIME_S as time_s,
+               ((e.hight-e.open)*$unit) as oh,
+               ((e.low-e.open)*$unit) as ol
+            FROM $currency_table e
+            LEFT JOIN alldates a ON a.date_s = e.date_s
+            WHERE e.DATE_s  BETWEEN $datestart  AND $dateend AND a.date_code = 1 ";
+        
+          //วันอังคาร 
+        $sql2 = "SELECT 
+               '$sub_currency_id' as cur_name,
+               concat('วันอังคารที่ ',e.date_s,'เวลา ', e.time_s) as date_s,
+               e.TIME_S as time_s,
+               ((e.hight-e.open)*$unit) as oh,
+               ((e.low-e.open)*$unit) as ol
+            FROM $currency_table e
+            LEFT JOIN alldates a ON a.date_s = e.date_s
+            WHERE e.DATE_s  BETWEEN $datestart  AND $dateend AND a.date_code = 2 ";
+        
+         //วันพุธ 
+        $sql3 = "SELECT 
+               '$sub_currency_id' as cur_name,
+               concat('วันพุธที่ ',e.date_s,'เวลา ', e.time_s) as date_s,
+               e.TIME_S as time_s,
+               ((e.hight-e.open)*$unit) as oh,
+               ((e.low-e.open)*$unit) as ol
+            FROM $currency_table e
+            LEFT JOIN alldates a ON a.date_s = e.date_s
+            WHERE e.DATE_s  BETWEEN $datestart  AND $dateend AND a.date_code = 3 ";
+        
+        //วันพฤหัสบดี 
+        $sql4 = "SELECT 
+               '$sub_currency_id' as cur_name,
+               concat('วันพฤหัสบดีที่ ',e.date_s,'เวลา ', e.time_s) as date_s,
+               e.TIME_S as time_s,
+               ((e.hight-e.open)*$unit) as oh,
+               ((e.low-e.open)*$unit) as ol
+            FROM $currency_table e
+            LEFT JOIN alldates a ON a.date_s = e.date_s
+            WHERE e.DATE_s  BETWEEN $datestart  AND $dateend AND a.date_code = 4 ";
+        
+                //วันศุกร์
+        $sql5 = "SELECT 
+               '$sub_currency_id' as cur_name,
+               concat('วันศุกร์ที่ ',e.date_s,'เวลา ', e.time_s) as date_s,
+               e.TIME_S as time_s,
+               ((e.hight-e.open)*$unit) as oh,
+               ((e.low-e.open)*$unit) as ol
+            FROM $currency_table e
+            LEFT JOIN alldates a ON a.date_s = e.date_s
+            WHERE e.DATE_s  BETWEEN $datestart  AND $dateend AND a.date_code = 5 ";
+             
+        try {
+            $rawData  = \yii::$app->db->createCommand($sql)->queryAll(); 
+            $rawData2 = \yii::$app->db->createCommand($sql2)->queryAll(); 
+            $rawData3 = \yii::$app->db->createCommand($sql3)->queryAll(); 
+            $rawData4 = \yii::$app->db->createCommand($sql4)->queryAll(); 
+            $rawData5 = \yii::$app->db->createCommand($sql5)->queryAll(); 
+        } catch (\yii\db\Exception $e) {
+            throw new \yii\web\ConflictHttpException('sql error');
+        }
+            
+        return $this->render('report10', [             
+                    'rawData' =>  $rawData,
+                    'rawData2' => $rawData2,
+                    'rawData3' => $rawData3,
+                    'rawData4' => $rawData4,
+                    'rawData5' => $rawData5,
+                    'report_name' => $report_name,
+                    'sub_currency_id' => $sub_currency_id,
+                    'datestart' => $datestart,
+                    'dateend' => $dateend,
         ]);
     }
     
