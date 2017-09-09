@@ -39,67 +39,8 @@ for ($i = 0; $i < count($rawData); $i++) {
 }
 
 
-$data3 = [];
-for ($i = 0; $i < count($rawData2); $i++) {
-    $data3[] = [
-        'name' => $rawData2[$i]['month_s'],
-        'y' => $rawData2[$i]['oh'] * 1,
-    ];
-}
-
-$data4 = [];
-for ($i = 0; $i < count($rawData2); $i++) {
-    $data4[] = [
-        'name' => $rawData2[$i]['month_s'],
-        'y' => $rawData2[$i]['ol'] * 1,
-    ];
-}
-
-$data5 = [];
-for ($i = 0; $i < count($rawData3); $i++) {
-    $data5[] = [
-        'name' => $rawData3[$i]['month_s'],
-        'y' => $rawData3[$i]['oh'] * 1,
-    ];
-}
-
-$data6 = [];
-for ($i = 0; $i < count($rawData3); $i++) {
-    $data6[] = [
-        'name' => $rawData3[$i]['month_s'],
-        'y' => $rawData3[$i]['ol'] * 1,
-    ];
-}
-
-
-$data7 = [];
-for ($i = 0; $i < count($rawData4); $i++) {
-    $data7[] = [
-        'name' => $rawData4[$i]['month_s'],
-        'y' => $rawData4[$i]['oh'] * 1,
-    ];
-}
-
-$data8 = [];
-for ($i = 0; $i < count($rawData4); $i++) {
-    $data8[] = [
-        'name' => $rawData4[$i]['month_s'],
-        'y' => $rawData4[$i]['ol'] * 1,
-    ];
-}
-
-
-
-
 $js_data1 = json_encode($data1);
 $js_data2 = json_encode($data2);
-$js_data3 = json_encode($data3);
-$js_data4 = json_encode($data4);
-$js_data5 = json_encode($data5);
-$js_data6 = json_encode($data6);
-$js_data7 = json_encode($data7);
-$js_data8 = json_encode($data8);
-
 
 // chart
 $this->registerJs(" 
@@ -123,41 +64,11 @@ $this->registerJs("
         enabled: false
     },
     series: [{
-        name: '',
-        data: $js_data6
-    }, {
-        name: '',
-        data: $js_data5
-    }, {
-        name: '',
-        data: $js_data4
-    }, {
-        name: '',
-        data: $js_data3
-    }, {
-        name: '',
-        data: $js_data2
-    }, {
-        name: '',
+        name: 'ค่าบวก',
         data: $js_data1
-    }, {
-        type: 'spline',
-        name: 'Average Positive',
-        data: $js_data7,
-        marker: {
-            lineWidth: 2,
-            lineColor: Highcharts.getOptions().colors[1],
-            fillColor: 'white'
-        }
-    }, {
-        type: 'spline',
-        name: 'Average Negative',
-        data: $js_data8,
-        marker: {
-            lineWidth: 2,
-            lineColor: Highcharts.getOptions().colors[2],
-            fillColor: 'white'
-        }
+    },{
+        name: 'ค่าลบ',
+        data: $js_data2
     }]
 });
 ");

@@ -40,80 +40,37 @@ class SqlController extends CommonController {
         }
         $unit = $data_unit[0]['units'];
         
-            $sql = "SELECT 
+        $sql = "SELECT 
                     '$sub_currency_id' as cur_name,
                     CONCAT(MONTH(DATE_S),'-',YEAR(DATE_S))  as month_s,
                     MONTH(DATE_S) as month_id,
                     open,hight,low,close,
                     ((hight-open)*$unit) as oh,
-                    ((low-open)*$unit) as ol
+                    ((open-low)*$unit) as ol
                 FROM $currency_table
                 WHERE YEAR(DATE_S) = $year_s
                 GROUP BY  CONCAT(YEAR(DATE_S),'-',MONTH(DATE_S))
                 
                 ORDER BY DATE_S ";
                                     
-        
-            $sql2 = "SELECT 
-                    '$sub_currency_id' as cur_name,
-                    CONCAT(MONTH(DATE_S),'-',YEAR(DATE_S))  as month_s,
-                    MONTH(DATE_S) as month_id,
-                    open,hight,low,close,
-                    ((hight-open)*$unit) as oh,
-                    ((low-open)*$unit) as ol
-                FROM $currency_table
-                WHERE YEAR(DATE_S) = ($year_s-1)
-                GROUP BY  CONCAT(YEAR(DATE_S),'-',MONTH(DATE_S))                
-                ORDER BY DATE_S ";
-                                      
-            
-            $sql3 = "SELECT 
-                    '$sub_currency_id' as cur_name,
-                    CONCAT(MONTH(DATE_S),'-',YEAR(DATE_S))  as month_s,
-                    MONTH(DATE_S) as month_id,
-                    open,hight,low,close,
-                    ((hight-open)*$unit) as oh,
-                    ((low-open)*$unit) as ol
-                FROM $currency_table
-                WHERE YEAR(DATE_S) = ($year_s-2)
-                GROUP BY  CONCAT(YEAR(DATE_S),'-',MONTH(DATE_S))                
-                ORDER BY DATE_S ";
-                                    
-            
-            $sql4 = "SELECT 
-                    '$sub_currency_id' as cur_name,
-                    MONTH(DATE_S) as month_s,
-                    avg(((hight-open)*$unit)) as oh,
-                    avg(((low-open)*$unit)) as ol
-                FROM $currency_table
-                WHERE YEAR(DATE_S) BETWEEN ($year_s-2) AND $year_s
-                GROUP BY  MONTH(DATE_S)           
-                ORDER BY month_s  ";
-            
+                            
              
         try {
             $rawData = \yii::$app->db->createCommand($sql)->queryAll();
-            $rawData2 = \yii::$app->db->createCommand($sql2)->queryAll();
-            $rawData3 = \yii::$app->db->createCommand($sql3)->queryAll();
-            $rawData4 = \yii::$app->db->createCommand($sql4)->queryAll();
         } catch (\yii\db\Exception $e) {
             throw new \yii\web\ConflictHttpException('sql error');
         }
         
                     
         $dataProvider = new \yii\data\ArrayDataProvider([
-            'allModels' => $rawData4,
+            'allModels' => $rawData,
             'pagination' => FALSE,
         ]);
               
-   
-         
+            
         return $this->render('report2', [
                     'dataProvider' => $dataProvider,
                     'rawData' => $rawData,
-                    'rawData2' => $rawData2,
-                    'rawData3' => $rawData3,
-                    'rawData4' => $rawData4,
                     'report_name' => $report_name,
                     'sub_currency_id' => $sub_currency_id,
                     'year_s' => $year_s,
@@ -139,51 +96,28 @@ class SqlController extends CommonController {
                DATE_S as date_s,
                MONTH(DATE_S) as month_s,
                ((hight-open)*$unit) as oh,
-               ((low-open)*$unit) as ol
+               ((open-low)*$unit) as ol
          FROM $currency_table
          WHERE 
                YEAR(DATE_S) =  $year_s
          GROUP BY DATE_S ";
         
-        
-        $sql2 = "SELECT 
-                '$sub_currency_id' as cur_name,
-                DATE_S as date_s,
-                MONTH(DATE_S) as month_s,
-               ((hight-open)*$unit) as oh,
-               ((low-open)*$unit) as ol
-            FROM $currency_table
-            WHERE YEAR(DATE_S) = ($year_s-1)
-            GROUP BY  DATE_S ";  
-        
-        $sql3 = "SELECT 
-                '$sub_currency_id' as cur_name,
-                DATE_S as date_s,
-                MONTH(DATE_S) as month_s,
-               ((hight-open)*$unit) as oh,
-               ((low-open)*$unit) as ol
-            FROM $currency_table
-            WHERE YEAR(DATE_S) = ($year_s-2)
-            GROUP BY  DATE_S ";       
-        
-                                  
-            
+                                       
         try {
             $rawData = \yii::$app->db->createCommand($sql)->queryAll();
-            $rawData2 = \yii::$app->db->createCommand($sql2)->queryAll();
-            $rawData3 = \yii::$app->db->createCommand($sql3)->queryAll();
+         
         } catch (\yii\db\Exception $e) {
             throw new \yii\web\ConflictHttpException('sql error');
         }
+        
         $dataProvider = new \yii\data\ArrayDataProvider([
             'allModels' => $rawData,
             'pagination' => FALSE,
         ]);
+        
         return $this->render('report3', [
                     'dataProvider' => $dataProvider,
-                    'rawData' => $rawData,
-                    'rawData2' => $rawData2,
-                    'rawData3' => $rawData3,
+                    'rawData' => $rawData,                  
                     'report_name' => $report_name,
                     'sub_currency_id' => $sub_currency_id,
                     'year_s' => $year_s,

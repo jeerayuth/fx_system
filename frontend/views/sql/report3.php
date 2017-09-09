@@ -137,6 +137,7 @@ for ($i = 0; $i < count($rawData); $i++) {
     ];
 }
 
+
 $data2 = [];
 for ($i = 0; $i < count($rawData); $i++) {
     $data2[] = [
@@ -145,52 +146,13 @@ for ($i = 0; $i < count($rawData); $i++) {
     ];
 }
 
-$data3 = [];
-for ($i = 0; $i < count($rawData2); $i++) {
-    $data3[] = [
-        'name' => $rawData2[$i]['date_s'],
-        'y' => $rawData2[$i]['oh'] * 1,
-    ];
-}
-
-
-$data4 = [];
-for ($i = 0; $i < count($rawData2); $i++) {
-    $data4[] = [
-        'name' => $rawData2[$i]['date_s'],
-        'y' => $rawData2[$i]['ol'] * 1,
-    ];
-}
-
-$data5 = [];
-for ($i = 0; $i < count($rawData3); $i++) {
-    $data5[] = [
-        'name' => $rawData3[$i]['date_s'],
-        'y' => $rawData3[$i]['oh'] * 1,
-    ];
-}
-
-
-$data6 = [];
-for ($i = 0; $i < count($rawData3); $i++) {
-    $data6[] = [
-        'name' => $rawData3[$i]['date_s'],
-        'y' => $rawData3[$i]['ol'] * 1,
-    ];
-}
-
 
 
 $js_data1 = json_encode($data1);
 $js_data2 = json_encode($data2);
-$js_data3 = json_encode($data3);
-$js_data4 = json_encode($data4);
-$js_data5 = json_encode($data5);
-$js_data6 = json_encode($data6);
 
 
-$year_second = $year_s-1;
-$year_third = $year_s-2;
+
 
 // chart
 $this->registerJs(" 
@@ -219,43 +181,8 @@ $this->registerJs("
     }, {
         name: 'แกนลบปี $year_s',
         data: $js_data2
-    }, {
-        type: 'spline',
-        name: 'แกนบวกปี $year_second',
-        data: $js_data3,
-        marker: {
-            lineWidth: 2,
-            lineColor: Highcharts.getOptions().colors[1],
-            fillColor: 'white'
-        }
-    }, {
-        type: 'spline',
-        name: 'แกนลบปี $year_second',
-        data: $js_data4,
-        marker: {
-            lineWidth: 2,
-            lineColor: Highcharts.getOptions().colors[1],
-            fillColor: 'white'
-        }
-    }, {
-        type: 'spline',
-        name: 'แกนบวกปี $year_third',
-        data: $js_data5,
-        marker: {
-            lineWidth: 2,
-            lineColor: Highcharts.getOptions().colors[1],
-            fillColor: 'white'
-        }
-    }, {
-        type: 'spline',
-        name: 'แกนลบปี $year_third',
-        data: $js_data6,
-        marker: {
-            lineWidth: 2,
-            lineColor: Highcharts.getOptions().colors[1],
-            fillColor: 'white'
-        }
-    }]
+    }
+    ]
 });
 ");
 // จบ chart
