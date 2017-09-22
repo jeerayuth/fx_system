@@ -30,7 +30,7 @@ class SqlController extends CommonController {
     public function actionReport2($sub_currency_id, $year_s) {
         $currency_table = $sub_currency_id . "_mn";
                
-        $report_name = "ข้อมูลสถิติการแกว่ง(Volatility) เฉลี่ยราย 3 เดือนของคู่เงิน $sub_currency_id ตั้งแต่ ปี ". ($year_s-2). " ถึงปี ".$year_s;
+        $report_name = "ข้อมูลสถิติการแกว่ง(Volatility) รายเดือนของคู่เงิน $sub_currency_id ปี ".$year_s;
         // sql find units in sub_current table
         $sql_find = "SELECT id,units FROM sub_currency WHERE id = '$sub_currency_id' ";
         try {
@@ -136,68 +136,18 @@ class SqlController extends CommonController {
             throw new \yii\web\ConflictHttpException('sql error');
         }
         $unit = $data_unit[0]['units'];
-         //วันจันทร์   
+ 
         $sql = "SELECT 
                '$sub_currency_id' as cur_name,
-               'วันจันทร์' as date_s,
-               MONTH(e.DATE_S) as month_s,
+                e.date_s,
+               MONTH(e.date_s) as month_s,
                ((e.hight-e.open)*$unit) as oh,
-               ((e.low-e.open)*$unit) as ol
-            FROM $currency_table e
-            LEFT JOIN alldates a ON a.date_s = e.date_s
-            WHERE YEAR(e.DATE_S) = $year_s AND a.date_code = 1 ";
-        
-        //วันอังคาร
-        $sql2 = "SELECT 
-               '$sub_currency_id' as cur_name,
-               'วันอังคาร' as date_s,
-               MONTH(e.DATE_S) as month_s,
-               ((e.hight-e.open)*$unit) as oh,
-               ((e.low-e.open)*$unit) as ol
-            FROM $currency_table e
-            LEFT JOIN alldates a ON a.date_s = e.date_s
-            WHERE YEAR(e.DATE_S) = $year_s AND a.date_code = 2 ";
-        
-        //วันพุธ
-        $sql3 = "SELECT 
-               '$sub_currency_id' as cur_name,
-               'วันพุธ' as date_s,
-               MONTH(e.DATE_S) as month_s,
-               ((e.hight-e.open)*$unit) as oh,
-               ((e.low-e.open)*$unit) as ol
-            FROM $currency_table e
-            LEFT JOIN alldates a ON a.date_s = e.date_s
-            WHERE YEAR(e.DATE_S) = $year_s AND a.date_code = 3 ";
-        
-        //วันพฤหัสบดี
-        $sql4 = "SELECT 
-               '$sub_currency_id' as cur_name,
-               'วันพฤหัสบดี' as date_s,
-               MONTH(e.DATE_S) as month_s,
-               ((e.hight-e.open)*$unit) as oh,
-               ((e.low-e.open)*$unit) as ol
-            FROM $currency_table e
-            LEFT JOIN alldates a ON a.date_s = e.date_s
-            WHERE YEAR(e.DATE_S) = $year_s AND a.date_code = 4 ";
-        
-        //วันศุกร์
-        $sql5 = "SELECT 
-               '$sub_currency_id' as cur_name,
-               'วันศุกร์' as date_s,
-               MONTH(e.DATE_S) as month_s,
-               ((e.hight-open)*$unit) as oh,
-               ((e.low-e.open)*$unit) as ol
-            FROM $currency_table e
-            LEFT JOIN alldates a ON a.date_s = e.date_s
-            WHERE YEAR(e.DATE_S) = $year_s AND a.date_code = 5 ";
-                      
-        
+               ((e.open-e.low)*$unit) as ol
+            FROM $currency_table e      
+            WHERE YEAR(e.DATE_S) = $year_s ";
+                              
         try {
             $rawData = \yii::$app->db->createCommand($sql)->queryAll(); 
-            $rawData2 = \yii::$app->db->createCommand($sql2)->queryAll();  
-            $rawData3 = \yii::$app->db->createCommand($sql3)->queryAll(); 
-            $rawData4 = \yii::$app->db->createCommand($sql4)->queryAll(); 
-            $rawData5 = \yii::$app->db->createCommand($sql5)->queryAll();
         } catch (\yii\db\Exception $e) {
             throw new \yii\web\ConflictHttpException('sql error');
         }
@@ -209,10 +159,6 @@ class SqlController extends CommonController {
         return $this->render('report4', [
                     'dataProvider' => $dataProvider,               
                     'rawData' => $rawData,
-                    'rawData2' => $rawData2,
-                    'rawData3' => $rawData3, 
-                    'rawData4' => $rawData4,
-                    'rawData5' => $rawData5,
                     'report_name' => $report_name,
                     'sub_currency_id' => $sub_currency_id,
                     'year_s' => $year_s,
@@ -521,7 +467,7 @@ class SqlController extends CommonController {
     
     
     public function actionReport9($datestart,$dateend,$timestart,$timeend,$sub_currency_id) {
-        $currency_table = $sub_currency_id."_m1";
+        $currency_table = $sub_currency_id."_h1";
         
         if($timestart == '01:00:00') {
             $timestart = '00:00:00';
@@ -543,9 +489,9 @@ class SqlController extends CommonController {
           
         // เอาไว้ดึงข้อมูลไปแสดงในกราฟ
         $sql = "SELECT 
-                    DATE_S,`OPEN`,max(HIGHT) as max_hight, min(LOW) as min_low,
-                    (max(HIGHT)-`OPEN`)*$unit as open_to_hight, 
-                    (`OPEN`-min(LOW))*$unit as open_to_low
+                    date_s,`OPEN`,max(HIGHT) as max_hight, min(LOW) as min_low,
+                    (max(HIGHT)-`OPEN`)*$unit as oh, 
+                    (`OPEN`-min(LOW))*$unit as ol
                 FROM $currency_table
                 WHERE 
                     DATE_S BETWEEN '$datestart' and '$dateend' and TIME_S BETWEEN '$timestart' and '$timeend'
@@ -688,146 +634,6 @@ class SqlController extends CommonController {
         
    
         
-         // เอาไว้ดึงข้อมูลไปแสดงในกราฟเพื่อดู Pattern
-        $sql_pattern_monday = "SELECT 
-                    concat(t1.DATE_S,'   time@ ', h1.time_second) as date_s,h1.time_first,t1.open as price_open,h1.time_second, 
-                                           
-                    IF($open_price_monday < t1.`OPEN`,t1.open-$open_price_monday,
-                                    IF($open_price_monday > t1.`open`, t1.open - $open_price_monday  , 1
-                          )
-                    )*$unit as cal_price_range
-                        
-                                                             
-                FROM $price_dynamic_table h1
-                
-                LEFT JOIN (
-                            select a.DATE_S,a.TIME_S,a.`OPEN` 
-                            from $currency_table a
-                            LEFT JOIN alldates b ON b.date_s = a.date_s
-                            where a.DATE_S BETWEEN $datestart  AND $dateend  AND b.date_code = 1 
-                ) t1 on (t1.TIME_S = h1.time_second)
-
-
-                GROUP BY t1.DATE_S,h1.time_second
-                ORDER BY t1.DATE_S,h1.time_second ";
-        
-        
-        // เอาไว้ดึงข้อมูลไปแสดงในกราฟเพื่อดู Pattern
-        $sql_pattern_monday = "SELECT 
-                    concat(t1.DATE_S,'   time@ ', h1.time_second) as date_s,h1.time_first,t1.open as price_open,h1.time_second, 
-                                           
-                    IF($open_price_monday < t1.`OPEN`,t1.open-$open_price_monday,
-                                    IF($open_price_monday > t1.`open`, t1.open - $open_price_monday  , 1
-                          )
-                    )*$unit as cal_price_range
-                        
-                                                             
-                FROM $price_dynamic_table h1
-                
-                LEFT JOIN (
-                            select a.DATE_S,a.TIME_S,a.`OPEN` 
-                            from $currency_table a
-                            LEFT JOIN alldates b ON b.date_s = a.date_s
-                            where a.DATE_S BETWEEN $datestart  AND $dateend  AND b.date_code = 1 
-                ) t1 on (t1.TIME_S = h1.time_second)
-
-
-                GROUP BY t1.DATE_S,h1.time_second
-                ORDER BY t1.DATE_S,h1.time_second ";
-        
-        
-        
-        // เอาไว้ดึงข้อมูลไปแสดงในกราฟเพื่อดู Pattern วันอังคาร
-        $sql_pattern_tuesday = "SELECT 
-                    concat(t1.DATE_S,'   time@ ', h1.time_second) as date_s,h1.time_first,t1.open as price_open,h1.time_second, 
-                                           
-                    IF($open_price_tuesday < t1.`OPEN`,t1.open-$open_price_tuesday,
-                                    IF($open_price_tuesday > t1.`open`, t1.open - $open_price_tuesday  , 1
-                          )
-                    )*$unit as cal_price_range
-                                                                                   
-                FROM $price_dynamic_table h1
-                
-                LEFT JOIN (
-                            select a.DATE_S,a.TIME_S,a.`OPEN` 
-                            from $currency_table a
-                            LEFT JOIN alldates b ON b.date_s = a.date_s
-                            where a.DATE_S BETWEEN $datestart  AND $dateend  AND b.date_code = 2 
-                ) t1 on (t1.TIME_S = h1.time_second)
-
-
-                GROUP BY t1.DATE_S,h1.time_second
-                ORDER BY t1.DATE_S,h1.time_second ";
-        
-        
-        
-        // เอาไว้ดึงข้อมูลไปแสดงในกราฟเพื่อดู Pattern วันพุธ
-        $sql_pattern_wednesday = "SELECT 
-                    concat(t1.DATE_S,'   time@ ', h1.time_second) as date_s,h1.time_first,t1.open as price_open,h1.time_second, 
-                                           
-                    IF($open_price_wednesday < t1.`OPEN`,t1.open-$open_price_wednesday,
-                                    IF($open_price_wednesday > t1.`open`, t1.open - $open_price_wednesday  , 1
-                          )
-                    )*$unit as cal_price_range
-                                                                                   
-                FROM $price_dynamic_table h1
-                
-                LEFT JOIN (
-                            select a.DATE_S,a.TIME_S,a.`OPEN` 
-                            from $currency_table a
-                            LEFT JOIN alldates b ON b.date_s = a.date_s
-                            where a.DATE_S BETWEEN $datestart  AND $dateend  AND b.date_code = 3 
-                ) t1 on (t1.TIME_S = h1.time_second)
-
-
-                GROUP BY t1.DATE_S,h1.time_second
-                ORDER BY t1.DATE_S,h1.time_second ";
-        
-        
-        // เอาไว้ดึงข้อมูลไปแสดงในกราฟเพื่อดู Pattern วันพฤหัสบดี
-        $sql_pattern_thursday = "SELECT 
-                    concat(t1.DATE_S,'   time@ ', h1.time_second) as date_s,h1.time_first,t1.open as price_open,h1.time_second, 
-                                           
-                    IF($open_price_thursday < t1.`OPEN`,t1.open-$open_price_thursday,
-                                    IF($open_price_thursday > t1.`open`, t1.open - $open_price_thursday  , 1
-                          )
-                    )*$unit as cal_price_range
-                                                                                   
-                FROM $price_dynamic_table h1
-                
-                LEFT JOIN (
-                            select a.DATE_S,a.TIME_S,a.`OPEN` 
-                            from $currency_table a
-                            LEFT JOIN alldates b ON b.date_s = a.date_s
-                            where a.DATE_S BETWEEN $datestart  AND $dateend  AND b.date_code = 4 
-                ) t1 on (t1.TIME_S = h1.time_second)
-
-
-                GROUP BY t1.DATE_S,h1.time_second
-                ORDER BY t1.DATE_S,h1.time_second ";
-        
-        
-         // เอาไว้ดึงข้อมูลไปแสดงในกราฟเพื่อดู Pattern วันศุกร์
-        $sql_pattern_friday = "SELECT 
-                    concat(t1.DATE_S,'   time@ ', h1.time_second) as date_s,h1.time_first,t1.open as price_open,h1.time_second, 
-                                           
-                    IF($open_price_friday < t1.`OPEN`,t1.open-$open_price_friday,
-                                    IF($open_price_friday > t1.`open`, t1.open - $open_price_friday  , 1
-                          )
-                    )*$unit as cal_price_range
-                                                                                   
-                FROM $price_dynamic_table h1
-                
-                LEFT JOIN (
-                            select a.DATE_S,a.TIME_S,a.`OPEN` 
-                            from $currency_table a
-                            LEFT JOIN alldates b ON b.date_s = a.date_s
-                            where a.DATE_S BETWEEN $datestart  AND $dateend  AND b.date_code = 5 
-                ) t1 on (t1.TIME_S = h1.time_second)
-
-
-                GROUP BY t1.DATE_S,h1.time_second
-                ORDER BY t1.DATE_S,h1.time_second ";
         
              
         try {
@@ -837,11 +643,7 @@ class SqlController extends CommonController {
             $rawData4 = \yii::$app->db->createCommand($sql4)->queryAll(); 
             $rawData5 = \yii::$app->db->createCommand($sql5)->queryAll(); 
             
-            $rawDataPatternMonday = \yii::$app->db->createCommand($sql_pattern_monday)->queryAll(); 
-            $rawDataPatternTuesday = \yii::$app->db->createCommand($sql_pattern_tuesday)->queryAll(); 
-            $rawDataPatternWednesday = \yii::$app->db->createCommand($sql_pattern_wednesday)->queryAll(); 
-            $rawDataPatternThursday = \yii::$app->db->createCommand($sql_pattern_thursday)->queryAll(); 
-            $rawDataPatternFriday = \yii::$app->db->createCommand($sql_pattern_friday)->queryAll(); 
+
             
         } catch (\yii\db\Exception $e) {
             throw new \yii\web\ConflictHttpException('sql error');
@@ -853,12 +655,7 @@ class SqlController extends CommonController {
                     'rawData2' => $rawData2,
                     'rawData3' => $rawData3,
                     'rawData4' => $rawData4,
-                    'rawData5' => $rawData5,
-                    'rawDataPatternMonday' => $rawDataPatternMonday,
-                    'rawDataPatternTuesday' => $rawDataPatternTuesday,
-                    'rawDataPatternWednesday' => $rawDataPatternWednesday,
-                    'rawDataPatternThursday' => $rawDataPatternThursday,
-                    'rawDataPatternFriday' => $rawDataPatternFriday,
+                    'rawData5' => $rawData5,               
                     'report_name' => $report_name,
                     'sub_currency_id' => $sub_currency_id,
                     'datestart' => $datestart,

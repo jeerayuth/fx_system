@@ -65,7 +65,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                         'class' => 'form-control',
                                         'id' => 'sub_currency2',
                                         'prompt' => ' -- คู่เงินที่ 2 --',
-                                        'options'=>['usdjpy'=>['Selected'=>true]]
+                                        'options'=>['eurgbp'=>['Selected'=>true]]
                                   ]) ?>
                             </div>
                             
@@ -75,7 +75,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                         'class' => 'form-control',
                                         'id' => 'sub_currency3',
                                         'prompt' => ' -- คู่เงินที่ 3 --',
-                                        'options'=>['gbpusd'=>['Selected'=>true]]
+                                        'options'=>['audjpy'=>['Selected'=>true]]
                                   ]) ?>
                             </div>
                             
@@ -85,7 +85,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                         'class' => 'form-control',
                                         'id' => 'sub_currency4',
                                         'prompt' => ' -- คู่เงินที่ 4 --',
-                                        'options'=>['usdchf'=>['Selected'=>true]]
+                                        'options'=>['audchf'=>['Selected'=>true]]
                                   ]) ?>
                             </div>
                             
@@ -95,7 +95,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                         'class' => 'form-control',
                                         'id' => 'sub_currency5',
                                         'prompt' => ' -- คู่เงินที่ 5 --',
-                                        'options'=>['usdcad'=>['Selected'=>true]]
+                                        'options'=>['audcad'=>['Selected'=>true]]
                                   ]) ?>
                             </div>
                             
@@ -105,7 +105,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                         'class' => 'form-control',
                                         'id' => 'sub_currency6',
                                         'prompt' => ' -- คู่เงินที่ 6 --',
-                                        'options'=>['audusd'=>['Selected'=>true]]
+                                        'options'=>['usdjpy'=>['Selected'=>true]]
                                   ]) ?>
                             </div>
                             
@@ -116,7 +116,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                         'class' => 'form-control',
                                         'id' => 'sub_currency7',
                                         'prompt' => ' -- คู่เงินที่ 7 --',
-                                        'options'=>['nzdusd'=>['Selected'=>true]]
+                                        'options'=>['gbpjpy'=>['Selected'=>true]]
                                   ]) ?>
                             </div>
                             
@@ -126,7 +126,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                         'class' => 'form-control',
                                         'id' => 'sub_currency8',
                                         'prompt' => ' -- คู่เงินที่ 8 --',
-                                        'options'=>['eurchf'=>['Selected'=>true]]
+                                        'options'=>['eurgbp'=>['Selected'=>true]]
                                   ]) ?>
                             </div>
                             
@@ -137,7 +137,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                         'class' => 'form-control',
                                         'id' => 'sub_currency9',
                                         'prompt' => ' -- คู่เงินที่ 9 --',
-                                        'options'=>['eurjpy'=>['Selected'=>true]]
+                                        'options'=>['chfjpy'=>['Selected'=>true]]
                                   ]) ?>
                             </div>
                             
@@ -148,7 +148,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                         'class' => 'form-control',
                                         'id' => 'sub_currency10',
                                         'prompt' => ' -- คู่เงินที่ 10 --',
-                                        'options'=>['eurgbp'=>['Selected'=>true]]
+                                        'options'=>['cadjpy'=>['Selected'=>true]]
                                   ]) ?>
                             </div>
                             

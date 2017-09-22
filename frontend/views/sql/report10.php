@@ -139,42 +139,6 @@ $js_data10 = json_encode($data10);
 
 
 
-$dataptmonday = [];
-for ($i = 0; $i < count($rawDataPatternMonday); $i++) {
-    $dataptmonday[] = intval($rawDataPatternMonday[$i]['cal_price_range']);
-}
-
-$datapttuesday = [];
-for ($i = 0; $i < count($rawDataPatternTuesday); $i++) {
-    $datapttuesday[] = intval($rawDataPatternTuesday[$i]['cal_price_range']);
-}
-
-$dataptwednesday = [];
-for ($i = 0; $i < count($rawDataPatternWednesday); $i++) {
-    $dataptwednesday[] = intval($rawDataPatternWednesday[$i]['cal_price_range']);
-}
-
-$dataptthursday = [];
-for ($i = 0; $i < count($rawDataPatternThursday); $i++) {
-    $dataptthursday[] = intval($rawDataPatternThursday[$i]['cal_price_range']);
-}
-
-$dataptfriday = [];
-for ($i = 0; $i < count($rawDataPatternFriday); $i++) {
-    $dataptfriday[] = intval($rawDataPatternFriday[$i]['cal_price_range']);
-}
-
-
-
-$js_data_pt_monday = implode(",", $dataptmonday);
-$js_data_pt_tuesday = implode(",", $datapttuesday);
-$js_data_pt_wednesday = implode(",", $dataptwednesday);
-$js_data_pt_thursday = implode(",", $dataptthursday);
-$js_data_pt_friday = implode(",", $dataptfriday);
-
-
-
-
 
 // chart
 $this->registerJs(" 
@@ -287,51 +251,7 @@ $this->registerJs("
             lineColor: Highcharts.getOptions().colors[1],
             fillColor: 'white'
         }
-    },{
-            type: 'spline',
-            name: 'Pattern ของวันจันทร์',
-            data: [$js_data_pt_monday], 
-            marker: {
-            lineWidth: 2,
-            lineColor: Highcharts.getOptions().colors[1],
-            fillColor: 'white'
-        }
-    }, {
-            type: 'spline',
-            name: 'Pattern ของวันอังคาร',
-            data: [$js_data_pt_tuesday], 
-            marker: {
-            lineWidth: 2,
-            lineColor: Highcharts.getOptions().colors[1],
-            fillColor: 'white'
-        }
-    }, {
-            type: 'spline',
-            name: 'Pattern ของวันพุธ',
-            data: [$js_data_pt_wednesday], 
-            marker: {
-            lineWidth: 2,
-            lineColor: Highcharts.getOptions().colors[1],
-            fillColor: 'white'
-        }
-    }, {
-            type: 'spline',
-            name: 'Pattern ของวันพฤหัสบดี',
-            data: [$js_data_pt_thursday], 
-            marker: {
-            lineWidth: 2,
-            lineColor: Highcharts.getOptions().colors[1],
-            fillColor: 'white'
-        }
-    }, {
-            type: 'spline',
-            name: 'Pattern ของวันศุกร์',
-            data: [$js_data_pt_friday], 
-            marker: {
-            lineWidth: 2,
-            lineColor: Highcharts.getOptions().colors[1],
-            fillColor: 'white'
-        }
+
     }]
 });
 ");

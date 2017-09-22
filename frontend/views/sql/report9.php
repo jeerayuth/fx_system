@@ -22,28 +22,70 @@ HighchartsAsset::register($this)->withScripts([
 <?php
 
 //เตรียมชุดข้อมูลไปใส่ให้กราฟ แกน x,y
+
+        $categ = [];
+        for ($i = 0; $i < count($rawData); $i++) {
+            $categ[] = $rawData[$i]['date_s'];
+        }
+        $js_categ = implode("','", $categ);
+
        $data1 = [];
         for ($i = 0; $i < count($rawData); $i++) {
             $data1[] = [
-                '0' => intval($rawData[$i]['open_to_hight']) * 1,
-                '1' => 0,
+                'name' => $rawData[$i]['date_s'],
+                'y' => $rawData[$i]['oh'] * 1,
             ];
         }
-        
-           $data2 = [];
+
+        $data2 = [];
         for ($i = 0; $i < count($rawData); $i++) {
             $data2[] = [
-                '0' => intval($rawData[$i]['open_to_low']) * 1,
-                '1' => 0,
+                'name' => $rawData[$i]['date_s'],
+                'y' => $rawData[$i]['ol'] * 1,
             ];
         }
-
         
-        $js_data_hight = json_encode($data1);
-        $js_data_low   = json_encode($data2);
+        $js_data1 = json_encode($data1);
+        $js_data2   = json_encode($data2);
+        
+        
+        
+        
+        // chart
+        $this->registerJs(" 
+            Highcharts.chart('chart', {
+            chart: {
+                type: 'column'
+            },
+            tooltip: {
+                pointFormat: 'Value: {point.y:,.0f} Point'
+            }, 
+            title: {
+                text: '$report_name'
+            },
+            xAxis: {
+                categories: ['$js_categ'],
+            },
+            yAxis: {
+                    tickInterval: 5
+                },
+            credits: {
+                enabled: false
+            },
+            series: [{
+                name: 'แกนบวก',
+                data: $js_data1
+            }, {
+                name: 'แกนลบ',
+                data: $js_data2
+            }
+            ]
+        });
+        ");
+        // จบ chart
         
 
-              
+            /* Chart แบบ Point   
         $this->registerJs(" $(function () {
                             $('#chart').highcharts({
                                chart: {
@@ -117,7 +159,9 @@ HighchartsAsset::register($this)->withScripts([
                                     }]
                                 });
                             });
-             ");
+             "); 
+             
+             */
         ?>
 
 

@@ -66,6 +66,8 @@ $categ = [];
             $data6[] = intval($rawData6[$i]['price_range_6']);
         }
         
+
+        
                
         $data_sum1 = [];
         for ($i = 0; $i < count($rawData_sum1); $i++) {
@@ -85,6 +87,7 @@ $categ = [];
         $js_data4 = implode(",", $data4);
         $js_data5 = implode(",", $data5);
         $js_data6 = implode(",", $data6);
+
         
         $js_data_sum1 = implode(",", $data_sum1);
         $js_data_sum1_inverse = implode(",", $data_sum1_inverse);
