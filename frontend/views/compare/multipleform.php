@@ -35,7 +35,8 @@ $this->params['breadcrumbs'][] = $this->title;
                         </label>
                        
                         <div class="col-md-6 col-sm-6 col-xs-6">
-                            <?php
+                            
+                             <?php
                             echo DatePicker::widget([
                                 'name' => 'from_date',
                                 'type' => DatePicker::TYPE_RANGE,
@@ -46,6 +47,16 @@ $this->params['breadcrumbs'][] = $this->title;
                                 ]
                             ]);
                             ?>
+                            
+                        </div>
+                   </div>   
+                        <div class="col-md-3 col-sm-3 col-xs-3">
+                            
+                        </div>
+                
+                       <div class="col-md-3 col-sm-3 col-xs-3">
+                           
+                           
                             
                             <div class="form-group">
                                 <?php echo Html::dropDownList('sub_currency1', null,
@@ -65,7 +76,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                         'class' => 'form-control',
                                         'id' => 'sub_currency2',
                                         'prompt' => ' -- คู่เงินที่ 2 --',
-                                        'options'=>['eurgbp'=>['Selected'=>true]]
+                                        'options'=>['euraud'=>['Selected'=>true]]
                                   ]) ?>
                             </div>
                             
@@ -75,7 +86,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                         'class' => 'form-control',
                                         'id' => 'sub_currency3',
                                         'prompt' => ' -- คู่เงินที่ 3 --',
-                                        'options'=>['audjpy'=>['Selected'=>true]]
+                                        'options'=>['eurgbp'=>['Selected'=>true]]
                                   ]) ?>
                             </div>
                             
@@ -85,7 +96,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                         'class' => 'form-control',
                                         'id' => 'sub_currency4',
                                         'prompt' => ' -- คู่เงินที่ 4 --',
-                                        'options'=>['audchf'=>['Selected'=>true]]
+                                        'options'=>['eurjpy'=>['Selected'=>true]]
                                   ]) ?>
                             </div>
                             
@@ -95,7 +106,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                         'class' => 'form-control',
                                         'id' => 'sub_currency5',
                                         'prompt' => ' -- คู่เงินที่ 5 --',
-                                        'options'=>['audcad'=>['Selected'=>true]]
+                                        'options'=>['eurchf'=>['Selected'=>true]]
                                   ]) ?>
                             </div>
                             
@@ -105,10 +116,12 @@ $this->params['breadcrumbs'][] = $this->title;
                                         'class' => 'form-control',
                                         'id' => 'sub_currency6',
                                         'prompt' => ' -- คู่เงินที่ 6 --',
-                                        'options'=>['usdjpy'=>['Selected'=>true]]
+                                        'options'=>['eurcad'=>['Selected'=>true]]
                                   ]) ?>
                             </div>
-                            
+                       </div>
+                
+                       <div class="col-md-3 col-sm-3 col-xs-3">
                             
                             <div class="form-group">
                                     <?php echo Html::dropDownList('sub_currency7', null,
@@ -116,7 +129,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                         'class' => 'form-control',
                                         'id' => 'sub_currency7',
                                         'prompt' => ' -- คู่เงินที่ 7 --',
-                                        'options'=>['gbpjpy'=>['Selected'=>true]]
+                                        'options'=>['usdjpy'=>['Selected'=>true]]
                                   ]) ?>
                             </div>
                             
@@ -126,7 +139,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                         'class' => 'form-control',
                                         'id' => 'sub_currency8',
                                         'prompt' => ' -- คู่เงินที่ 8 --',
-                                        'options'=>['eurgbp'=>['Selected'=>true]]
+                                        'options'=>['usdcad'=>['Selected'=>true]]
                                   ]) ?>
                             </div>
                             
@@ -137,7 +150,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                         'class' => 'form-control',
                                         'id' => 'sub_currency9',
                                         'prompt' => ' -- คู่เงินที่ 9 --',
-                                        'options'=>['chfjpy'=>['Selected'=>true]]
+                                        'options'=>['audjpy'=>['Selected'=>true]]
                                   ]) ?>
                             </div>
                             
@@ -148,7 +161,29 @@ $this->params['breadcrumbs'][] = $this->title;
                                         'class' => 'form-control',
                                         'id' => 'sub_currency10',
                                         'prompt' => ' -- คู่เงินที่ 10 --',
-                                        'options'=>['cadjpy'=>['Selected'=>true]]
+                                        'options'=>['nzdjpy'=>['Selected'=>true]]
+                                  ]) ?>
+                            </div>
+                            
+                            
+                           <div class="form-group">
+                                    <?php echo Html::dropDownList('sub_currency11', null,
+                                        ArrayHelper::map(Subcurrency::find()->all(), 'id', 'name'), [
+                                        'class' => 'form-control',
+                                        'id' => 'sub_currency11',
+                                        'prompt' => ' -- คู่เงินที่ 11 --',
+                                        'options'=>['chfjpy'=>['Selected'=>true]]
+                                  ]) ?>
+                            </div>
+                            
+                            
+                           <div class="form-group">
+                                    <?php echo Html::dropDownList('sub_currency12', null,
+                                        ArrayHelper::map(Subcurrency::find()->all(), 'id', 'name'), [
+                                        'class' => 'form-control',
+                                        'id' => 'sub_currency12',
+                                        'prompt' => ' -- คู่เงินที่ 12 --',
+                                        'options'=>['gbpjpy'=>['Selected'=>true]]
                                   ]) ?>
                             </div>
                             
@@ -157,6 +192,8 @@ $this->params['breadcrumbs'][] = $this->title;
                            
                                                     
                         </div>
+                
+                        
                                       
                     </div>
                 </form>
@@ -198,10 +235,12 @@ $this->params['breadcrumbs'][] = $this->title;
         sub_currency8 = $("#sub_currency8 option:selected").val();
         sub_currency9 = $("#sub_currency9 option:selected").val();
         sub_currency10 = $("#sub_currency10 option:selected").val();
+        sub_currency11 = $("#sub_currency11 option:selected").val();
+        sub_currency12 = $("#sub_currency12 option:selected").val();
        
    
         
-         window.open('http://localhost:8080/fx_system/frontend/web/index.php?r=compare/compare2&datestart=' + datestart + '&dateend=' + dateend + '&sub_currency1=' +  sub_currency1 + '&sub_currency2=' +  sub_currency2 + '&sub_currency3=' +  sub_currency3 + '&sub_currency4=' +  sub_currency4 + '&sub_currency5=' +  sub_currency5 + '&sub_currency6=' +  sub_currency6 + '&sub_currency7=' +  sub_currency7 + '&sub_currency8=' +  sub_currency8 + '&sub_currency9=' +  sub_currency9 + '&sub_currency10=' +  sub_currency10);
+         window.open('http://localhost:8080/fx_system/frontend/web/index.php?r=compare/compare2&datestart=' + datestart + '&dateend=' + dateend + '&sub_currency1=' +  sub_currency1 + '&sub_currency2=' +  sub_currency2 + '&sub_currency3=' +  sub_currency3 + '&sub_currency4=' +  sub_currency4 + '&sub_currency5=' +  sub_currency5 + '&sub_currency6=' +  sub_currency6 + '&sub_currency7=' +  sub_currency7 + '&sub_currency8=' +  sub_currency8 + '&sub_currency9=' +  sub_currency9 + '&sub_currency10=' +  sub_currency10 + '&sub_currency11=' +  sub_currency11 + '&sub_currency12=' +  sub_currency12);
     }
     
     

@@ -81,10 +81,21 @@ $categ = [];
             $data9[] = intval($rawData9[$i]['price_range_9']);
         }
         
-         $data10 = [];
+        $data10 = [];
         for ($i = 0; $i < count($rawData10); $i++) {
             $data10[] = intval($rawData10[$i]['price_range_10']);
         }
+        
+        $data11 = [];
+        for ($i = 0; $i < count($rawData11); $i++) {
+            $data11[] = intval($rawData11[$i]['price_range_11']);
+        }
+        
+        $data12 = [];
+        for ($i = 0; $i < count($rawData12); $i++) {
+            $data12[] = intval($rawData12[$i]['price_range_12']);
+        }
+        
         
         
         $data_sum1 = [];
@@ -108,6 +119,8 @@ $categ = [];
         $js_data8 = implode(",", $data8);
         $js_data9 = implode(",", $data9);
         $js_data10 = implode(",", $data10);
+        $js_data11 = implode(",", $data11);
+        $js_data12 = implode(",", $data12);
         
         $js_data_sum1 = implode(",", $data_sum1);
         $js_data_sum2 = implode(",", $data_sum2);
@@ -181,6 +194,12 @@ $categ = [];
                                 },  {
                                     name: '$sub_currency10',
                                     data: [$js_data10]
+                                },  {
+                                    name: '$sub_currency11',
+                                    data: [$js_data11]
+                                },  {
+                                    name: '$sub_currency12',
+                                    data: [$js_data12]
                                 }]
                             });
                         });

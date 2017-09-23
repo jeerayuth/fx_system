@@ -79,6 +79,19 @@ $categ = [];
             $data_sum1_inverse[] = intval($rawData_sum1[$i]['sum_price_range1_inverse']);
         }
         
+        
+        
+                  
+        $data_sum1_hight = [];
+        for ($i = 0; $i < count($rawData_sum1); $i++) {
+            $data_sum1_hight[] = intval($rawData_sum1[$i]['sum_price_range1_hight']);
+        }
+        
+        $data_sum1_low = [];
+        for ($i = 0; $i < count($rawData_sum1); $i++) {
+            $data_sum1_low[] = intval($rawData_sum1[$i]['sum_price_range1_low']);
+        }
+        
     
         
         $js_data1 = implode(",", $data1);
@@ -91,6 +104,9 @@ $categ = [];
         
         $js_data_sum1 = implode(",", $data_sum1);
         $js_data_sum1_inverse = implode(",", $data_sum1_inverse);
+        
+        $js_data_sum1_hight = implode(",", $data_sum1_hight);
+        $js_data_sum1_low = implode(",", $data_sum1_low);
 
         
 
@@ -200,12 +216,18 @@ $categ = [];
                                     enabled: false
                                 },
                                 series: [{
-                                    name: 'sum ชุด1',
+                                    name: 'sum ชุด1 ราคา hight',
+                                    data: [$js_data_sum1_hight]
+                                },{
+                                    name: 'sum ชุด1 ราคา open',
                                     data: [$js_data_sum1]
                                 },{
+                                    name: 'sum ชุด1 ราคา low',
+                                    data: [$js_data_sum1_low]
+                                },/*{
                                     name: 'sum ชุด1 inverse',
                                     data: [$js_data_sum1_inverse]
-                                }]
+                                }*/]
                             });
                         });
              ");
