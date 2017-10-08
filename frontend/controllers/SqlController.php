@@ -3,6 +3,7 @@ namespace frontend\controllers;
 use Yii;
 use frontend\components\CommonController;
 class SqlController extends CommonController {
+    
     public function actionReport1($sub_currency_id) {
         $currency_table = $sub_currency_id . "_mn";
         $report_name = "เลือกปีที่ต้องการดูข้อมูลสถิติของคู่เงิน $sub_currency_id";
@@ -27,6 +28,8 @@ class SqlController extends CommonController {
                     'sub_currency_id' => $sub_currency_id
         ]);
     }
+    
+    
     public function actionReport2($sub_currency_id, $year_s) {
         $currency_table = $sub_currency_id . "_mn";
                
@@ -428,6 +431,17 @@ class SqlController extends CommonController {
                           )
                     )*$unit as cal_price_range,
                         
+                    IF($open_price_first < t1.HIGHT,t1.HIGHT-$open_price_first,
+                                    IF($open_price_first > t1.HIGHT, t1.HIGHT - $open_price_first  , 1
+                          )
+                    )*$unit as cal_price_range_hight,
+                        
+                    IF($open_price_first < t1.LOW,t1.LOW-$open_price_first,
+                                    IF($open_price_first > t1.LOW, t1.LOW - $open_price_first  , 1
+                          )
+                    )*$unit as cal_price_range_low,
+                                               
+                        
                     (IF($open_price_first < t1.`OPEN`,t1.open-$open_price_first,
                                     IF($open_price_first > t1.`open`, t1.open - $open_price_first  , 1
                           )
@@ -437,7 +451,7 @@ class SqlController extends CommonController {
                 FROM $price_dynamic_table h1
                 
                 LEFT JOIN (
-                            select DATE_S,TIME_S,`OPEN` from $currency_table where DATE_S BETWEEN '$datestart'  AND '$dateend' 
+                            select DATE_S,TIME_S,`OPEN`,HIGHT,LOW from $currency_table where DATE_S BETWEEN '$datestart'  AND '$dateend' 
 
                 ) t1 on (t1.TIME_S = h1.time_second)
 
@@ -453,7 +467,7 @@ class SqlController extends CommonController {
             throw new \yii\web\ConflictHttpException('sql error');
         }
    
-                   
+                
         return $this->render('report8', [
                     'rawData' => $rawData,
                     'report_name' => $report_name,
@@ -468,6 +482,7 @@ class SqlController extends CommonController {
     
     public function actionReport9($datestart,$dateend,$timestart,$timeend,$sub_currency_id) {
         $currency_table = $sub_currency_id."_h1";
+        $price_dynamic_table = "price_dynamic"."_h1";
         
         if($timestart == '01:00:00') {
             $timestart = '00:00:00';
@@ -478,16 +493,22 @@ class SqlController extends CommonController {
                
         // sql find units in sub_current table
         $sql_find = "SELECT id,units FROM sub_currency WHERE id = '$sub_currency_id' ";
-           
+        
+         // sql find first open price @ first day select
+        $sql_find_open_price_first = "SELECT open FROM $currency_table WHERE DATE_S = '$datestart' and TIME_S = '$timestart' ORDER BY DATE_S LIMIT 0,1 ";
+                   
         try {
             $data_unit = \yii::$app->db->createCommand($sql_find)->queryAll();
+            $data_open_price_first = \yii::$app->db->createCommand($sql_find_open_price_first)->queryAll();
         } catch (\yii\db\Exception $e) {
             throw new \yii\web\ConflictHttpException('sql error');
         }
         $unit = $data_unit[0]['units'];
+        $open_price_first = $data_open_price_first[0]['open'];
         
+
           
-        // เอาไว้ดึงข้อมูลไปแสดงในกราฟ
+        // เอาไว้ดึงข้อมูลไปแสดงในกราฟเพื่อหาค่าสูงสุด/ต่ำสุด ในช่วงเวลาที่เลือก
         $sql = "SELECT 
                     date_s,`OPEN`,max(HIGHT) as max_hight, min(LOW) as min_low,
                     (max(HIGHT)-`OPEN`)*$unit as oh, 
@@ -496,10 +517,57 @@ class SqlController extends CommonController {
                 WHERE 
                     DATE_S BETWEEN '$datestart' and '$dateend' and TIME_S BETWEEN '$timestart' and '$timeend'
                 GROUP BY DATE_S ";
-                    
+        
+        
+         // เอาไว้ดึงข้อมูลไปแสดงในกราฟเพื่อดูพฤติกรรมราคา
+        $sql2 = "SELECT 
+                    concat(t1.DATE_S,'   time@ ', h1.time_second) as date_s,h1.time_first,t1.open as price_open,h1.time_second, 
+                                           
+                    IF($open_price_first < t1.`OPEN`,t1.open-$open_price_first,
+                                    IF($open_price_first > t1.`open`, t1.open - $open_price_first  , 1
+                          )
+                    )*$unit as cal_price_range,
+                        
+                    IF($open_price_first < t1.HIGHT,t1.HIGHT-$open_price_first,
+                                    IF($open_price_first > t1.HIGHT, t1.HIGHT - $open_price_first  , 1
+                          )
+                    )*$unit as cal_price_range_hight,
+                        
+                    IF($open_price_first < t1.LOW,t1.LOW-$open_price_first,
+                                    IF($open_price_first > t1.LOW, t1.LOW - $open_price_first  , 1
+                          )
+                    )*$unit as cal_price_range_low,
+                                               
+                        
+                    (IF($open_price_first < t1.`OPEN`,t1.open-$open_price_first,
+                                    IF($open_price_first > t1.`open`, t1.open - $open_price_first  , 1
+                          )
+                    )*$unit)*-1 as cal_price_range_inverse,
+                        
+                    (max(HIGHT)-`OPEN`)*$unit as oh, 
+                    (`OPEN`-min(LOW))*$unit as ol
+                        
+                                                             
+                FROM $price_dynamic_table h1
+                
+                RIGHT JOIN (
+                            SELECT 
+                                DATE_S,TIME_S,`OPEN`,HIGHT,LOW 
+                            FROM $currency_table WHERE DATE_S BETWEEN '$datestart'  AND '$dateend' 
+                            AND  time_s BETWEEN '$timestart' and '$timeend'
+				
+                ) t1 on (t1.TIME_S = h1.time_second)
+                
+                AND h1.time_second BETWEEN '$timestart' and '$timeend'
+
+                GROUP BY t1.DATE_S,h1.time_second
+                ORDER BY t1.DATE_S,h1.time_second "; 
+        
+   
         
         try {
             $rawData = \yii::$app->db->createCommand($sql)->queryAll();  
+            $rawData2 = \yii::$app->db->createCommand($sql2)->queryAll();  
         } catch (\yii\db\Exception $e) {
             throw new \yii\web\ConflictHttpException('sql error');
         }
@@ -507,6 +575,7 @@ class SqlController extends CommonController {
             
          return $this->render('report9', [
                     'rawData' => $rawData,
+                    'rawData2' => $rawData2,
                     'sub_currency_id' => $sub_currency_id,
                     'report_name' => $report_name,
         ]);

@@ -34,16 +34,30 @@ $categ = [];
         for ($i = 0; $i < count($rawData); $i++) {
             $data[] = intval($rawData[$i]['cal_price_range']);
         }
-        $js_data = implode(",", $data);
         
         $data2 = [];
         for ($i = 0; $i < count($rawData); $i++) {
             $data2[] = intval($rawData[$i]['cal_price_range_inverse']);
         }
+        
+        $data3 = [];
+        for ($i = 0; $i < count($rawData); $i++) {
+            $data3[] = intval($rawData[$i]['cal_price_range_hight']);
+        }
+        
+        $data4 = [];
+        for ($i = 0; $i < count($rawData); $i++) {
+            $data4[] = intval($rawData[$i]['cal_price_range_low']);
+        }
+           
+        
         $js_data = implode(",", $data);
         $js_data2 = implode(",", $data2);
+        $js_data3 = implode(",", $data3);
+        $js_data4 = implode(",", $data4);
 
 
+        
 
         $this->registerJs(" $(function () {
                             $('#chart').highcharts({
@@ -84,15 +98,18 @@ $categ = [];
                                     enabled: false
                                 },
                                 series: [{
-                                    name: 'range',
+                                    name: 'hight',
+                                    data: [$js_data3]
+                                },{
+                                    name: 'open',
                                     data: [$js_data]
-                                }, {
-                                    name: 'range_inverse',
-                                    data: [$js_data2]
+                                },{
+                                    name: 'low',
+                                    data: [$js_data4]
                                 }]
                             });
                         });
-             ");
+             "); 
         ?>
 
 
