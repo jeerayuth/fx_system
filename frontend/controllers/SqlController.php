@@ -545,7 +545,7 @@ class SqlController extends CommonController {
                     )*$unit)*-1 as cal_price_range_inverse,
                         
                     (max(HIGHT)-`OPEN`)*$unit as oh, 
-                    (`OPEN`-min(LOW))*$unit as ol
+                    (min(LOW)-`OPEN`)*$unit as ol
                         
                                                              
                 FROM $price_dynamic_table h1
