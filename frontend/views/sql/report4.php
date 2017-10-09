@@ -333,9 +333,10 @@ echo GridView::widget([
          timestart = moment(cds).format('HH:mm:ss');
          timeend = moment(cde).format('HH:mm:ss');
          
-
+        timeframe = $("[name='opttimeframe']:checked").val()
         
-        window.open('http://localhost:8080/fx_system/frontend/web/index.php?r=sql/report9&datestart=' +  datestart + '&dateend=' + dateend + '&timestart=' + timestart + '&timeend=' + timeend + '&sub_currency_id=<?php echo $sub_currency_id;?>' );
+      
+        window.open('http://localhost:8080/fx_system/frontend/web/index.php?r=sql/report9&datestart=' +  datestart + '&dateend=' + dateend + '&timestart=' + timestart + '&timeend=' + timeend + '&sub_currency_id=<?php echo $sub_currency_id;?>'  + '&timeframe=' + timeframe);
     }
     
     

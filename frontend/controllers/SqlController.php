@@ -480,19 +480,22 @@ class SqlController extends CommonController {
     }
     
     
-    public function actionReport9($datestart,$dateend,$timestart,$timeend,$sub_currency_id) {
-        $currency_table = $sub_currency_id."_h1";
-        $price_dynamic_table = "price_dynamic"."_h1";
+    public function actionReport9($datestart,$dateend,$timestart,$timeend,$sub_currency_id,$timeframe) {
+        $currency_table = $sub_currency_id.$timeframe;
+        $price_dynamic_table = "price_dynamic".$timeframe;
         
         if($timestart == '01:00:00') {
             $timestart = '00:00:00';
         }
         
         
-        $report_name = "ระดับการแกว่งของราคาค่าเงิน $sub_currency_id ระหว่างวันที่ $datestart ถึงวันที่ $dateend ณ ช่วงเวลา $timestart ถึง $timeend ";
+        $report_name = "ระดับการแกว่งของราคาค่าเงิน $sub_currency_id ระหว่างวันที่ $datestart ถึงวันที่ $dateend ณ ช่วงเวลา $timestart ถึง $timeend (เวลาโบรค)";
                
         // sql find units in sub_current table
         $sql_find = "SELECT id,units FROM sub_currency WHERE id = '$sub_currency_id' ";
+        
+        // sql find timezone in sub_current table
+        $sql_timezone = "SELECT name,val FROM config WHERE name = 'timezone' ";
         
          // sql find first open price @ first day select
         $sql_find_open_price_first = "SELECT open FROM $currency_table WHERE DATE_S = '$datestart' and TIME_S = '$timestart' ORDER BY DATE_S LIMIT 0,1 ";
@@ -500,14 +503,15 @@ class SqlController extends CommonController {
         try {
             $data_unit = \yii::$app->db->createCommand($sql_find)->queryAll();
             $data_open_price_first = \yii::$app->db->createCommand($sql_find_open_price_first)->queryAll();
+            $data_timezone = \yii::$app->db->createCommand($sql_timezone)->queryAll();
         } catch (\yii\db\Exception $e) {
             throw new \yii\web\ConflictHttpException('sql error');
         }
         $unit = $data_unit[0]['units'];
         $open_price_first = $data_open_price_first[0]['open'];
+        $timezone = $data_timezone[0]['val'];
         
-
-          
+        
         // เอาไว้ดึงข้อมูลไปแสดงในกราฟเพื่อหาค่าสูงสุด/ต่ำสุด ในช่วงเวลาที่เลือก
         $sql = "SELECT 
                     date_s,`OPEN`,max(HIGHT) as max_hight, min(LOW) as min_low,
@@ -521,7 +525,9 @@ class SqlController extends CommonController {
         
          // เอาไว้ดึงข้อมูลไปแสดงในกราฟเพื่อดูพฤติกรรมราคา
         $sql2 = "SELECT 
-                    concat(t1.DATE_S,'   time@ ', h1.time_second) as date_s,h1.time_first,t1.open as price_open,h1.time_second, 
+                    date_add(concat(t1.DATE_S,' ',h1.time_second), interval $timezone HOUR ) as date_s,
+ 
+                    h1.time_first,t1.open as price_open,h1.time_second, 
                                            
                     IF($open_price_first < t1.`OPEN`,t1.open-$open_price_first,
                                     IF($open_price_first > t1.`open`, t1.open - $open_price_first  , 1
