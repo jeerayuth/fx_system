@@ -47,6 +47,15 @@ $this->params['breadcrumbs'][] = $this->title;
                             ]);
                             ?>
                             
+                            
+                            <div class="form-group">              
+                                <label class="radio-inline"><input type="radio" name="opttimeframe" value="_h1" checked>1 ชม.</label>
+                                <label class="radio-inline"><input type="radio" name="opttimeframe" value="_m15">15 นาที</label>
+                                <label class="radio-inline"><input type="radio" name="opttimeframe" value="_m5">5 นาที</label>
+                            </div>
+                            
+  
+                            
                             <div class="form-group">
                                 <?php echo Html::dropDownList('sub_currency1', null,
                                         ArrayHelper::map(Subcurrency::find()->all(), 'id', 'name'), [
@@ -148,6 +157,9 @@ $this->params['breadcrumbs'][] = $this->title;
         m2 = arr2[1];
         m3 = arr2[2];
         dateend = m3+m2+m1;
+        
+        timeframe = $("[name='opttimeframe']:checked").val()
+        
          
         sub_currency1 = $("#sub_currency1 option:selected").val();
         sub_currency2 = $("#sub_currency2 option:selected").val();
@@ -158,7 +170,7 @@ $this->params['breadcrumbs'][] = $this->title;
 
        
            
-         window.open('http://localhost:8080/fx_system/frontend/web/index.php?r=compare/compare3&datestart=' + datestart + '&dateend=' + dateend + '&sub_currency1=' +  sub_currency1 + '&sub_currency2=' +  sub_currency2 + '&sub_currency3=' +  sub_currency3 + '&sub_currency4=' +  sub_currency4 + '&sub_currency5=' +  sub_currency5 + '&sub_currency6=' +  sub_currency6);
+         window.open('http://localhost:8080/fx_system/frontend/web/index.php?r=compare/compare3&datestart=' + datestart + '&dateend=' + dateend + '&sub_currency1=' +  sub_currency1 + '&sub_currency2=' +  sub_currency2 + '&sub_currency3=' +  sub_currency3 + '&sub_currency4=' +  sub_currency4 + '&sub_currency5=' +  sub_currency5 + '&sub_currency6=' +  sub_currency6 + '&timeframe=' + timeframe);
     }
     
     

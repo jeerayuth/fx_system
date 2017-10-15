@@ -826,14 +826,14 @@ class CompareController extends \yii\web\Controller {
     
     
     
-    public function actionCompare3($datestart,$dateend,$sub_currency1,$sub_currency2,$sub_currency3,$sub_currency4,$sub_currency5,$sub_currency6) {
+    public function actionCompare3($datestart,$dateend,$sub_currency1,$sub_currency2,$sub_currency3,$sub_currency4,$sub_currency5,$sub_currency6,$timeframe) {
         
-         $currency_table1 = $sub_currency1."_h1";
-         $currency_table2 = $sub_currency2."_h1";
-         $currency_table3 = $sub_currency3."_h1";
-         $currency_table4 = $sub_currency4."_h1";
-         $currency_table5 = $sub_currency5."_h1";
-         $currency_table6 = $sub_currency6."_h1";
+         $currency_table1 = $sub_currency1.$timeframe;
+         $currency_table2 = $sub_currency2.$timeframe;
+         $currency_table3 = $sub_currency3.$timeframe;
+         $currency_table4 = $sub_currency4.$timeframe;
+         $currency_table5 = $sub_currency5.$timeframe;
+         $currency_table6 = $sub_currency6.$timeframe;
 
         
          $report_name = "กราฟเปรียบเทียบ P-Core  ระหว่างวันที่ $datestart ถึงวันที่ $dateend ";
