@@ -847,6 +847,10 @@ class CompareController extends \yii\web\Controller {
         $sql_find4 = "SELECT id,units FROM sub_currency WHERE id = '$sub_currency4' ";
         $sql_find5 = "SELECT id,units FROM sub_currency WHERE id = '$sub_currency5' ";
         $sql_find6 = "SELECT id,units FROM sub_currency WHERE id = '$sub_currency6' ";
+        
+        
+        // sql find timezone in sub_current table
+        $sql_timezone = "SELECT name,val FROM config WHERE name = 'timezone' ";
 
         
               
@@ -875,7 +879,7 @@ class CompareController extends \yii\web\Controller {
             $data_open_price_first5 = \yii::$app->db->createCommand($sql_find_open_price_first5)->queryAll();
             $data_open_price_first6 = \yii::$app->db->createCommand($sql_find_open_price_first6)->queryAll();
        
-
+            $data_timezone = \yii::$app->db->createCommand($sql_timezone)->queryAll();
             
         } catch (\yii\db\Exception $e) {
             throw new \yii\web\ConflictHttpException('sql error');
@@ -897,11 +901,13 @@ class CompareController extends \yii\web\Controller {
         $open_price_first5 = $data_open_price_first5[0]['open'];
         $open_price_first6 = $data_open_price_first6[0]['open'];
      
-
+        $timezone = $data_timezone[0]['val'];
+          
             
         // เอาไว้ดึงข้อมูลไปแสดงในกราฟ
         $sql1 = "SELECT 
-                    concat(t1.DATE_S,'   time@ ', h1.time_second) as date_s,h1.time_first,t1.open as price_open,h1.time_second, 
+                    date_add(concat(t1.DATE_S,' ',h1.time_second), interval $timezone HOUR ) as date_s,
+                    h1.time_first,t1.open as price_open,h1.time_second, 
                                            
                     IF($open_price_first1 < t1.`OPEN`,t1.open-$open_price_first1,
                                     IF($open_price_first1 > t1.`open`, t1.open - $open_price_first1  , 1
@@ -933,7 +939,8 @@ class CompareController extends \yii\web\Controller {
         
         // เอาไว้ดึงข้อมูลไปแสดงในกราฟ
         $sql2 = "SELECT 
-                    concat(t1.DATE_S,'   time@ ', h1.time_second) as date_s,h1.time_first,t1.open as price_open,h1.time_second, 
+                    date_add(concat(t1.DATE_S,' ',h1.time_second), interval $timezone HOUR ) as date_s,
+                    h1.time_first,t1.open as price_open,h1.time_second, 
                                            
                     IF($open_price_first2 < t1.`OPEN`,t1.open-$open_price_first2,
                                     IF($open_price_first2 > t1.`open`, t1.open - $open_price_first2  , 1
@@ -965,7 +972,8 @@ class CompareController extends \yii\web\Controller {
         
         // เอาไว้ดึงข้อมูลไปแสดงในกราฟ
         $sql3 = "SELECT 
-                    concat(t1.DATE_S,'   time@ ', h1.time_second) as date_s,h1.time_first,t1.open as price_open,h1.time_second, 
+                    date_add(concat(t1.DATE_S,' ',h1.time_second), interval $timezone HOUR ) as date_s,
+                    h1.time_first,t1.open as price_open,h1.time_second, 
                                            
                     IF($open_price_first3 < t1.`OPEN`,t1.open-$open_price_first3,
                                     IF($open_price_first3 > t1.`open`, t1.open - $open_price_first3  , 1
@@ -997,7 +1005,8 @@ class CompareController extends \yii\web\Controller {
         
                 // เอาไว้ดึงข้อมูลไปแสดงในกราฟ
         $sql4 = "SELECT 
-                    concat(t1.DATE_S,'   time@ ', h1.time_second) as date_s,h1.time_first,t1.open as price_open,h1.time_second, 
+                    date_add(concat(t1.DATE_S,' ',h1.time_second), interval $timezone HOUR ) as date_s,
+                    h1.time_first,t1.open as price_open,h1.time_second, 
                                            
                     IF($open_price_first4 < t1.`OPEN`,t1.open-$open_price_first4,
                                     IF($open_price_first4 > t1.`open`, t1.open - $open_price_first4  , 1
@@ -1029,7 +1038,8 @@ class CompareController extends \yii\web\Controller {
         
          // เอาไว้ดึงข้อมูลไปแสดงในกราฟ
         $sql5 = "SELECT 
-                    concat(t1.DATE_S,'   time@ ', h1.time_second) as date_s,h1.time_first,t1.open as price_open,h1.time_second, 
+                    date_add(concat(t1.DATE_S,' ',h1.time_second), interval $timezone HOUR ) as date_s,
+                    h1.time_first,t1.open as price_open,h1.time_second, 
                                            
                     IF($open_price_first5 < t1.`OPEN`,t1.open-$open_price_first5,
                                     IF($open_price_first5 > t1.`open`, t1.open - $open_price_first5  , 1
@@ -1062,7 +1072,8 @@ class CompareController extends \yii\web\Controller {
         
         // เอาไว้ดึงข้อมูลไปแสดงในกราฟ
         $sql6 = "SELECT 
-                    concat(t1.DATE_S,'   time@ ', h1.time_second) as date_s,h1.time_first,t1.open as price_open,h1.time_second, 
+                    date_add(concat(t1.DATE_S,' ',h1.time_second), interval $timezone HOUR ) as date_s,
+                    h1.time_first,t1.open as price_open,h1.time_second, 
                                            
                     IF($open_price_first6 < t1.`OPEN`,t1.open-$open_price_first6,
                                     IF($open_price_first6 > t1.`open`, t1.open - $open_price_first6  , 1
@@ -1096,7 +1107,11 @@ class CompareController extends \yii\web\Controller {
           
                                             
         
-         $sql_sum1 = "SELECT  date_s, time_second , sum(price_range_1) as sum_price_range1,sum(price_range_1_hight) as sum_price_range1_hight, sum(price_range_1_low) as sum_price_range1_low, sum(price_range_1)*-1 as sum_price_range1_inverse   FROM (
+         $sql_sum1 = "SELECT  
+                        date_s, time_second , sum(price_range_1) as sum_price_range1,
+                        sum(price_range_1_hight) as sum_price_range1_hight, 
+                        sum(price_range_1_low) as sum_price_range1_low, 
+                        sum(price_range_1)*-1 as sum_price_range1_inverse   FROM (
 
                              SELECT 
                                 concat(t1.DATE_S,'   time@ ', h1.time_second) as date_s,h1.time_first,t1.open as price_open,h1.time_second, 
