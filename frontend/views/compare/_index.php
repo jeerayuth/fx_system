@@ -23,8 +23,6 @@ $this->params['breadcrumbs'][] = $this->title;
 ?>
 
 
-<br/>
-<br/>
 
 <div class="row">
     
@@ -50,6 +48,13 @@ $this->params['breadcrumbs'][] = $this->title;
                                 ]
                             ]);
                             ?>
+                            
+                            <div class="form-group">              
+                                <label class="radio-inline"><input type="radio" name="opttimeframe" value="_h1" >1 ชม.</label>
+                                <label class="radio-inline"><input type="radio" name="opttimeframe" value="_m15">15 นาที</label>
+                                <label class="radio-inline"><input type="radio" name="opttimeframe" value="_m5" checked>5 นาที</label>
+                            </div>
+                            
                             
                             <div class="form-group">
                                 <?php echo Html::dropDownList('sub_currency1', null,
@@ -105,14 +110,15 @@ $this->params['breadcrumbs'][] = $this->title;
         m3 = arr2[2];
         dateend = m3+m2+m1;
         
-     //   timeframe = $("[name='opttimeframe']:checked").val()
+        timeframe = $("[name='opttimeframe']:checked").val()
+        
      
         sub_currency1 = $("#sub_currency1 option:selected").val();
         sub_currency2 = $("#sub_currency2 option:selected").val();
        
    
         
-         window.open('http://localhost:8080/fx_system/frontend/web/index.php?r=compare/compare1&datestart=' + datestart + '&dateend=' + dateend + '&sub_currency1=' +  sub_currency1 + '&sub_currency2=' +  sub_currency2 );
+         window.open('http://localhost:8080/fx_system/frontend/web/index.php?r=compare/compare1&datestart=' + datestart + '&dateend=' + dateend + '&sub_currency1=' +  sub_currency1 + '&sub_currency2=' +  sub_currency2 + '&timeframe=' + timeframe);
     }
     
     

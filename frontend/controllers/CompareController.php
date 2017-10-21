@@ -13,14 +13,14 @@ class CompareController extends \yii\web\Controller {
         return $this->render('//compare/index');
     }
     
-    
-    public function actionCompare1($datestart,$dateend,$sub_currency1,$sub_currency2) {
+           
+    public function actionCompare1($datestart,$dateend,$sub_currency1,$sub_currency2,$timeframe) {
         
-         $currency_table1 = $sub_currency1."_h1";
-         $currency_table2 = $sub_currency2."_h1";
-         
-         $report_name = "กราฟเปรียบเทียบ N-Core, P-Core ระหว่างค่าเงิน $sub_currency1 กับ $sub_currency2 ระหว่างวันที่ $datestart ถึงวันที่ $dateend ";
-                
+         $currency_table1 = $sub_currency1.$timeframe;
+         $currency_table2 = $sub_currency2.$timeframe;
+                        
+         $price_dynamic_table = "price_dynamic".$timeframe;
+              
          // sql find units in sub_current table
         $sql_find1 = "SELECT id,units FROM sub_currency WHERE id = '$sub_currency1' ";
         $sql_find2 = "SELECT id,units FROM sub_currency WHERE id = '$sub_currency2' ";
@@ -28,6 +28,10 @@ class CompareController extends \yii\web\Controller {
         // sql find first open price @ first day select
         $sql_find_open_price_first1 = "SELECT open FROM $currency_table1 WHERE DATE_S = '$datestart' ORDER BY DATE_S LIMIT 0,1 ";
         $sql_find_open_price_first2 = "SELECT open FROM $currency_table2 WHERE DATE_S = '$datestart' ORDER BY DATE_S LIMIT 0,1 ";
+        
+        
+        // sql find timezone in sub_current table
+        $sql_timezone = "SELECT name,val FROM config WHERE name = 'timezone' ";
 
         
         try {
@@ -35,6 +39,10 @@ class CompareController extends \yii\web\Controller {
             $data_unit2 = \yii::$app->db->createCommand($sql_find2)->queryAll();
             $data_open_price_first1 = \yii::$app->db->createCommand($sql_find_open_price_first1)->queryAll();
             $data_open_price_first2 = \yii::$app->db->createCommand($sql_find_open_price_first2)->queryAll();
+            
+            $data_timezone = \yii::$app->db->createCommand($sql_timezone)->queryAll();
+            
+             
         } catch (\yii\db\Exception $e) {
             throw new \yii\web\ConflictHttpException('sql error');
         }
@@ -45,17 +53,23 @@ class CompareController extends \yii\web\Controller {
         $open_price_first1 = $data_open_price_first1[0]['open'];
         $open_price_first2 = $data_open_price_first2[0]['open'];
 
+        
+        $timezone = $data_timezone[0]['val'];
+        
+        $report_name = "กราฟเปรียบเทียบ N-Core, P-Core ระหว่างค่าเงิน $sub_currency1 กับ $sub_currency2 ระหว่างวันที่ $datestart ถึงวันที่ $dateend TimeZone $timezone ";
+           
             
         // เอาไว้ดึงข้อมูลไปแสดงในกราฟ
         $sql1 = "SELECT 
-                    concat(t1.DATE_S,'   time@ ', h1.time_second) as date_s,h1.time_first,t1.open as price_open,h1.time_second, 
+                    date_add(concat(t1.DATE_S,' ',h1.time_second), interval $timezone HOUR ) as date_s,
+                    h1.time_first,t1.open as price_open,h1.time_second, 
                                            
                     IF($open_price_first1 < t1.`OPEN`,t1.open-$open_price_first1,
                                     IF($open_price_first1 > t1.`open`, t1.open - $open_price_first1  , 1
                           )
                     )*$unit1 as price_range_1
                                                              
-                FROM price_dynamic_h1 h1
+                FROM $price_dynamic_table h1
                 
                 LEFT JOIN (
                             select DATE_S,TIME_S,`OPEN` from $currency_table1 where DATE_S BETWEEN '$datestart'  AND '$dateend' 
@@ -69,14 +83,15 @@ class CompareController extends \yii\web\Controller {
         
         // เอาไว้ดึงข้อมูลไปแสดงในกราฟ
         $sql2 = "SELECT 
-                    concat(t1.DATE_S,'   time@ ', h1.time_second) as date_s,h1.time_first,t1.open as price_open,h1.time_second, 
+                    date_add(concat(t1.DATE_S,' ',h1.time_second), interval $timezone HOUR ) as date_s,
+                    h1.time_first,t1.open as price_open,h1.time_second, 
                                            
                     IF($open_price_first2 < t1.`OPEN`,t1.open-$open_price_first2,
                                     IF($open_price_first2 > t1.`open`, t1.open - $open_price_first2  , 1
                           )
                     )*$unit2 as price_range_2
                                                              
-                FROM price_dynamic_h1 h1
+                FROM $price_dynamic_table h1
                 
                 LEFT JOIN (
                             select DATE_S,TIME_S,`OPEN` from $currency_table2 where DATE_S BETWEEN '$datestart'  AND '$dateend' 
