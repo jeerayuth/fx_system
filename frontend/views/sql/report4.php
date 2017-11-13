@@ -45,10 +45,10 @@ for ($i = 0; $i < count($rawData); $i++) {
 }
 
 $data2 = [];
-for ($i = 0; $i < count($rawData); $i++) {
+for ($i = 0; $i < count($rawData2); $i++) {
     $data2[] = [
-        'name' => $rawData[$i]['date_s'],
-        'y' => $rawData[$i]['ol'] * 1,
+        'name' => $rawData2[$i]['date_s'],
+        'y' => $rawData2[$i]['ol'] * 1,
     ];
 }
 

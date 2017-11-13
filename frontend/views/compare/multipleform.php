@@ -48,15 +48,30 @@ $this->params['breadcrumbs'][] = $this->title;
                             ]);
                             ?>
                             
+           
+                                <label class="radio-inline"><input type="radio" name="opttimeframe" value="_h1" >1 ชม.</label>
+                                <label class="radio-inline"><input type="radio" name="opttimeframe" value="_m15">15 นาที</label>
+                                <label class="radio-inline"><input type="radio" name="opttimeframe" value="_m5" checked>5 นาที</label>
+          
                         </div>
+                       
+                      
+                       
                    </div>   
+                
+                
+                
                         <div class="col-md-3 col-sm-3 col-xs-3">
-                            
+                    
                         </div>
+                
+                
+                
                 
                        <div class="col-md-3 col-sm-3 col-xs-3">
                            
                            
+         
                             
                             <div class="form-group">
                                 <?php echo Html::dropDownList('sub_currency1', null,
@@ -65,7 +80,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                         'class' => 'form-control',
                                         'id' => 'sub_currency1',
                                         'prompt' => ' -- คู่เงินที่ 1 --',
-                                        'options'=>['eurusd'=>['Selected'=>true]]
+                                        'options'=>['euraud'=>['Selected'=>true]]
                                   ]) ?>
                             </div>   
                             
@@ -76,7 +91,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                         'class' => 'form-control',
                                         'id' => 'sub_currency2',
                                         'prompt' => ' -- คู่เงินที่ 2 --',
-                                        'options'=>['euraud'=>['Selected'=>true]]
+                                        'options'=>['eurcad'=>['Selected'=>true]]
                                   ]) ?>
                             </div>
                             
@@ -86,7 +101,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                         'class' => 'form-control',
                                         'id' => 'sub_currency3',
                                         'prompt' => ' -- คู่เงินที่ 3 --',
-                                        'options'=>['eurgbp'=>['Selected'=>true]]
+                                        'options'=>['eurchf'=>['Selected'=>true]]
                                   ]) ?>
                             </div>
                             
@@ -96,7 +111,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                         'class' => 'form-control',
                                         'id' => 'sub_currency4',
                                         'prompt' => ' -- คู่เงินที่ 4 --',
-                                        'options'=>['eurjpy'=>['Selected'=>true]]
+                                        'options'=>['eurgbp'=>['Selected'=>true]]
                                   ]) ?>
                             </div>
                             
@@ -106,7 +121,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                         'class' => 'form-control',
                                         'id' => 'sub_currency5',
                                         'prompt' => ' -- คู่เงินที่ 5 --',
-                                        'options'=>['eurchf'=>['Selected'=>true]]
+                                        'options'=>['eurjpy'=>['Selected'=>true]]
                                   ]) ?>
                             </div>
                             
@@ -116,12 +131,14 @@ $this->params['breadcrumbs'][] = $this->title;
                                         'class' => 'form-control',
                                         'id' => 'sub_currency6',
                                         'prompt' => ' -- คู่เงินที่ 6 --',
-                                        'options'=>['eurcad'=>['Selected'=>true]]
+                                        'options'=>['eurusd'=>['Selected'=>true]]
                                   ]) ?>
                             </div>
                        </div>
                 
                        <div class="col-md-3 col-sm-3 col-xs-3">
+                           
+         
                             
                             <div class="form-group">
                                     <?php echo Html::dropDownList('sub_currency7', null,
@@ -129,7 +146,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                         'class' => 'form-control',
                                         'id' => 'sub_currency7',
                                         'prompt' => ' -- คู่เงินที่ 7 --',
-                                        'options'=>['usdjpy'=>['Selected'=>true]]
+                                        'options'=>['usdcad'=>['Selected'=>true]]
                                   ]) ?>
                             </div>
                             
@@ -139,7 +156,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                         'class' => 'form-control',
                                         'id' => 'sub_currency8',
                                         'prompt' => ' -- คู่เงินที่ 8 --',
-                                        'options'=>['usdcad'=>['Selected'=>true]]
+                                        'options'=>['usdchf'=>['Selected'=>true]]
                                   ]) ?>
                             </div>
                             
@@ -150,7 +167,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                         'class' => 'form-control',
                                         'id' => 'sub_currency9',
                                         'prompt' => ' -- คู่เงินที่ 9 --',
-                                        'options'=>['audjpy'=>['Selected'=>true]]
+                                        'options'=>['usdjpy'=>['Selected'=>true]]
                                   ]) ?>
                             </div>
                             
@@ -161,7 +178,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                         'class' => 'form-control',
                                         'id' => 'sub_currency10',
                                         'prompt' => ' -- คู่เงินที่ 10 --',
-                                        'options'=>['nzdjpy'=>['Selected'=>true]]
+                                        'options'=>['usdhkd'=>['Selected'=>true]]
                                   ]) ?>
                             </div>
                             
@@ -172,7 +189,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                         'class' => 'form-control',
                                         'id' => 'sub_currency11',
                                         'prompt' => ' -- คู่เงินที่ 11 --',
-                                        'options'=>['chfjpy'=>['Selected'=>true]]
+                                        'options'=>['usdsgd'=>['Selected'=>true]]
                                   ]) ?>
                             </div>
                             
@@ -224,6 +241,9 @@ $this->params['breadcrumbs'][] = $this->title;
         m2 = arr2[1];
         m3 = arr2[2];
         dateend = m3+m2+m1;
+        
+         timeframe = $("[name='opttimeframe']:checked").val()
+        
          
         sub_currency1 = $("#sub_currency1 option:selected").val();
         sub_currency2 = $("#sub_currency2 option:selected").val();
@@ -240,7 +260,7 @@ $this->params['breadcrumbs'][] = $this->title;
        
    
         
-         window.open('http://localhost:8080/fx_system/frontend/web/index.php?r=compare/compare2&datestart=' + datestart + '&dateend=' + dateend + '&sub_currency1=' +  sub_currency1 + '&sub_currency2=' +  sub_currency2 + '&sub_currency3=' +  sub_currency3 + '&sub_currency4=' +  sub_currency4 + '&sub_currency5=' +  sub_currency5 + '&sub_currency6=' +  sub_currency6 + '&sub_currency7=' +  sub_currency7 + '&sub_currency8=' +  sub_currency8 + '&sub_currency9=' +  sub_currency9 + '&sub_currency10=' +  sub_currency10 + '&sub_currency11=' +  sub_currency11 + '&sub_currency12=' +  sub_currency12);
+         window.open('http://localhost:8080/fx_system/frontend/web/index.php?r=compare/compare2&datestart=' + datestart + '&dateend=' + dateend + '&sub_currency1=' +  sub_currency1 + '&sub_currency2=' +  sub_currency2 + '&sub_currency3=' +  sub_currency3 + '&sub_currency4=' +  sub_currency4 + '&sub_currency5=' +  sub_currency5 + '&sub_currency6=' +  sub_currency6 + '&sub_currency7=' +  sub_currency7 + '&sub_currency8=' +  sub_currency8 + '&sub_currency9=' +  sub_currency9 + '&sub_currency10=' +  sub_currency10 + '&sub_currency11=' +  sub_currency11 + '&sub_currency12=' +  sub_currency12 + '&timeframe=' + timeframe);
     }
     
     

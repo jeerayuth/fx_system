@@ -132,21 +132,27 @@ class CompareController extends \yii\web\Controller {
     }
     
     
-    public function actionCompare2($datestart,$dateend,$sub_currency1,$sub_currency2,$sub_currency3,$sub_currency4,$sub_currency5,$sub_currency6,$sub_currency7,$sub_currency8,$sub_currency9,$sub_currency10,$sub_currency11,$sub_currency12) {
+    public function actionCompare2($datestart,$dateend,$sub_currency1,$sub_currency2,$sub_currency3,$sub_currency4,$sub_currency5,$sub_currency6,$sub_currency7,$sub_currency8,$sub_currency9,$sub_currency10,$sub_currency11,$sub_currency12,$timeframe) {
         
-         $currency_table1 = $sub_currency1."_h1";
-         $currency_table2 = $sub_currency2."_h1";
-         $currency_table3 = $sub_currency3."_h1";
-         $currency_table4 = $sub_currency4."_h1";
-         $currency_table5 = $sub_currency5."_h1";        
-         $currency_table6 = $sub_currency6."_h1";
+         $currency_table1 = $sub_currency1.$timeframe;
+         $currency_table2 = $sub_currency2.$timeframe;
+         $currency_table3 = $sub_currency3.$timeframe;
+         $currency_table4 = $sub_currency4.$timeframe;
+         $currency_table5 = $sub_currency5.$timeframe;        
+         $currency_table6 = $sub_currency6.$timeframe;
                 
-         $currency_table7 = $sub_currency7."_h1";
-         $currency_table8 = $sub_currency8."_h1";
-         $currency_table9 = $sub_currency9."_h1";
-         $currency_table10 = $sub_currency10."_h1";
-         $currency_table11 = $sub_currency11."_h1";
-         $currency_table12 = $sub_currency12."_h1";
+         $currency_table7 = $sub_currency7.$timeframe;
+         $currency_table8 = $sub_currency8.$timeframe;
+         $currency_table9 = $sub_currency9.$timeframe;
+         $currency_table10 = $sub_currency10.$timeframe;
+         $currency_table11 = $sub_currency11.$timeframe;
+         $currency_table12 = $sub_currency12.$timeframe;
+         
+
+         
+         $price_dynamic_table = "price_dynamic".$timeframe;
+         
+         
          
          
          $report_name = "กราฟเปรียบเทียบ N-Core, P-Core  ระหว่างวันที่ $datestart ถึงวันที่ $dateend ";
@@ -260,7 +266,7 @@ class CompareController extends \yii\web\Controller {
                           )
                     )*$unit1 as price_range_1
                                                              
-                FROM price_dynamic_h1 h1
+                FROM $price_dynamic_table h1
                 
                 LEFT JOIN (
                             select DATE_S,TIME_S,`OPEN` from $currency_table1 where DATE_S BETWEEN '$datestart'  AND '$dateend' 
@@ -281,7 +287,7 @@ class CompareController extends \yii\web\Controller {
                           )
                     )*$unit2 as price_range_2
                                                              
-                FROM price_dynamic_h1 h1
+                FROM $price_dynamic_table h1
                 
                 LEFT JOIN (
                             select DATE_S,TIME_S,`OPEN` from $currency_table2 where DATE_S BETWEEN '$datestart'  AND '$dateend' 
@@ -302,7 +308,7 @@ class CompareController extends \yii\web\Controller {
                           )
                     )*$unit3 as price_range_3
                                                              
-                FROM price_dynamic_h1 h1
+                FROM $price_dynamic_table h1
                 
                 LEFT JOIN (
                             select DATE_S,TIME_S,`OPEN` from $currency_table3 where DATE_S BETWEEN '$datestart'  AND '$dateend' 
@@ -323,7 +329,7 @@ class CompareController extends \yii\web\Controller {
                           )
                     )*$unit4 as price_range_4
                                                              
-                FROM price_dynamic_h1 h1
+                FROM $price_dynamic_table h1
                 
                 LEFT JOIN (
                             select DATE_S,TIME_S,`OPEN` from $currency_table4 where DATE_S BETWEEN '$datestart'  AND '$dateend' 
@@ -344,7 +350,7 @@ class CompareController extends \yii\web\Controller {
                           )
                     )*$unit5 as price_range_5
                                                              
-                FROM price_dynamic_h1 h1
+                FROM $price_dynamic_table h1
                 
                 LEFT JOIN (
                             select DATE_S,TIME_S,`OPEN` from $currency_table5 where DATE_S BETWEEN '$datestart'  AND '$dateend' 
@@ -365,7 +371,7 @@ class CompareController extends \yii\web\Controller {
                           )
                     )*$unit6 as price_range_6
                                                              
-                FROM price_dynamic_h1 h1
+                FROM $price_dynamic_table h1
                 
                 LEFT JOIN (
                             select DATE_S,TIME_S,`OPEN` from $currency_table6 where DATE_S BETWEEN '$datestart'  AND '$dateend' 
@@ -387,7 +393,7 @@ class CompareController extends \yii\web\Controller {
                           )
                     )*$unit7 as price_range_7
                                                              
-                FROM price_dynamic_h1 h1
+                FROM $price_dynamic_table h1
                 
                 LEFT JOIN (
                             select DATE_S,TIME_S,`OPEN` from $currency_table7 where DATE_S BETWEEN '$datestart'  AND '$dateend' 
@@ -409,7 +415,7 @@ class CompareController extends \yii\web\Controller {
                           )
                     )*$unit8 as price_range_8
                                                              
-                FROM price_dynamic_h1 h1
+                FROM $price_dynamic_table h1
                 
                 LEFT JOIN (
                             select DATE_S,TIME_S,`OPEN` from $currency_table8 where DATE_S BETWEEN '$datestart'  AND '$dateend' 
@@ -431,7 +437,7 @@ class CompareController extends \yii\web\Controller {
                           )
                     )*$unit9 as price_range_9
                                                              
-                FROM price_dynamic_h1 h1
+                FROM $price_dynamic_table h1
                 
                 LEFT JOIN (
                             select DATE_S,TIME_S,`OPEN` from $currency_table9 where DATE_S BETWEEN '$datestart'  AND '$dateend' 
@@ -452,7 +458,7 @@ class CompareController extends \yii\web\Controller {
                           )
                     )*$unit10 as price_range_10
                                                              
-                FROM price_dynamic_h1 h1
+                FROM $price_dynamic_table h1
                 
                 LEFT JOIN (
                             select DATE_S,TIME_S,`OPEN` from $currency_table10 where DATE_S BETWEEN '$datestart'  AND '$dateend' 
@@ -474,7 +480,7 @@ class CompareController extends \yii\web\Controller {
                           )
                     )*$unit11 as price_range_11
                                                              
-                FROM price_dynamic_h1 h1
+                FROM $price_dynamic_table h1
                 
                 LEFT JOIN (
                             select DATE_S,TIME_S,`OPEN` from $currency_table11 where DATE_S BETWEEN '$datestart'  AND '$dateend' 
@@ -496,7 +502,7 @@ class CompareController extends \yii\web\Controller {
                           )
                     )*$unit12 as price_range_12
                                                              
-                FROM price_dynamic_h1 h1
+                FROM $price_dynamic_table h1
                 
                 LEFT JOIN (
                             select DATE_S,TIME_S,`OPEN` from $currency_table12 where DATE_S BETWEEN '$datestart'  AND '$dateend' 
@@ -524,7 +530,7 @@ class CompareController extends \yii\web\Controller {
                                       )
                                 )*$unit1 as price_range_1
 
-                            FROM price_dynamic_h1 h1
+                            FROM $price_dynamic_table h1
 
                             LEFT JOIN (
                                         select DATE_S,TIME_S,`OPEN` from $currency_table1 where DATE_S BETWEEN '$datestart'  AND '$dateend' 
@@ -544,7 +550,7 @@ class CompareController extends \yii\web\Controller {
                                       )
                                 )*$unit2 as price_range_1
 
-                            FROM price_dynamic_h1 h1
+                            FROM $price_dynamic_table h1
 
                             LEFT JOIN (
                                         select DATE_S,TIME_S,`OPEN` from $currency_table2 where DATE_S BETWEEN '$datestart'  AND '$dateend' 
@@ -565,7 +571,7 @@ class CompareController extends \yii\web\Controller {
                               )
                         )*$unit3 as price_range_1
 
-                    FROM price_dynamic_h1 h1
+                    FROM $price_dynamic_table h1
 
                     LEFT JOIN (
                                 select DATE_S,TIME_S,`OPEN` from $currency_table3 where DATE_S BETWEEN '$datestart'  AND '$dateend' 
@@ -584,7 +590,7 @@ class CompareController extends \yii\web\Controller {
                               )
                         )*$unit4 as price_range_1
 
-                    FROM price_dynamic_h1 h1
+                    FROM $price_dynamic_table h1
 
                     LEFT JOIN (
                                 select DATE_S,TIME_S,`OPEN` from $currency_table4 where DATE_S BETWEEN '$datestart'  AND '$dateend' 
@@ -604,7 +610,7 @@ class CompareController extends \yii\web\Controller {
                           )
                     )*$unit5 as price_range_1
                                                              
-                FROM price_dynamic_h1 h1
+                FROM $price_dynamic_table h1
                 
                 LEFT JOIN (
                             select DATE_S,TIME_S,`OPEN` from $currency_table5 where DATE_S BETWEEN '$datestart'  AND '$dateend' 
@@ -624,7 +630,7 @@ class CompareController extends \yii\web\Controller {
                           )
                     )*$unit6 as price_range_1
                                                              
-                FROM price_dynamic_h1 h1
+                FROM $price_dynamic_table h1
                 
                 LEFT JOIN (
                             select DATE_S,TIME_S,`OPEN` from $currency_table6 where DATE_S BETWEEN '$datestart'  AND '$dateend' 
@@ -653,7 +659,7 @@ class CompareController extends \yii\web\Controller {
                                   )
                             )*$unit7 as price_range_2
 
-                        FROM price_dynamic_h1 h1
+                        FROM $price_dynamic_table h1
 
                         LEFT JOIN (
                                     select DATE_S,TIME_S,`OPEN` from $currency_table7 where DATE_S BETWEEN '$datestart'  AND '$dateend' 
@@ -673,7 +679,7 @@ class CompareController extends \yii\web\Controller {
                                   )
                             )*$unit8 as price_range_2
 
-                        FROM price_dynamic_h1 h1
+                        FROM $price_dynamic_table h1
 
                         LEFT JOIN (
                                     select DATE_S,TIME_S,`OPEN` from $currency_table8 where DATE_S BETWEEN '$datestart'  AND '$dateend' 
@@ -693,7 +699,7 @@ class CompareController extends \yii\web\Controller {
                               )
                         )*$unit9 as price_range_2
 
-                    FROM price_dynamic_h1 h1
+                    FROM $price_dynamic_table h1
 
                     LEFT JOIN (
                                 select DATE_S,TIME_S,`OPEN` from $currency_table9 where DATE_S BETWEEN '$datestart'  AND '$dateend' 
@@ -714,7 +720,7 @@ class CompareController extends \yii\web\Controller {
                           )
                     )*$unit10 as price_range_2
                                                              
-                FROM price_dynamic_h1 h1
+                FROM $price_dynamic_table h1
                 
                 LEFT JOIN (
                             select DATE_S,TIME_S,`OPEN` from $currency_table10 where DATE_S BETWEEN '$datestart'  AND '$dateend' 
@@ -733,7 +739,7 @@ class CompareController extends \yii\web\Controller {
                                   )
                             )*$unit11 as price_range_2
 
-                        FROM price_dynamic_h1 h1
+                        FROM $price_dynamic_table h1
 
                         LEFT JOIN (
                                     select DATE_S,TIME_S,`OPEN` from $currency_table11 where DATE_S BETWEEN '$datestart'  AND '$dateend' 
@@ -752,7 +758,7 @@ class CompareController extends \yii\web\Controller {
                                   )
                             )*$unit12 as price_range_2
 
-                        FROM price_dynamic_h1 h1
+                        FROM $price_dynamic_table h1
 
                         LEFT JOIN (
                                     select DATE_S,TIME_S,`OPEN` from $currency_table12 where DATE_S BETWEEN '$datestart'  AND '$dateend' 

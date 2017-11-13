@@ -147,10 +147,24 @@ class SqlController extends CommonController {
                ((e.hight-e.open)*$unit) as oh,
                ((e.open-e.low)*$unit) as ol
             FROM $currency_table e      
-            WHERE YEAR(e.DATE_S) = $year_s ";
+            WHERE YEAR(e.DATE_S) = $year_s 
+            AND e.DATE_S not in (select date_s from alldates where date_code in (0,1,6) )
+            ORDER BY  ((e.hight-e.open)*$unit) ASC ";
+        
+        $sql2 = "SELECT 
+               '$sub_currency_id' as cur_name,
+                e.date_s,
+               MONTH(e.date_s) as month_s,
+               ((e.hight-e.open)*$unit) as oh,
+               ((e.open-e.low)*$unit) as ol
+            FROM $currency_table e      
+            WHERE YEAR(e.DATE_S) = $year_s
+            AND e.DATE_S not in (select date_s from alldates where date_code in (0,1,6) )    
+            ORDER BY ((e.open-e.low)*$unit) ASC ";
                               
         try {
             $rawData = \yii::$app->db->createCommand($sql)->queryAll(); 
+            $rawData2 = \yii::$app->db->createCommand($sql2)->queryAll(); 
         } catch (\yii\db\Exception $e) {
             throw new \yii\web\ConflictHttpException('sql error');
         }
@@ -158,10 +172,17 @@ class SqlController extends CommonController {
             'allModels' => $rawData,
             'pagination' => FALSE,
         ]);
+        
+        $dataProvider2 = new \yii\data\ArrayDataProvider([
+            'allModels' => $rawData2,
+            'pagination' => FALSE,
+        ]);
             
         return $this->render('report4', [
-                    'dataProvider' => $dataProvider,               
+                    'dataProvider' => $dataProvider,  
+                    'dataProvider2' => $dataProvider2,    
                     'rawData' => $rawData,
+                    'rawData2' => $rawData2,
                     'report_name' => $report_name,
                     'sub_currency_id' => $sub_currency_id,
                     'year_s' => $year_s,
