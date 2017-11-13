@@ -404,6 +404,7 @@ class SqlController extends CommonController {
         }
         $unit = $data_unit[0]['units'];
                    
+        
         return $this->render('report7', [
                     'rawData' => $rawData,
                     'report_name' => $report_name,
@@ -413,7 +414,7 @@ class SqlController extends CommonController {
                     'datestart' => $datestart,
                     'dateend' => $dateend,
                     'unit' => $unit,
-        ]);
+        ]); 
     }
     
     
