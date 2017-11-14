@@ -149,7 +149,7 @@ class SqlController extends CommonController {
             FROM $currency_table e      
             WHERE YEAR(e.DATE_S) = $year_s 
             AND e.DATE_S not in (select date_s from alldates where date_code in (0,1,6) )
-            ORDER BY  ((e.hight-e.open)*$unit) ASC ";
+            ORDER BY  ((e.hight-e.open)*$unit) DESC ";
         
         $sql2 = "SELECT 
                '$sub_currency_id' as cur_name,
@@ -160,7 +160,7 @@ class SqlController extends CommonController {
             FROM $currency_table e      
             WHERE YEAR(e.DATE_S) = $year_s
             AND e.DATE_S not in (select date_s from alldates where date_code in (0,1,6) )    
-            ORDER BY ((e.open-e.low)*$unit) ASC ";
+            ORDER BY ((e.open-e.low)*$unit) DESC ";
                               
         try {
             $rawData = \yii::$app->db->createCommand($sql)->queryAll(); 
@@ -542,7 +542,18 @@ class SqlController extends CommonController {
                 FROM $currency_table
                 WHERE 
                     DATE_S BETWEEN '$datestart' and '$dateend' and TIME_S BETWEEN '$timestart' and '$timeend'
-                GROUP BY DATE_S ";
+                GROUP BY DATE_S ORDER BY oh DESC ";
+        
+          // เอาไว้ดึงข้อมูลไปแสดงในกราฟเพื่อหาค่าสูงสุด/ต่ำสุด ในช่วงเวลาที่เลือก
+        $sql1 = "SELECT 
+                    date_s,`OPEN`,max(HIGHT) as max_hight, min(LOW) as min_low,
+                    (max(HIGHT)-`OPEN`)*$unit as oh, 
+                    (`OPEN`-min(LOW))*$unit as ol
+                FROM $currency_table
+                WHERE 
+                    DATE_S BETWEEN '$datestart' and '$dateend' and TIME_S BETWEEN '$timestart' and '$timeend'
+                GROUP BY DATE_S ORDER BY ol DESC ";
+        
         
         
          // เอาไว้ดึงข้อมูลไปแสดงในกราฟเพื่อดูพฤติกรรมราคา
@@ -595,6 +606,7 @@ class SqlController extends CommonController {
         
         try {
             $rawData = \yii::$app->db->createCommand($sql)->queryAll();  
+            $rawData1 = \yii::$app->db->createCommand($sql1)->queryAll();  
             $rawData2 = \yii::$app->db->createCommand($sql2)->queryAll();  
         } catch (\yii\db\Exception $e) {
             throw new \yii\web\ConflictHttpException('sql error');
@@ -603,6 +615,7 @@ class SqlController extends CommonController {
             
          return $this->render('report9', [
                     'rawData' => $rawData,
+                    'rawData1' => $rawData1,
                     'rawData2' => $rawData2,
                     'sub_currency_id' => $sub_currency_id,
                     'report_name' => $report_name,

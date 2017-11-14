@@ -19,6 +19,8 @@ HighchartsAsset::register($this)->withScripts([
 <div id="chart2"></div>
 
 <br/>
+<div id="chart3"></div>
+<br/>
 
 <div id="chart"></div>
 
@@ -41,10 +43,10 @@ HighchartsAsset::register($this)->withScripts([
         }
 
         $data2 = [];
-        for ($i = 0; $i < count($rawData); $i++) {
+        for ($i = 0; $i < count($rawData1); $i++) {
             $data2[] = [
-                'name' => $rawData[$i]['date_s'],
-                'y' => $rawData[$i]['ol'] * 1,
+                'name' => $rawData1[$i]['date_s'],
+                'y' => $rawData1[$i]['ol'] * 1,
             ];
         }
         
@@ -193,7 +195,56 @@ HighchartsAsset::register($this)->withScripts([
                                 },{
                                     name: 'low',
                                     data: [$js_data44]
-                                },{
+                                },],
+                         
+                            });
+                        });
+             "); 
+        
+        
+        
+        
+        
+        
+        $this->registerJs(" $(function () {
+                            $('#chart3').highcharts({
+                                title: {
+                                    text: '$report_name',
+                                    x: -20 //center
+                                },
+                                chart: {
+                                       height: 550
+                                },
+                                subtitle: {
+                                    text: '',
+                                    x: -20
+                                },
+                                xAxis: {
+                                      categories: ['$js_categ22'],
+                                },
+                                yAxis: {
+                                    title: {
+                                        text: 'ระยะการแกว่ง'
+                                    },
+                                    plotLines: [{
+                                        value: 0,
+                                        width: 1,
+                                        color: '#808080'
+                                    }]
+                                },
+                                tooltip: {
+                                    valueSuffix: ''
+                                },
+                                legend: {
+                                    layout: 'vertical',
+                                    align: 'right',
+                                    verticalAlign: 'middle',
+                                    borderWidth: 0
+                                },
+                                credits: {
+                                    enabled: false
+                                },
+                                series: [{
                                     type: 'column',
                                     name: 'แดนบวก',
                                     data: $js_data_hight
@@ -207,10 +258,6 @@ HighchartsAsset::register($this)->withScripts([
                             });
                         });
              "); 
-        
-        
-        
-        
         
         
         
